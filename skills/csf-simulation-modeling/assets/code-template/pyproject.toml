@@ -1,0 +1,22 @@
+[project]
+name = "csf-sim-modeling"
+version = "0.1.0"
+description = "2026 CSF simulation modeling challenge workspace"
+requires-python = ">=3.10"
+dependencies = [
+  "numpy", "pandas", "scipy", "matplotlib", "seaborn", "plotly",
+  "networkx", "mesa", "simpy", "gymnasium", "scikit-learn",
+  "stable-baselines3", "optuna", "deap", "tqdm", "joblib",
+  "ipykernel", "jupyter",
+]
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "SIM"]
+ignore = ["E501"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

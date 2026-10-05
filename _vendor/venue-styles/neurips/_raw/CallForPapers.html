@@ -1,0 +1,2233 @@
+
+
+
+
+
+
+
+
+
+<!DOCTYPE html>
+<html lang="en"> 
+
+<head>
+    <style>html { scroll-padding-top: 70px; /* height of sticky header plus extra */ }</style>
+    
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="/static/virtual/js/virtual.js"></script>
+    <meta name="google-site-verification" content="0jwPnVXIAk4FvFdT37dwMmd-kjHF86e5DKwvqlStUW0">
+
+
+    
+    <link rel="stylesheet" href="/static/core/css/core.css" type="text/css">
+    <link rel="stylesheet" href="/static/virtual/css/virtual.css" type="text/css">
+     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+
+    <link rel="stylesheet" href="/static/core/css/custom.css" type="text/css">
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.14.0-beta3/dist/css/bootstrap-select.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Exo:wght@400;700&family=Lato:wght@400;700&display=swap" rel="stylesheet">
+    <script nonce="0Gal3K3NCI8vZOQb2DOCLg==">
+        window.MathJax = {
+          tex: {
+            // Workshop/competition imports store inline formulas with doubled dollars.
+            inlineMath: [['$$', '$$'], ['$', '$'], ['\\(', '\\)']],
+            displayMath: [['\\[', '\\]']],
+            processEscapes: true,
+          },
+          options: {
+            ignoreHtmlClass: 'no-mathjax',
+          }
+        };
+    </script>
+
+    <script id="MathJax-script" async
+            src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"
+            nonce="0Gal3K3NCI8vZOQb2DOCLg==" >
+    </script>
+
+    <!--This script keeps local links inside the web app rather than opening them
+in Safari, and has nothing to do with editing or Aloha.-->
+
+<script nonce="0Gal3K3NCI8vZOQb2DOCLg==">
+    (function (document, navigator, standalone) {
+
+        if ((standalone in navigator) && navigator[standalone]) {
+            var curnode, location = document.location, stop = /^(a|html)$/i;
+            document.addEventListener('click', function (e) {
+                curnode = e.target;
+                while (!(stop).test(curnode.nodeName)) {
+                    curnode = curnode.parentNode;
+                }
+
+                if (
+                    'href' in curnode && // is a link
+                    (chref = curnode.href).replace(location.href, '').indexOf('#') && // is not an anchor
+                    (!(/^[a-z\+\.\-]+:/i).test(chref) ||                       // either does not have a proper scheme (relative links)
+                        chref.indexOf(location.protocol + '//' + location.host) === 0) // or is in the same protocol and domain
+                ) {
+                    e.preventDefault();
+                    location.href = curnode.href;
+                }
+            }, false);
+        }
+    })(document, window.navigator, 'standalone');
+</script>
+
+
+<style>
+
+    @media screen and (min-width: 767px) {
+        .blurb {
+            min-height: 260px;
+        }
+    }
+</style>
+    
+
+<script src="https://code.jquery.com/jquery-3.6.1.min.js"
+        integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous">
+</script>
+
+<script nonce="0Gal3K3NCI8vZOQb2DOCLg==">
+    if (typeof jQuery === 'undefined') {
+        var script = document.createElement('script');
+        script.type = 'text/javascript';
+        script.src = "/static/core/js/jquery-3.6.1.min.js";
+        document.head.appendChild(script);
+    }
+</script>
+
+    
+    <script nonce="0Gal3K3NCI8vZOQb2DOCLg==">
+        var $ = jQuery;
+    </script>
+
+    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
+
+    <script src="/static/core/js/ajax-csrf-snippet.js"></script>
+    
+    <link rel="stylesheet" href="/static/fontawesomefree/css/all.min.css">
+    <script src="/static/fontawesomefree/js/all.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.14.0-beta3/dist/js/bootstrap-select.min.js"></script>
+
+
+    <style nonce="0Gal3K3NCI8vZOQb2DOCLg==">
+        body {
+            font-family: Exo;}
+    </style>
+
+
+
+
+
+
+
+
+        
+
+
+    <link rel="stylesheet"
+          href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic">
+    <link href="https://fonts.googleapis.com/css2?family=Exo:wght@400;700&family=Lato:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/virtual/css/virtual.css">
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/corejs-typeahead/1.3.1/typeahead.bundle.min.js" integrity="sha512-lEb9Vp/rkl9g2E/LdHIMFTqz21+LA79f84gqP75fbimHqVTu6483JG1AwJlWLLQ8ezTehty78fObKupq3HSHPQ==" crossorigin="anonymous"></script>
+    <script src="/static/core/js/moment/min/moment.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script>
+    <script src="/static/core/js/ajax-csrf-snippet.js" ></script>
+    <script src="/static/virtual/js/virtual.js"></script>
+    
+
+    
+
+    
+    <link rel="canonical" href="https://neurips.cc/Conferences/2025/CallForPapers">
+
+    <title>NeurIPS 2025 Call for Papers</title>
+</head>
+
+<body>
+<!-- <h1><a href="#" onclick="alert('CSP Test');">CSP Test</a></h1> -->
+
+
+
+
+<div class="noprint">
+    
+        
+            <!--Navbar start-->
+<header>
+    <a href="#child-menu" class="off-screen">Skip to yearly menu bar</a>
+    <a href="#main" class="off-screen">Skip to main content</a>
+    <div id="id_navbar" class="navbar navbar-expand-sm navbar-dark" aria-label="Main Navigation"
+         style="background-color:#212529">
+        <h2 class="off-screen">Main Navigation</h2>
+        <div class="container-fluid">
+            <div><a class="navbar-brand" href="/" aria-label="Home">
+
+                <img src="/static/core/img/neurips-navbar-logo.svg" alt="conference_logo" height="40"></a></div>
+
+
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#navbarToggler1"
+                    aria-expanded="false" aria-label="Toggle main navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarToggler1">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    
+    <li class="dropdown-item dropdown pe-3">
+        <a class="nav-link dropdown-toggle  p-1" 
+           href="#"
+           role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            NeurIPS
+        </a>
+        <ul class="dropdown-menu dropdown-menu-dark">
+            
+    
+        
+            <li class="dropdown-item  pe-2" >
+                <a class="nav-link p-1"  href="/FAQ">
+                    <span >
+                        Help/FAQ
+                    </span>
+                </a>
+                
+                    <hr class="dropdown-divider" aria-hidden="true">
+                
+            </li>
+
+        
+
+    
+
+
+
+    
+        
+            <li class="dropdown-item  pe-2" >
+                <a class="nav-link p-1"  href="/Help/Contact">
+                    <span >
+                        Contact NeurIPS
+                    </span>
+                </a>
+                
+                    <hr class="dropdown-divider" aria-hidden="true">
+                
+            </li>
+
+        
+
+    
+
+
+
+    
+        
+            <li class="dropdown-item  pe-2" >
+                <a class="nav-link p-1"  href="/Profile/create">
+                    <span >
+                        Create Profile
+                    </span>
+                </a>
+                
+                    <hr class="dropdown-divider" aria-hidden="true">
+                
+            </li>
+
+        
+
+    
+
+
+
+    
+        
+            <li class="dropdown-item  pe-2" >
+                <a class="nav-link p-1"  href="/Conferences/2023/EthicsGuidelines">
+                    <span >
+                        Code of Ethics
+                    </span>
+                </a>
+                
+                    <hr class="dropdown-divider" aria-hidden="true">
+                
+            </li>
+
+        
+
+    
+
+
+
+    
+        
+            <li class="dropdown-item  pe-2" >
+                <a class="nav-link p-1"  href="/public/CodeOfConduct">
+                    <span >
+                        Code of Conduct
+                    </span>
+                </a>
+                
+                    <hr class="dropdown-divider" aria-hidden="true">
+                
+            </li>
+
+        
+
+    
+
+
+
+    
+        
+            <li class="dropdown-item  pe-2" >
+                <a class="nav-link p-1"  href="/public/JournalToConference">
+                    <span >
+                        Journal To Conference Track
+                    </span>
+                </a>
+                
+                    <hr class="dropdown-divider" aria-hidden="true">
+                
+            </li>
+
+        
+
+    
+
+
+
+    
+        
+            <li class="dropdown-item  pe-2" >
+                <a class="nav-link p-1"  href="/public/DiversityInclusion">
+                    <span >
+                        Diversity &amp; Inclusion
+                    </span>
+                </a>
+                
+                    <hr class="dropdown-divider" aria-hidden="true">
+                
+            </li>
+
+        
+
+    
+
+
+
+    
+        
+            <li class="dropdown-item  pe-2" >
+                <a class="nav-link p-1"  href="https://proceedings.neurips.cc/">
+                    <span >
+                        Proceedings
+                    </span>
+                </a>
+                
+                    <hr class="dropdown-divider" aria-hidden="true">
+                
+            </li>
+
+        
+
+    
+
+
+
+    
+        
+            <li class="dropdown-item  pe-2" >
+                <a class="nav-link p-1"  href="/Conferences/FutureMeetings">
+                    <span >
+                        Future Meetings
+                    </span>
+                </a>
+                
+                    <hr class="dropdown-divider" aria-hidden="true">
+                
+            </li>
+
+        
+
+    
+
+
+
+    
+        
+            <li class="dropdown-item  pe-2" >
+                <a class="nav-link p-1"  href="/Conferences/2025/Press">
+                    <span >
+                        Press
+                    </span>
+                </a>
+                
+                    <hr class="dropdown-divider" aria-hidden="true">
+                
+            </li>
+
+        
+
+    
+
+
+
+    
+        
+            <li class="dropdown-item  pe-2" >
+                <a class="nav-link p-1"  href="/Exhibitors/exhibitorinfo">
+                    <span >
+                        Exhibitor Information
+                    </span>
+                </a>
+                
+                    <hr class="dropdown-divider" aria-hidden="true">
+                
+            </li>
+
+        
+
+    
+
+
+
+    
+        
+            <li class="dropdown-item  pe-2" >
+                <a class="nav-link p-1"  href="/public/PrivacyPolicy">
+                    <span >
+                        Privacy Policy
+                    </span>
+                </a>
+                
+                    <hr class="dropdown-divider" aria-hidden="true">
+                
+            </li>
+
+        
+
+    
+
+
+
+    
+        
+            <li class="dropdown-item  pe-2" >
+                <a class="nav-link p-1"  href="/Downloads">
+                    <span >
+                        Downloads
+                    </span>
+                </a>
+                
+            </li>
+
+        
+
+    
+
+
+
+        </ul>
+    </li>
+    
+
+
+
+    
+        
+            <li class="dropdown-item  pe-2" >
+                <a class="nav-link p-1"  href="/MyStuff">
+                    <span >
+                        My Stuff
+                    </span>
+                </a>
+                
+            </li>
+
+        
+
+    
+
+
+
+                    
+                </ul>
+
+                
+                <form class="d-flex mx-2" aria-label="Search" role="search" action="/search">
+                    <div class="input-group" role="search" style="outline-color:green;">
+                        <input type="text" class="form-control" placeholder="Search" name="q"
+                               value=""
+                               aria-label="Search" aria-describedby="btnGroupAddon"
+                                id="navbar-search">
+                        <div class="input-group-text btn-primary" id="btnGroupAddon">
+                            <button style="border: none; background-color: transparent; padding: 0;" type="submit" aria-label="execute search">
+                                <i class="fa-solid fa-magnifying-glass"></i>
+                            </button>
+                        </div>
+                    </div>
+                </form>
+                
+
+                
+                    <a href="/accounts/login?nextp=/virtual/2025/loc/san-diego/poster/116933 " class="navbar-brand"><span
+                            class="fa-solid fa-right-to-bracket"></span> Login</a>
+                
+
+            </div>
+        </div>
+    </div>
+</header>
+<!--Navbar end-->
+        
+    
+</div><!--noprint div-->
+
+<!--This holds the whole page including the navbar-->
+<main id="main">
+    
+        
+            <div class="container-fluid">
+                
+<!--Navbar start-->
+
+
+
+
+<div class="container-fluid">
+
+    <div class="dropdown" id="child-menu">
+        <nav class="align-middle navbar navbar-expand-md mx-4 border border-3 border-top-0 rounded-bottom"
+             style="min-height: 57px; background-color: #F6f6f6;">
+            <div class="container-fluid">
+
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#navbarToggler1034"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <div class="collapse navbar-collapse" id="navbarToggler1034">
+                    <ul class="navbar-nav me-auto mb-lg-0">
+                        
+
+
+    <li class="dropdown-item dropdown pe-3">
+        <a class="nav-link dropdown-toggle border-3  btn btn-primary text-white p-1" style= "background-color: #070bff; font-size: 1.2 em;"
+           href="#"
+           role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Select Year: (2025)
+        </a>
+        <ul class="dropdown-menu">
+            
+    
+        
+            <li class="dropdown-item " >
+                <a class="dropdown-item p-1"
+                   href="/Conferences/2026">2026
+                </a>
+                
+                    <hr class="dropdown-divider" aria-hidden="true">
+                
+            </li>
+        
+
+    
+
+
+
+    
+        
+            <li class="dropdown-item " >
+                <a class="dropdown-item p-1"
+                   href="/Conferences/2025">2025
+                </a>
+                
+                    <hr class="dropdown-divider" aria-hidden="true">
+                
+            </li>
+        
+
+    
+
+
+
+    
+        
+            <li class="dropdown-item " >
+                <a class="dropdown-item p-1"
+                   href="/Conferences/2024">2024
+                </a>
+                
+                    <hr class="dropdown-divider" aria-hidden="true">
+                
+            </li>
+        
+
+    
+
+
+
+    
+        
+            <li class="dropdown-item " >
+                <a class="dropdown-item p-1"
+                   href="/Conferences/2023">2023
+                </a>
+                
+                    <hr class="dropdown-divider" aria-hidden="true">
+                
+            </li>
+        
+
+    
+
+
+
+    
+        
+            <li class="dropdown-item " >
+                <a class="dropdown-item p-1"
+                   href="/Conferences/2022">2022
+                </a>
+                
+                    <hr class="dropdown-divider" aria-hidden="true">
+                
+            </li>
+        
+
+    
+
+
+
+    
+        
+            <li class="dropdown-item " >
+                <a class="dropdown-item p-1"
+                   href="/Conferences/2021">2021
+                </a>
+                
+                    <hr class="dropdown-divider" aria-hidden="true">
+                
+            </li>
+        
+
+    
+
+
+
+    
+        
+            <li class="dropdown-item " >
+                <a class="dropdown-item p-1"
+                   href="/Conferences/2020">2020
+                </a>
+                
+                    <hr class="dropdown-divider" aria-hidden="true">
+                
+            </li>
+        
+
+    
+
+
+
+    
+        
+            <li class="dropdown-item " >
+                <a class="dropdown-item p-1"
+                   href="/Conferences/2019">2019
+                </a>
+                
+                    <hr class="dropdown-divider" aria-hidden="true">
+                
+            </li>
+        
+
+    
+
+
+
+    
+        
+            <li class="dropdown-item " >
+                <a class="dropdown-item p-1"
+                   href="/Conferences/2018">2018
+                </a>
+                
+                    <hr class="dropdown-divider" aria-hidden="true">
+                
+            </li>
+        
+
+    
+
+
+
+    
+        
+            <li class="dropdown-item " >
+                <a class="dropdown-item p-1"
+                   href="/Conferences/2017">2017
+                </a>
+                
+                    <hr class="dropdown-divider" aria-hidden="true">
+                
+            </li>
+        
+
+    
+
+
+
+    
+        
+            <li class="dropdown-item " >
+                <a class="dropdown-item p-1"
+                   href="/Conferences/2016">2016
+                </a>
+                
+                    <hr class="dropdown-divider" aria-hidden="true">
+                
+            </li>
+        
+
+    
+
+
+
+    
+        
+            <li class="dropdown-item " >
+                <a class="dropdown-item p-1"
+                   href="/Conferences/2015">2015
+                </a>
+                
+                    <hr class="dropdown-divider" aria-hidden="true">
+                
+            </li>
+        
+
+    
+
+
+
+    
+        
+            <li class="dropdown-item " >
+                <a class="dropdown-item p-1"
+                   href="/Conferences/2014">2014
+                </a>
+                
+                    <hr class="dropdown-divider" aria-hidden="true">
+                
+            </li>
+        
+
+    
+
+
+
+    
+        
+            <li class="dropdown-item " >
+                <a class="dropdown-item p-1"
+                   href="/Conferences/2013">2013
+                </a>
+                
+                    <hr class="dropdown-divider" aria-hidden="true">
+                
+            </li>
+        
+
+    
+
+
+
+    
+        
+            <li class="dropdown-item " >
+                <a class="dropdown-item p-1"
+                   href="/Conferences/2012">2012
+                </a>
+                
+                    <hr class="dropdown-divider" aria-hidden="true">
+                
+            </li>
+        
+
+    
+
+
+
+    
+        
+            <li class="dropdown-item " >
+                <a class="dropdown-item p-1"
+                   href="/Conferences/2011">2011
+                </a>
+                
+                    <hr class="dropdown-divider" aria-hidden="true">
+                
+            </li>
+        
+
+    
+
+
+
+    
+        
+            <li class="dropdown-item " >
+                <a class="dropdown-item p-1"
+                   href="/Conferences/2010">2010
+                </a>
+                
+                    <hr class="dropdown-divider" aria-hidden="true">
+                
+            </li>
+        
+
+    
+
+
+
+    
+        
+            <li class="dropdown-item " >
+                <a class="dropdown-item p-1"
+                   href="/Conferences/2009">2009
+                </a>
+                
+                    <hr class="dropdown-divider" aria-hidden="true">
+                
+            </li>
+        
+
+    
+
+
+
+    
+        
+            <li class="dropdown-item " >
+                <a class="dropdown-item p-1"
+                   href="/Conferences/2008">2008
+                </a>
+                
+                    <hr class="dropdown-divider" aria-hidden="true">
+                
+            </li>
+        
+
+    
+
+
+
+    
+        
+            <li class="dropdown-item " >
+                <a class="dropdown-item p-1"
+                   href="/Conferences/2007">2007
+                </a>
+                
+                    <hr class="dropdown-divider" aria-hidden="true">
+                
+            </li>
+        
+
+    
+
+
+
+    
+        
+            <li class="dropdown-item " >
+                <a class="dropdown-item p-1"
+                   href="/Conferences/2006">2006
+                </a>
+                
+                    <hr class="dropdown-divider" aria-hidden="true">
+                
+            </li>
+        
+
+    
+
+
+
+    
+        
+            <li class="dropdown-item " >
+                <a class="dropdown-item p-1"
+                   href="/Conferences/PastConferences">Earlier Conferences
+                </a>
+                
+            </li>
+        
+
+    
+
+
+
+        </ul>
+    </li>
+    
+
+
+
+    
+        
+            <li class="dropdown-item  pe-2" >
+                <a class="nav-link p-1"  href="/Conferences/2025/Dates">
+                    <span >
+                        Dates
+                    </span>
+                </a>
+                
+            </li>
+
+        
+
+    
+
+
+
+    <li class="dropdown-item dropdown pe-3">
+        <a class="nav-link dropdown-toggle  p-1" 
+           href="#"
+           role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Submit
+        </a>
+        <ul class="dropdown-menu">
+            
+    
+        
+            <li class="dropdown-item  pe-2" >
+                <a class="nav-link p-1"  href="/Conferences/2025/CallForPapers">
+                    <span >
+                        Call for Papers
+                    </span>
+                </a>
+                
+            </li>
+
+        
+
+    
+
+
+
+    
+        
+            <li class="dropdown-item  pe-2" >
+                <a class="nav-link p-1"  href="/Conferences/2025/CallForDatasetsBenchmarks">
+                    <span >
+                        Call for Datasets and Benchmarks
+                    </span>
+                </a>
+                
+            </li>
+
+        
+
+    
+
+
+
+    
+        
+            <li class="dropdown-item  pe-2" >
+                <a class="nav-link p-1"  href="/Conferences/2025/CallForCompetitions">
+                    <span >
+                        Call for Competitions
+                    </span>
+                </a>
+                
+                    <hr class="dropdown-divider" aria-hidden="true">
+                
+            </li>
+
+        
+
+    
+
+
+
+    
+        
+            <li class="dropdown-item  pe-2" >
+                <a class="nav-link p-1"  href="/Conferences/2025/CallForPositionPapers">
+                    <span >
+                        Call for Position Papers
+                    </span>
+                </a>
+                
+            </li>
+
+        
+
+    
+
+
+
+    
+        
+            <li class="dropdown-item  pe-2" >
+                <a class="nav-link p-1"  href="/Conferences/2025/CallForWorkshops">
+                    <span >
+                        Call for Workshops
+                    </span>
+                </a>
+                
+            </li>
+
+        
+
+    
+
+
+
+    
+        
+            <li class="dropdown-item  pe-2" >
+                <a class="nav-link p-1"  href="/Conferences/2025/CallForCreativeAI">
+                    <span >
+                        Call for Creative AI
+                    </span>
+                </a>
+                
+            </li>
+
+        
+
+    
+
+
+
+    
+        
+            <li class="dropdown-item  pe-2" >
+                <a class="nav-link p-1"  href="/Conferences/2025/CallForTutorials">
+                    <span >
+                        Call for Tutorials
+                    </span>
+                </a>
+                
+                    <hr class="dropdown-divider" aria-hidden="true">
+                
+            </li>
+
+        
+
+    
+
+
+
+    
+        
+            <li class="dropdown-item fw-bolder fs-3 pe-2" >
+                <a class="nav-link p-1"  href="">
+                    <span >
+                        Reviewer Resources
+                    </span>
+                </a>
+                
+            </li>
+
+        
+
+    
+
+
+
+    
+        
+            <li class="dropdown-item  pe-2" >
+                <a class="nav-link p-1"  href="/Conferences/2025/AC-Guidelines">
+                    <span >
+                        Area Chair Guidelines
+                    </span>
+                </a>
+                
+            </li>
+
+        
+
+    
+
+
+
+    
+        
+            <li class="dropdown-item  pe-2" >
+                <a class="nav-link p-1"  href="/Conferences/2025/SAC-Guidelines">
+                    <span >
+                        Senior Area Chair Guidelines
+                    </span>
+                </a>
+                
+            </li>
+
+        
+
+    
+
+
+
+    
+        
+            <li class="dropdown-item  pe-2" >
+                <a class="nav-link p-1"  href="/Conferences/2025/ReviewerGuidelines">
+                    <span >
+                        Reviewer Guidelines
+                    </span>
+                </a>
+                
+            </li>
+
+        
+
+    
+
+
+
+    
+        
+            <li class="dropdown-item  pe-2" >
+                <a class="nav-link p-1"  href="/Conferences/2025/CallForAffinityEvents">
+                    <span >
+                        Call for Affinity Events
+                    </span>
+                </a>
+                
+            </li>
+
+        
+
+    
+
+
+
+    
+        
+            <li class="dropdown-item  pe-2" >
+                <a class="nav-link p-1"  href="/Conferences/2025/CallForEthicsReviewers">
+                    <span >
+                        Call For Ethics Reviewers
+                    </span>
+                </a>
+                
+            </li>
+
+        
+
+    
+
+
+
+    
+        
+            <li class="dropdown-item  pe-2" >
+                <a class="nav-link p-1"  href="/Conferences/2025/CallForEducationMaterials">
+                    <span >
+                        Call for Educational Materials
+                    </span>
+                </a>
+                
+                    <hr class="dropdown-divider" aria-hidden="true">
+                
+            </li>
+
+        
+
+    
+
+
+
+    
+        
+            <li class="dropdown-item  pe-2" >
+                <a class="nav-link p-1"  href="/Conferences/2025/CallForExpo">
+                    <span >
+                        Call for Expo
+                    </span>
+                </a>
+                
+                    <hr class="dropdown-divider" aria-hidden="true">
+                
+            </li>
+
+        
+
+    
+
+
+
+    
+        
+            <li class="dropdown-item  pe-2" >
+                <a class="nav-link p-1"  href="/Conferences/2025/CallforSocials">
+                    <span >
+                        Call for Socials
+                    </span>
+                </a>
+                
+            </li>
+
+        
+
+    
+
+
+
+    
+        
+            <li class="dropdown-item fw-bolder fs-3 pe-2" >
+                <a class="nav-link p-1"  href="">
+                    <span >
+                        Mexico City
+                    </span>
+                </a>
+                
+            </li>
+
+        
+
+    
+
+
+
+    
+        
+            <li class="dropdown-item  pe-2" >
+                <a class="nav-link p-1"  href="/Conferences/2025/CDMXCallForTutorials">
+                    <span >
+                        Call For Tutorials
+                    </span>
+                </a>
+                
+            </li>
+
+        
+
+    
+
+
+
+    
+        
+            <li class="dropdown-item fw-bolder fs-3 pe-2" >
+                <a class="nav-link p-1"  href="">
+                    <span >
+                        Author Resources
+                    </span>
+                </a>
+                
+                    <hr class="dropdown-divider" aria-hidden="true">
+                
+            </li>
+
+        
+
+    
+
+
+
+    
+        
+            <li class="dropdown-item  pe-2" >
+                <a class="nav-link p-1"  href="/Conferences/2025/PosterInstructions">
+                    <span >
+                        Poster Instructions
+                    </span>
+                </a>
+                
+                    <hr class="dropdown-divider" aria-hidden="true">
+                
+            </li>
+
+        
+
+    
+
+
+
+    
+        
+            <li class="dropdown-item  pe-2" >
+                <a class="nav-link p-1"  href="/Conferences/2025/CDMXCallForSocials">
+                    <span >
+                        Call for Socials
+                    </span>
+                </a>
+                
+            </li>
+
+        
+
+    
+
+
+
+    
+        
+            <li class="dropdown-item  pe-2" >
+                <a class="nav-link p-1"  href="/Conferences/2025/CDMXCallForStartupPitch">
+                    <span >
+                        Call for Startup Pitch
+                    </span>
+                </a>
+                
+                    <hr class="dropdown-divider" aria-hidden="true">
+                
+            </li>
+
+        
+
+    
+
+
+
+    
+        
+            <li class="dropdown-item  pe-2" >
+                <a class="nav-link p-1"  href="/Conferences/2025/CDMXCallForWorkshops">
+                    <span >
+                        Call for Workshops
+                    </span>
+                </a>
+                
+            </li>
+
+        
+
+    
+
+
+
+    
+        
+            <li class="dropdown-item  pe-2" >
+                <a class="nav-link p-1"  href="/Conferences/2025/CallForBTFGrants">
+                    <span >
+                        Call for Bridging the Future Grants
+                    </span>
+                </a>
+                
+                    <hr class="dropdown-divider" aria-hidden="true">
+                
+            </li>
+
+        
+
+    
+
+
+
+    
+        
+            <li class="dropdown-item  pe-2" >
+                <a class="nav-link p-1"  href="https://docs.google.com/document/u/1/d/e/2PACX-1vTIIpfIUs1oPgm47hg5NQ9dWCtK2twhNTAkfkggItdzukS85kf-ThFxxVXHhFuGtnZ5pfyC-Rw38xIm/pub">
+                    <span >
+                        Accessibility Guidelines for Talks, Papers and Posters
+                    </span>
+                </a>
+                
+            </li>
+
+        
+
+    
+
+
+
+        </ul>
+    </li>
+    
+
+
+
+    <li class="dropdown-item dropdown pe-3">
+        <a class="nav-link dropdown-toggle  p-1" 
+           href="#"
+           role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Attend
+        </a>
+        <ul class="dropdown-menu">
+            
+    
+        
+            <li class="dropdown-item  pe-2" >
+                <a class="nav-link p-1"  href="/Conferences/2025/Visa">
+                    <span >
+                        Visa Information
+                    </span>
+                </a>
+                
+                    <hr class="dropdown-divider" aria-hidden="true">
+                
+            </li>
+
+        
+
+    
+
+
+
+    
+        
+            <li class="dropdown-item  pe-2" >
+                <a class="nav-link p-1"  href="/Conferences/2025/Hotels">
+                    <span >
+                        Hotels
+                    </span>
+                </a>
+                
+                    <hr class="dropdown-divider" aria-hidden="true">
+                
+            </li>
+
+        
+
+    
+
+
+
+    
+        
+            <li class="dropdown-item  pe-2" >
+                <a class="nav-link p-1"  href="/Register/view-registration">
+                    <span >
+                        Register
+                    </span>
+                </a>
+                
+                    <hr class="dropdown-divider" aria-hidden="true">
+                
+            </li>
+
+        
+
+    
+
+
+
+    
+        
+            <li class="dropdown-item  pe-2" >
+                <a class="nav-link p-1"  href="/Conferences/2025/Children">
+                    <span >
+                        Attending with Children
+                    </span>
+                </a>
+                
+                    <hr class="dropdown-divider" aria-hidden="true">
+                
+            </li>
+
+        
+
+    
+
+
+
+    
+        
+            <li class="dropdown-item  pe-2" >
+                <a class="nav-link p-1"  href="/Conferences/2025/FinancialAssistance">
+                    <span >
+                        Volunteering and Financial Assistance
+                    </span>
+                </a>
+                
+                    <hr class="dropdown-divider" aria-hidden="true">
+                
+            </li>
+
+        
+
+    
+
+
+
+    
+        
+            <li class="dropdown-item  pe-2" >
+                <a class="nav-link p-1"  href="/Conferences/2025/AtTheConference">
+                    <span >
+                        At the Conference
+                    </span>
+                </a>
+                
+            </li>
+
+        
+
+    
+
+
+
+        </ul>
+    </li>
+    
+
+
+
+    <li class="dropdown-item dropdown pe-3">
+        <a class="nav-link dropdown-toggle  p-1" 
+           href="#"
+           role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Organizers
+        </a>
+        <ul class="dropdown-menu">
+            
+    
+        
+            <li class="dropdown-item  pe-2" >
+                <a class="nav-link p-1"  href="/Conferences/2025/Board">
+                    <span >
+                        NeurIPS Board
+                    </span>
+                </a>
+                
+                    <hr class="dropdown-divider" aria-hidden="true">
+                
+            </li>
+
+        
+
+    
+
+
+
+    
+        
+            <li class="dropdown-item  pe-2" >
+                <a class="nav-link p-1"  href="/Conferences/2025/Committees">
+                    <span >
+                        Organizing Committee
+                    </span>
+                </a>
+                
+                    <hr class="dropdown-divider" aria-hidden="true">
+                
+            </li>
+
+        
+
+    
+
+
+
+    
+        
+            <li class="dropdown-item  pe-2" >
+                <a class="nav-link p-1"  href="/Conferences/2025/ProgramCommittee">
+                    <span >
+                        Program Committee
+                    </span>
+                </a>
+                
+                    <hr class="dropdown-divider" aria-hidden="true">
+                
+            </li>
+
+        
+
+    
+
+
+
+    
+        
+            <li class="dropdown-item  pe-2" >
+                <a class="nav-link p-1"  href="/About">
+                    <span >
+                        NeurIPS Foundation
+                    </span>
+                </a>
+                
+            </li>
+
+        
+
+    
+
+
+
+        </ul>
+    </li>
+    
+
+
+
+    <li class="dropdown-item dropdown pe-3">
+        <a class="nav-link dropdown-toggle  p-1" 
+           href="#"
+           role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Exhibitors
+        </a>
+        <ul class="dropdown-menu">
+            
+    
+        
+            <li class="dropdown-item  pe-2" >
+                <a class="nav-link p-1"  href="/Exhibitors/exhibitorinfo">
+                    <span >
+                        Information
+                    </span>
+                </a>
+                
+                    <hr class="dropdown-divider" aria-hidden="true">
+                
+            </li>
+
+        
+
+    
+
+
+
+    
+        
+            <li class="dropdown-item  pe-2" >
+                <a class="nav-link p-1"  href="/FAQ/Exhibitors">
+                    <span >
+                        FAQ
+                    </span>
+                </a>
+                
+                    <hr class="dropdown-divider" aria-hidden="true">
+                
+            </li>
+
+        
+
+    
+
+
+
+    
+        
+            <li class="dropdown-item  pe-2" >
+                <a class="nav-link p-1"  href="/Conferences/2025/Sponsors">
+                    <span >
+                        2025 Exhibitors
+                    </span>
+                </a>
+                
+            </li>
+
+        
+
+    
+
+
+
+        </ul>
+    </li>
+    
+
+
+
+    
+        
+            <li class="dropdown-item  pe-2" >
+                <a class="nav-link p-1"  href="/virtual/2025/index.html">
+                    <span >
+                        Conference Site
+                    </span>
+                </a>
+                
+            </li>
+
+        
+
+    
+
+
+
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </div>
+    <!--Navbar end-->
+
+            </div>
+            <br><br>
+        
+    
+    
+        
+        <div class="container">
+    
+    
+    
+
+    
+    <div class="container">
+        
+            <!--JUst above the HTML in document-snippet.html-->
+            <div> <div class="call-for-papers">
+<h1>Call For Papers 2025</h1>
+
+<div class="important-dates">
+<ul>
+	<li><strong>Abstract submission deadline:</strong> May 11, 2025 AoE</li>
+	<li><strong>Full paper submission deadline: </strong>May 15, 2025 AOE <span class="note">(all authors must have an OpenReview profile when submitting)</span></li>
+	<li><strong>Technical appendices and supplemental materials deadline:</strong> May 22, 2025 AoE</li>
+	<li><strong>Author notification:</strong> Sep 18, 2025 AoE</li>
+	<li><strong>Camera-ready:</strong> Oct 23, 2025 AoE</li>
+</ul>
+
+<p><strong>Submit at:</strong> <a href="https://openreview.net/group?id=NeurIPS.cc/2025/Conference" target="_blank">https://openreview.net/group?id=NeurIPS.cc/2025/Conference</a></p>
+
+<p>The site will start accepting submissions on April 3, 2025.</p>
+
+<p>Subscribe to these and other dates on the <a href="https://neurips.cc/Conferences/2025/Dates">2025 dates page</a>.</p>
+</div>
+
+<div class="conference-intro">
+<p>The Thirty-Ninth Annual Conference on Neural Information Processing Systems (NeurIPS 2025) is an interdisciplinary conference that brings together researchers in machine learning, neuroscience, statistics, optimization, computer vision, natural language processing, life sciences, natural sciences, social sciences, and other adjacent fields. We invite submissions presenting new and original research on topics including but not limited to the following:</p>
+
+<ul>
+	<li>Applications (e.g., vision, language, speech and audio, Creative AI)</li>
+	<li>Deep learning (e.g., architectures, generative models, optimization for deep networks, foundation models, LLMs)</li>
+	<li>Evaluation (e.g., methodology, meta studies, replicability and validity, human-in-the-loop)</li>
+	<li>General machine learning (supervised, unsupervised, online, active, etc.)</li>
+	<li>Infrastructure (e.g., libraries, improved implementation and scalability, distributed solutions)</li>
+	<li>Machine learning for sciences (e.g. climate, health, life sciences, physics, social sciences)</li>
+	<li>Neuroscience and cognitive science (e.g., neural coding, brain-computer interfaces)</li>
+	<li>Optimization (e.g., convex and non-convex, stochastic, robust)</li>
+	<li>Probabilistic methods (e.g., variational inference, causal inference, Gaussian processes)</li>
+	<li>Reinforcement learning (e.g., decision and control, planning, hierarchical RL, robotics)</li>
+	<li>Social and economic aspects of machine learning (e.g., fairness, interpretability, human-AI interaction, privacy, safety, strategic behavior)</li>
+	<li>Theory (e.g., control theory, learning theory, algorithmic game theory)</li>
+</ul>
+
+<p>Machine learning is a rapidly evolving field, and so we welcome interdisciplinary submissions that do not fit neatly into existing categories. We also encourage in-depth analysis of existing methods that provide new insights in terms of their limitations or behaviour beyond the scope of the original work.</p>
+
+<p>Authors are asked to confirm that their submissions accord with the <a href="https://neurips.cc/public/CodeOfConduct">NeurIPS code of conduct</a>.</p>
+</div>
+
+<div class="submission-details">
+<h3>OpenReview</h3>
+
+<p>We are using OpenReview to manage submissions. The reviews and author responses will not be public initially (but may be made public later, see below). As in previous years, submissions under review will be visible only to their assigned program committee. We will not be soliciting comments from the general public during the reviewing process. Anyone who plans to submit a paper as an author or a co-author will need to create (or update) their OpenReview profile by the full paper submission deadline. Your OpenReview profile can be edited by logging in and clicking on your name in <a href="https://openreview.net/">https://openreview.net/</a>. This takes you to a URL "https://openreview.net/profile?id=~[Firstname]_[Lastname][n]" where the last part is your profile name, e.g., ~Po-Yi_Lu1.</p>
+
+<p>The OpenReview profiles must be up to date, with all publications by the authors, and their current affiliations. The easiest way to import publications is through DBLP but it is not required, <a href="https://openreview.net/faq">see OpenReview FAQ</a>. Submissions without the authors' updated OpenReview profiles will be desk rejected. The information entered in the profile is critical for ensuring that <a href="https://neurips.cc/public/guides/ConflictsOfInterest">conflicts of interest</a> and reviewer matching are handled properly. Because of the rapid growth of NeurIPS, we request that all authors help with reviewing papers, if asked to do so. We need everyone's help in maintaining the high scientific quality of NeurIPS.</p>
+
+<p>Please be aware that OpenReview has a moderation policy for newly created profiles: New profiles created without an institutional email will go through a moderation process that can take up to two weeks. New profiles created with an institutional email will be activated automatically. If you have any questions about the use of OpenReview, please refer to its FAQ: https://openreview.net/faq</p>
+
+<p>Our OpenReview portal is <a href="https://openreview.net/group?id=NeurIPS.cc/2025/Conference">https://openreview.net/group?id=NeurIPS.cc/2025/Conference</a>. Please note that submissions meant for the Datasets &amp; Benchmarks papers should be submitted to a different OpenReview portal, as shown <a href="https://neurips.cc/Conferences/2025/CallForDatasetsBenchmarks">here</a>. Papers will not be transferred between the main and the D&amp;B track after the submission is closed.</p>
+
+<h3>Abstract Submission</h3>
+
+<p>There is a mandatory abstract submission deadline on <strong>May 11, 2025</strong>, four days before full paper submissions are due. While it will be possible to edit the title and abstract until the full paper submission deadline, submissions with "placeholder" abstracts that are rewritten for the full submission risk being removed without consideration. This includes titles and abstracts that either provide little or no semantic information (e.g., "We provide a new semi-supervised learning method.") or describe a substantively different claimed contribution. After the abstract deadline, adding or removing authors is not allowed, but listed authors can potentially be reordered before the submission deadline.</p>
+
+<h3>Paper Formatting Instructions</h3>
+
+<p>All submissions must be in PDF format, and in a single PDF file include, in this suggested order:</p>
+
+<ol>
+	<li>The submitted paper content</li>
+	<li>Paper references</li>
+	<li>The NeurIPS paper checklist</li>
+</ol>
+
+<p>The authors may optionally choose to include some or all of the technical appendices in the same PDF above. But those included parts cannot be changed after the full submission deadline.</p>
+
+<p>The main text of a submitted paper is limited to <strong>nine content pages</strong>, including all figures and tables. Additional pages containing references, checklist, and the optional technical appendices do not count as content pages. If your submission is accepted, you will be allowed an additional content page for the camera-ready version. The maximum file size for a main paper submission is 50MB.</p>
+
+<p>You must format your submission using the <strong><a href="https://media.neurips.cc/Conferences/NeurIPS2025/Styles.zip" target="_blank">NeurIPS 2025 LaTeX style file</a></strong>, which includes a "preprint" option for non-anonymous preprints posted online. Submissions that violate the NeurIPS style (e.g., by decreasing margins or font sizes) or page limits may be rejected without further review. Papers may also be rejected without consideration of their merits if they fail to meet the submission requirements, as described in this document.</p>
+
+<h3>Paper Checklist</h3>
+
+<p>In order to improve the rigor and transparency of research submitted to and published at NeurIPS, authors are required to complete a <a href="https://neurips.cc/public/guides/PaperChecklist">paper checklist</a>. The paper checklist is intended to help authors reflect on a wide variety of issues relating to responsible machine learning research, including reproducibility, transparency, research ethics, and societal impact. The checklist forms part of the paper submission, but does not count towards the page limit.</p>
+
+<h3>Technical Appendices and Supplementary Material</h3>
+
+<p>Technical appendices with additional results, figures, graphs and proofs may be submitted with the paper submission before the full submission deadline (see above), or as a separate PDF in the ZIP file below before the supplementary material deadline. There is no page limit for the technical appendices.</p>
+
+<p>Supplementary material, such as data, or source code may also be submitted separately in a single ZIP file. The material should be created by the authors that directly supports the submission content. We encourage authors to upload their code specifically as part of their supplementary material in order to help reviewers assess the quality of the work. Check <a href="/public/guides/CodeSubmissionPolicy">the policy</a> as well as code submission <a href="https://github.com/paperswithcode/releasing-research-code">guidelines and templates</a> for further details.</p>
+
+<p>Like main paper submissions, technical appendices and supplementary material must be anonymized. Looking at technical appendices and supplementary material is at the discretion of the reviewers. Authors may submit up to 100MB of technical appendices and supplementary material.</p>
+
+<h3>Use of Large Language Models (LLMs)</h3>
+
+<p>The NeurIPS policy for use of Large Language Models (LLMs) can be found <a href="https://neurips.cc/Conferences/2025/LLM">here</a>. Authors are responsible for following it.</p>
+
+<h3>Double-blind Reviewing</h3>
+
+<p>All submissions must be anonymized and may not contain any identifying information that may violate the double-blind reviewing policy. This policy applies to any supplementary or linked material as well, including code. If you are including links to any external material, it is your responsibility to guarantee anonymous browsing. Please do not include acknowledgments at submission time. If you need to cite one of your own papers, you should do so with adequate anonymization to preserve double-blind reviewing. For instance, write "In the previous work of Smith et al. [1]…" rather than "In our previous work [1]...". If you need to cite one of your own papers that is in submission to NeurIPS and not available as a non-anonymous preprint, then include a copy of the cited anonymized submission in the supplementary material and write "Anonymous et al. [1] concurrently show...". Any papers found to be violating this policy will be desk rejected.</p>
+
+<p>Please note that a different policy applies to Datasets &amp; Benchmarks papers, as shown <a href="https://neurips.cc/Conferences/2025/CallForDatasetsBenchmarks">here</a>.</p>
+
+<h3>Ethics Review</h3>
+
+<p>Reviewers and ACs may flag submissions for <a href="https://neurips.cc/public/EthicsGuidelines">ethics review</a>. Flagged submissions will be sent to an ethics review committee for comments. Comments from ethics reviewers will be considered by the primary reviewers and AC as part of their deliberation. They will also be visible to authors, who will have an opportunity to respond. Ethics reviewers do not have the authority to reject papers, but in extreme cases papers may be rejected by the program chairs on ethical grounds, regardless of scientific quality or contribution.</p>
+
+<h3>Preprints</h3>
+
+<p>The existence of non-anonymous preprints (on arXiv or other online repositories, personal websites, social media) will not result in rejection. If you choose to use the NeurIPS style for the preprint version, you must use the "preprint" option rather than the "final" option. Reviewers will be instructed not to actively look for such preprints, but encountering them will not constitute a conflict of interest. Authors may submit anonymized work to NeurIPS that is already available as a preprint (e.g., on arXiv) without citing it. Note that public versions of the submission should not say "Under review at NeurIPS" or similar.</p>
+
+<h3>Dual Submissions</h3>
+
+<p>Submissions that are substantially similar to papers that the authors have previously published or submitted in parallel to other peer-reviewed venues with proceedings or journals may not be submitted to NeurIPS. Papers previously presented at workshops are permitted, so long as they did not appear in conference proceedings (e.g., CVPRW proceedings), a journal or a book. NeurIPS coordinates with other conferences to identify dual submissions. The NeurIPS policy on dual submissions applies for the entire duration of the reviewing process. Failure to cope with the dual submission policy is ground to desk rejection during any point of the reviewing and program building process. Slicing contributions too thinly is discouraged. The reviewing process will treat any other submission by an overlapping set of authors as prior work. If publishing one would render the other too incremental, both may be rejected.</p>
+
+<p>Please note that dual submissions to both the main conference track and the Datasets &amp; Benchmarks track will be desk rejected.</p>
+
+<h3>Anti-collusion</h3>
+
+<p>NeurIPS does not tolerate any collusion whereby authors secretly cooperate with reviewers, ACs or SACs to obtain favorable reviews. The penalty for collusion is immediate removal from the reviewing system, rejection of all papers under consideration, and/or sanctions to future NeurIPS.</p>
+
+<p>If collusion is identified, the authors and reviewers involved will be notified, and be able to respond to the accusation. While their answers will be carefully taken into consideration, given the short time window to act, the PCs will deliberate and their decision will be final.</p>
+
+<p>Identifying collusion can happen at any point during the review process, including but not limited to the bidding process and the rebuttal period.</p>
+
+<h3>Author Responses</h3>
+
+<p>Authors will have one week to view and respond to initial reviews. Author responses may not contain any identifying information that may violate the double-blind reviewing policy. Authors may not submit revisions of their paper or supplemental material, but may post their responses as a discussion in OpenReview. This is to reduce the burden on authors to have to revise their paper in a rush during the short rebuttal period.</p>
+
+<p>After the initial response period, authors will be able to respond to any further reviewer/AC questions and comments by posting on the submission's forum page. The program chairs reserve the right to solicit additional reviews after the initial author response period. These reviews will become visible to the authors as they are added to OpenReview, and authors will have a chance to respond to them.</p>
+
+<p>After the notification deadline, accepted and opted-in rejected papers will be made public and open for non-anonymous public commenting. Their anonymous reviews, meta-reviews, author responses and reviewer responses will also be made public. Authors of rejected papers will have two weeks after the notification deadline to opt in to make their deanonymized rejected papers public in OpenReview. These papers are not counted as NeurIPS publications and will be shown as rejected in OpenReview.</p>
+
+<h3>Publication of Accepted Submissions</h3>
+
+<p>Reviews, meta-reviews, and any discussion with the authors will be made public for accepted papers (but reviewer, area chair, and senior area chair identities will remain anonymous). Camera-ready papers will be due in advance of the conference. All camera-ready papers must include a <a href="https://neurips.cc/public/guides/FundingDisclosure">funding disclosure</a>. We strongly encourage accompanying code and data to be submitted with accepted papers when appropriate, as per the <a href="https://neurips.cc/public/guides/CodeSubmissionPolicy">code submission policy</a>. Authors will be allowed to make minor changes for a short period of time after the conference.</p>
+
+<h3>Contemporaneous Work</h3>
+
+<p>For the purpose of the reviewing process, papers that appeared online after March 1st, 2025 will generally be considered "contemporaneous" in the sense that the submission will not be rejected on the basis of the comparison to contemporaneous work. Authors are still expected to cite and discuss contemporaneous work and perform empirical comparisons to the degree feasible. Any paper that influenced the submission is considered prior work and must be cited and discussed as such. Submissions that are very similar to contemporaneous work will undergo additional scrutiny to prevent cases of plagiarism and missing credit to prior work.</p>
+
+<p>Plagiarism is prohibited by the NeurIPS <a href="https://neurips.cc/public/CodeOfConduct">Code of Conduct</a>.</p>
+
+<h3>Other Tracks</h3>
+
+<p>Similarly to earlier years, we will host multiple tracks, such as datasets and benchmarks, competitions, tutorials as well as workshops, in addition to the main track for which this call for papers is intended. See the conference homepage for updates and calls for participation in these tracks.</p>
+
+<p>This year, the Datasets and Benchmarks track will share the exact same deadlines as the main conference program. DB submissions will also adhere to the main track's guidelines for formatting, supplementary materials, LLM use, ethics review, preprints, dual submissions, anti-collusion, author responses, and publication. Please refer to the <a href="https://neurips.cc/Conferences/2025/CallForDatasetsBenchmarks">Datasets and Benchmarks CFP</a> for details on the track specific requirements; otherwise, the main track's CFP applies.</p>
+
+<p>This year, we introduce a new Position Paper track, with formatting requirements that are consistent to those for the main conference and shared policies on double-blind reviewing, etc. The Position track also has a “lay summary” requirement for papers that are accepted for publication. The deadlines for position papers are shifted slightly later compared to those of the main conference. Please refer to the <a href="/Conferences/2025/CallForPositionPapers">Position Papers CFP</a> for more details.</p>
+
+<h3>Experiments</h3>
+
+<p>As in past years, the program chairs will be measuring the quality and effectiveness of the review process via randomized controlled experiments. All experiments are independently reviewed and approved by an Institutional Review Board (IRB). The program chairs and the Datasets and Benchmarks track chairs will decide whether the experiments are applicable to either or both of the tracks.</p>
+
+<h3>Financial Aid</h3>
+
+<p>Each paper may designate up to one (1) NeurIPS.cc account email address of a corresponding student author who confirms that they would need the support to attend the conference, and agrees to volunteer if they get selected. To be considered for Financial the student will also need to fill out the Financial Aid application when it becomes available.</p>
+</div>
+</div>
+</div>
+        
+    </div>
+
+
+
+    
+        </div>
+    
+
+</main>
+<!--END BLOCK CONTENT-->
+
+
+<!--Footer for the edit button-->
+
+
+<script nonce="0Gal3K3NCI8vZOQb2DOCLg==">
+
+    $(function () {
+        if ($(".editable").length == 0) {
+            $("#editFooter").hide();
+        }
+
+        // Event bindings for edit buttons
+        $('.startEditBtn').on('click', function() {
+            start_edit();
+        });
+        
+        $('.stopEditBtn').on('click', function() {
+            stop_edit();
+        });
+        $('#id_accepted_terms_and_conditions').on('change', function() {
+            this.form.submit();
+        });
+        $('.accepted_terms_and_conditions').on('change', function() {
+            this.form.submit();
+        });
+        $('.workshopstatus').on('change', function() {
+            changeStatus(this);
+        });
+        $('.action-select').on('change', function() {
+            actionChanged(this);
+        });
+        $('.extra').on('change', function() {
+            extraChanged(this);
+        });
+        $('.filter_workshop').on('change', function() {
+            this.form.submit();
+        });
+        $('.volunteer-status, .recommendation-letter-status').on('change', function() {
+            setStatus(this);
+        });
+        $('.status-form-show').on('change', function() {
+            this.form.submit();
+        });
+        $('.download-form-download').on('change', function() {
+            this.form.submit();
+        });
+        $('.presentation-type-form-presentation-type').on('change', function() {
+            this.form.submit();
+        });
+        $('.export-form-resource').on('change', function() {
+            showFieldsForResource(this.value);
+        });
+        $('.import-form-resource').on('change', function() {
+            showFieldsForResource(this.value);
+        });
+        $('.vol-email-form-to, .vol-email-form-template').on('change', function() {
+            this.form.submit();
+        });
+        $('.organizer-alert').on('click', function() {
+            getUserCreateForm(this.href);
+        });
+    })
+</script>
+
+<script src="/static/core/js/fastclick.min.js" ></script>
+
+<!--We don't know if there are editable tags on the page until after the django template engine has rendered the page. So,
+test in javascript for "editable" tags and if present, load the ckeditor engine dynamically. -->
+
+<script nonce="0Gal3K3NCI8vZOQb2DOCLg==">
+    if (document.getElementsByClassName('editable').length > 0) {
+        var script = document.createElement("script");
+        script.type = "text/javascript";
+        script.src = "/static/core/ckeditor/4.18/ckeditor.js";    // use this for linked script
+      script.onload = function () {
+        console.log("ckeditor loaded");
+        // Initial setup when each editor is ready
+        CKEDITOR.on("instanceReady", function (e) {
+          updateToggleDocName(e.editor);
+        });
+
+        // React to any editor entering/leaving read-only
+        CKEDITOR.on("readOnly", function (e) {
+          updateToggleDocName(e.editor);
+        });
+      };
+        document.body.appendChild(script);
+    }
+
+    function updateToggleDocName(editor) {
+      var id = editor && editor.name;
+      if (!id || id.indexOf("id_") !== 0) return;
+
+      var doc_name_element = document.getElementById("document_name_" + id.slice(3));
+      console.log(doc_name_element);
+      if (!doc_name_element) return;
+
+      doc_name_element.style.display = editor.readOnly ? "none" : "block";
+    }
+
+</script>
+
+
+<script nonce="0Gal3K3NCI8vZOQb2DOCLg==">
+    function fetchContent() {
+        $(".editable").each(function (index) {
+            var myself = this;
+            var docvID = this.getAttribute('id').replace("id_", "");
+            var blurbtext = this.getAttribute("blurbtext");
+            $.ajax({
+                url: "/Admin/RetrieveDocumentVersion",
+                type: "POST",
+                data: {
+                    docvID: docvID,
+                    blurbtext: blurbtext,
+                    csrfmiddlewaretoken: csrftoken,
+                },
+                success: function (data, textStatus, jqXHR) {
+                    myself.setAttribute("contenteditable", "true");
+                    myself.innerHTML = data;
+                    CKEDITOR.inline(myself.id);
+                },
+            });
+        })
+    }
+
+    $("#nopageedit").hide();
+
+    function start_edit() {
+
+        $(".editable").addClass("warning-ring");
+
+        //At the beginning of an edit, we need to replace the content of the
+        //editable div with it's databased content in order to preserve the
+        //template tags. We want the tag, not the rendered tag.
+
+        /* You must remove any countdown.js timers on the page before replacing the page with it's
+        document version otherwise, Javascript will throw an exception.  */
+
+
+        $("[class$='-countdown']").parent().remove();
+        fetchContent();
+        $(".editable").attr("onblur", "ckeditorsave(this)");
+        window.status.bold();
+        window.status = "Click outside the editable area to save. Changes are LIVE!! Refresh page to discard changes.";
+        $("#editpage").hide();
+        $("#noeditpage").show();
+    }
+
+
+    function stop_edit() {
+        ckeditorsave();
+        $("#noeditpage").hide();
+        $("#editpage").show();
+        window.location.reload();
+    }
+
+    function ckeditorsave(event) {
+        for (var name in CKEDITOR.instances) {
+            if (CKEDITOR.instances[name].checkDirty()) {
+                editor = CKEDITOR.instances[name];
+                saveEditable(editor);
+            }
+        }
+    }
+
+    function saveEditable(editor) {
+        var content = editor.getData();
+        var contentId = editor.name;
+        var pageId = window.location.pathname;
+        var originalContent = "N/A";
+        var documentversion = editor.container.getAttribute("id").replace("id_", "");
+        var blurbtext = editor.container.getAttribute("blurbtext");
+        if (contentId.match(/-aloha$/gi)) {
+            contentId = contentId.replace(/-aloha/gi, '');
+        }  /*I'm not sure what this does but it seems like it would matter*/
+        var request = jQuery.ajax({
+            url: "/Admin/SaveDocument",
+            type: "POST",
+            async: false,
+            data: {
+                content: content,
+                originalContent: originalContent,
+                contentId: contentId,
+                pageId: pageId,
+                documentversion: documentversion,
+                blurbtext: blurbtext,
+                csrfmiddlewaretoken: csrftoken
+            },
+            success: function (data) {
+                if (data['message']) {
+                    alert(data['message']);
+                }
+            },
+            error: function (xqXHR, textStatus) {
+                window.status = textStatus;
+                debugger;
+            }
+
+        });
+
+    };
+
+
+</script>
+
+<script nonce="0Gal3K3NCI8vZOQb2DOCLg==">
+    jQuery(document).ajaxSend(function (event, xhr, settings) {
+        function getCookie(name) {
+            var cookieValue = null;
+            if (document.cookie && document.cookie != '') {
+                var cookies = document.cookie.split(';');
+                for (var i = 0; i < cookies.length; i++) {
+                    var cookie = jQuery.trim(cookies[i]);
+                    // Does this cookie string begin with the name we want?
+                    if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+
+        function sameOrigin(url) {
+            // url could be relative or scheme relative or absolute
+            var host = document.location.host; // host + port
+            var protocol = document.location.protocol;
+            var sr_origin = '//' + host;
+            var origin = protocol + sr_origin;
+            // Allow absolute or scheme relative URLs to same origin
+            return (url == origin || url.slice(0, origin.length + 1) == origin + '/') ||
+                (url == sr_origin || url.slice(0, sr_origin.length + 1) == sr_origin + '/') ||
+                // or any other URL that isn't scheme relative or absolute i.e relative.
+                !(/^(\/\/|http:|https:).*/.test(url));
+        }
+
+        function safeMethod(method) {
+            return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+        }
+
+        if (!safeMethod(settings.type) && sameOrigin(settings.url)) {
+            xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
+        }
+    });
+</script>
+
+
+
+
+
+<div id="successful-page-load" class='hidden'>Successful Page Load</div>
+
+
+
+
+
+    
+        <link href="/static/conf_gdpr/css/conf_gdpr.css" rel="stylesheet">
+        <div id="cookie-bar" style="z-index: 8">
+            <table class="gdpr-statement">
+                <col>
+                <col style="width:120px">
+                <tr>
+                    <td style="padding:5px">
+                        NeurIPS uses cookies for essential functions only. We do not sell your personal
+                        information.
+                        <a href="/public/PrivacyPolicy">Our Privacy Policy &raquo;&nbsp;</a>
+                    </td>
+                    <td>
+                        <button float-end class="btn btn-light btn-sm btn btn-outline-dark" id="accept_cookies_button" >Accept</button>
+                           
+                    </td>
+                </tr>
+            </table>
+        </div>
+
+        <script nonce="0Gal3K3NCI8vZOQb2DOCLg==">
+            function accept_cookies() {
+
+                $.ajax({
+                    method: "POST",
+                    url: "/conf_gdpr/accept",
+                    data: {
+                        csrfmiddlewaretoken: csrftoken,
+                    },
+                }).done(function (data) {
+                    console.log(data);
+                    $("#cookie-bar").fadeOut();
+                }).fail(function (jqXHR, textStatus) {
+                    alert(textStatus);
+                });
+            }
+            $("#accept_cookies_button").on("click", () => {
+                accept_cookies();
+            });
+        </script>
+
+    
+
+
+
+
+
+
+
+<br>
+<div class="noprint">
+    <footer id="bootstrap-footer" class="text-center text-lg-start bg-light text-muted noprint">
+
+        <div class="text-center p-1 border-top border-dark">
+        </div>
+        <!-- Section: Links  -->
+        <section class="pt-1">
+            <div class="container text-center text-md-start mt-3">
+                <!-- Grid row -->
+                <div class="row mt-3">
+                    <!-- Grid column -->
+                    <div class="col-md-3 col-lg-3 col-xl-3 mx-auto mb-3">
+                        <!-- Content -->
+                        <h6 class="text-uppercase fw-bold mb-4">
+                            <img src="/static/core/img/NeurIPS-logo.svg" alt="NeurIPS logo" height='30'>
+                        </h6>
+                        <p>
+                            The NeurIPS Logo above may be used on presentations. Right-click and choose
+                            download. It is a vector graphic and may be used at any scale.
+                        </p>
+
+                    </div>
+
+
+                    <!-- Grid column -->
+                    <div class="col-md-5 col-lg-4 col-xl-3 mx-auto mb-4" style="max-width: 300px;">
+                        <!-- Links -->
+                        <h6 class="text-uppercase fw-bold mb-4 text-center">
+                            Useful links
+                        </h6>
+                        <div>
+             <ul>
+	<li><a href="/Conferences/2025/Press">Press</a></li>
+	<li><a href="https://proceedings.neurips.cc/">Proceedings</a></li>
+</ul>
+            </div>
+                    </div>
+                    <!-- Grid column -->
+
+                    <!-- Grid column -->
+                    <div class="col-md-4 col-lg-3 col-xl-3 mx-auto mb-md-0 mb-4">
+                        <!-- Links -->
+                        <h6 class="text-uppercase fw-bold mb-4">Contact</h6>
+                        
+                            <p>
+                                <i class="fas fa-home me-3"></i> 1269 Law St, San Diego CA 92109
+                            </p>
+                        
+                        <p>
+                            <i class="fas fa-envelope me-3"></i> <a href="/Help/Contact">Email</a>
+                        </p>
+                        
+                        
+
+
+                    </div>
+                    <!-- Grid column -->
+                </div>
+                <!-- Grid row -->
+            </div>
+        </section>
+        <!-- Section: Links  -->
+
+        <!-- Copyright -->
+        <div class="text-center p-4" style="background-color: rgba(0, 0, 0, 0.05);">
+            <div>
+             <p><a href="https://proceedings.neurips.cc">NeurIPS Proceedings</a></p>
+
+            </div>
+        </div>
+        <!-- Copyright -->
+    </footer>
+</div>
+<!-- Footer -->
+
+
+<!-- Footer -->
+
+</body>
+</html>

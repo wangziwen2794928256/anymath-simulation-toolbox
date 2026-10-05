@@ -1,0 +1,49 @@
+% 赛后期刊论文骨架（LaTeX）。投稿前按目标期刊模板替换 documentclass。
+\documentclass[review]{elsarticle} % 以 Elsevier 为例；MDPI 用 mdpi 模板
+\usepackage{graphicx,amsmath,amssymb,booktabs,algorithm,algpseudocode}
+
+\title{Multi-Agent Simulation and <Learning/Optimization> for <Scenario>: A <Contribution> Approach}
+
+\author[1]{First Author\corref{cor1}}
+\cortext[cor1]{Corresponding author}
+\address[1]{School of ..., University ..., City, China}
+
+\begin{abstract}
+    <Background>... <Method>... <Key results with numbers>... <Significance>...
+\end{abstract}
+
+\begin{keyword}
+multi-agent simulation \sep reinforcement learning \sep scheduling \sep calibration
+\end{keyword}
+
+\begin{document}
+\maketitle
+
+\section{Introduction}\label{sec:intro}
+    Motivation, gap, contributions (3--4 bullets), paper organization.
+
+\section{Related Work}\label{sec:related}
+    \subsection{Agent-based / discrete-event simulation}
+    \subsection{Multi-agent reinforcement learning / optimization}
+    \subsection{Simulation calibration}
+
+\section{Problem Formulation}\label{sec:problem}
+    Notation, objective, constraints, KPI definitions.
+
+\section{Method}\label{sec:method}
+    \subsection{Simulation model} (ODD-style description)
+    \subsection{Learning / optimization algorithm}
+    \subsection{Calibration and training details}
+
+\section{Experiments}\label{sec:exp}
+    \subsection{Setup} (data, metrics, baselines, hardware, seeds)
+    \subsection{Main results} (tables, figures)
+    \subsection{Ablation study}
+    \subsection{Sensitivity and statistical significance}
+
+\section{Conclusion}\label{sec:conclusion}
+    Contributions, limitations, future work.
+
+\bibliographystyle{elsarticle-num}
+\bibliography{references}
+\end{document}

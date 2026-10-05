@@ -1,0 +1,45 @@
+# ieee-ieeetran — 官方样式文件来源 / source of truth
+
+## https://mirrors.ctan.org/macros/latex/contrib/IEEEtran.zip
+- 本地路径: `D:\anymath-and-simulation\_vendor\venue-styles\ieee-ieeetran\_raw\ (extracted)`
+- 字节数: 1,727,001
+- sha256: `e0cd4f5afbd42c8076092280e72b3e0a5111efe501d35de9f715cfb8da313cb4`
+- 获取时间(UTC): 2026-10-05T10:57:09+00:00
+- 解压条目 (36):
+  - `IEEEtran.cls`
+  - `IEEEtran_HOWTO.pdf`
+  - `README`
+  - `bare_adv.tex`
+  - `bare_conf.tex`
+  - `bare_conf_compsoc.tex`
+  - `bare_jrnl.tex`
+  - `bare_jrnl_compsoc.tex`
+  - `bare_jrnl_comsoc.tex`
+  - `bare_jrnl_transmag.tex`
+  - `bibtex/IEEEabrv.bib`
+  - `bibtex/IEEEexample.bib`
+  - `bibtex/IEEEfull.bib`
+  - `bibtex/IEEEtran.bst`
+  - `bibtex/IEEEtranN.bst`
+  - `bibtex/IEEEtranS.bst`
+  - `bibtex/IEEEtranSA.bst`
+  - `bibtex/IEEEtranSN.bst`
+  - `bibtex/IEEEtran_bst_HOWTO.pdf`
+  - `bibtex/README`
+  - `bibtex/changelog.txt`
+  - `changelog.txt`
+  - `extras/README`
+  - `extras/tux.eps`
+  - `extras/tux.pdf`
+  - `testflow/README`
+  - `testflow/testflow.tex`
+  - `testflow/testflow_ctl_A4.pdf`
+  - `testflow/testflow_ctl_A4.ps`
+  - `testflow/testflow_ctl_LTR.pdf`
+  - `testflow/testflow_ctl_LTR.ps`
+  - `testflow/testflow_doc.pdf`
+  - `tools/IEEEtrantools.sty`
+  - `tools/IEEEtrantools_doc.txt`
+  - `tools/README`
+  - `tools/changelog.txt`
+

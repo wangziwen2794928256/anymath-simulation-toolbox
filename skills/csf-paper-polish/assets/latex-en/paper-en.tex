@@ -1,0 +1,338 @@
+% =========================================================================== %
+% paper-en.tex —— English top-venue authoring template (A-track simulation paper)
+%
+% BUILD
+%   lualatex paper-en.tex && lualatex paper-en.tex
+%   (LuaLaTeX, not XeLaTeX: microtype font expansion needs LuaTeX and is the
+%    largest single contributor to the "professionally typeset" impression.)
+%
+% HOW TO USE THIS FILE
+%   The section order below IS the argument order. Do not reorder it. A top-venue
+%   paper is not "restate the problem, then analyse it, then model it"; it is
+%   "here is a gap, here is a mechanism, here is a method that follows from the
+%   mechanism, here is the evidence, here is where it breaks".
+%   The moves for each section are specified in
+%   `references/english-narrative.md`; `scripts/csf_prose.py` machine-checks the
+%   subset that can be checked.
+%
+%   Write ENGLISH FIRST. Localisation to Chinese is a mechanical derivative of a
+%   frozen English source (`scripts/csf_localize.py`), never a rewrite. Writing
+%   Chinese first and translating is what produced the flat voice this template
+%   exists to prevent.
+%
+% SWITCHING VENUE APPEARANCE
+%   \usepackage[neurips,stix,final]{csfstyle-en}   (default: NeurIPS-like, 1 col)
+%   \usepackage[icml,stix,final]{csfstyle-en}
+%   \usepackage[nature,stix,final]{csfstyle-en}    (unnumbered sans headings)
+%   \usepackage[aamas,charter,final]{csfstyle-en}  + [twocolumn] on the class
+%   Add `draft` to show line numbers and make \csfclaim / \csfevi visible.
+% =========================================================================== %
+
+\documentclass[10pt]{article}
+\usepackage[neurips,stix,final]{csfstyle-en}
+
+% --- Bibliography. `plainnat` + natbib gives author-year, which is what every
+% --- venue in scope uses. Swap for the venue .bst from _vendor/venue-styles/.
+\usepackage[round,authoryear]{natbib}
+\bibliographystyle{plainnat}
+
+% --- Graphics. Vector only. A raster figure in a simulation paper is a defect:
+% --- it cannot be re-scaled, and reviewers zoom.
+\usepackage{graphicx}
+\graphicspath{{figures/}{figs/}}
+
+\begin{document}
+
+% --------------------------------------------------------------------------- %
+% Title block. The title states the FINDING or the MECHANISM, not the topic.
+%   weak   : "Research on Optimization of Multi-Agent Emergency Evacuation"
+%   strong : "Capacity-Proportional Allocation Beats Congestion-Aware Routing in
+%             Multi-Agent Evacuation: A Mechanism-Level Account"
+% The weak form announces a topic and promises nothing; it is the single most
+% common title defect in contest drafts.
+% --------------------------------------------------------------------------- %
+\csftitle{<Finding-first title: state the mechanism or the result, not the topic>}
+
+\csfauthors{<Author One$^{1}$, Author Two$^{1,2}$>}
+\csfaffil{$^{1}$<Institution> \quad $^{2}$<Institution>}
+\csfemail{\{author.one, author.two\}@example.edu}
+
+\begin{csfabstract}
+% Five moves, 4-6 sentences total, no citations, no equations, no "\ref".
+%   (1) Context in one clause, with the stakes and, if possible, a number.
+%   (2) The gap, stated as a mechanism that is missing or misunderstood.
+%   (3) What we do: the model and the one design decision that matters.
+%   (4) The quantitative result, with the comparison and the interval.
+%   (5) What it implies, in one clause, without hedging.
+% Each sentence that makes a claim must be supported somewhere in the body; an
+% abstract claim with no body evidence is an automatic reviewer objection.
+<TODO move 1: context and stakes of the simulated system, in one clause.>
+<TODO move 2: the specific gap, phrased as a mechanism, not as "few studies".>
+<TODO move 3: our model and the single design decision that drives the result.>
+<TODO move 4: headline number, with baseline and uncertainty.>
+<TODO move 5: the implication, stated plainly.>
+
+\csfkeywords{multi-agent simulation; <domain>; <method family>; <mechanism>; reproducibility}
+\end{csfabstract}
+
+% --------------------------------------------------------------------------- %
+\section{Introduction}
+% Five paragraphs, in this order. The funnel is not decoration: it is the
+% sequence a reviewer needs in order to accept the contribution.
+%
+%   P1 Domain and stakes, with at least one real number and a citation.
+%   P2 The specific problem, narrowed to what this paper solves.
+%   P3 Why the obvious approaches fail, AT THE LEVEL OF MECHANISM. This is the
+%      paragraph that makes the paper scientific rather than engineering.
+%   P4 Our approach in two sentences plus the intuition for why it should work.
+%   P5 Contributions, as a numbered list, each ending in a testable claim.
+%
+% The contribution list is the contract with the reader. Every C-item must be
+% discharged by evidence later, and csf_prose.py checks that each one names the
+% figure, table or section that discharges it.
+% --------------------------------------------------------------------------- %
+
+<TODO P1: domain and stakes. One number. One citation, e.g. \citep{helbing1995social}.>
+
+<TODO P2: the specific problem, narrowed. Define the decision that has to be made.>
+
+<TODO P3: why the obvious approach fails, by mechanism. Not "existing methods have
+limitations" but "routing on instantaneous queue length is self-defeating because
+the act of choosing a station changes the quantity being chosen on".>
+
+<TODO P4: our approach, and the intuition that motivates it.>
+
+\begin{csfcontrib}
+\begin{csfcontribs}
+  \item <A formal model of ... (discharged by \cref{sec:model})>
+  \item <A mechanism-level explanation of why ... (discharged by \cref{fig:mechanism})>
+  \item <An allocation rule that ... (discharged by \cref{tab:main}, \cref{fig:main})>
+  \item <A cross-implementation parity check that ... (discharged by \cref{sec:repro})>
+\end{csfcontribs}
+\end{csfcontrib}
+
+% --------------------------------------------------------------------------- %
+\section{Related Work}
+% Structure by CONTRAST, never as an annotated bibliography. Each paragraph takes
+% one family of prior work and ends with the specific difference that matters:
+%   "X et al. optimise Y under Z. Their formulation assumes <assumption>, which
+%    fails in <our setting> because <mechanism>. We therefore <difference>."
+% A paragraph that only summarises is dead weight; delete it.
+% csf_prose.py fails the paper when NO paragraph contains a contrast marker.
+% --------------------------------------------------------------------------- %
+
+<TODO: 3-5 contrast paragraphs, each ending in a concrete difference.>
+% Cite prior work with \citet{...} where the authors are the subject of the
+% sentence and \citep{...} where the work is parenthetical. Example:
+%   "Social-force models reproduce local interactions \citep{helbing1995social}
+%    but assume exits are equivalent, whereas our formulation makes the allocation
+%    decision endogenous."
+% Keep the two example lines above COMMENTED: leaving a literal \citet{...} in
+% live text sends the key "..." to BibTeX, which then warns that it found no
+% database entry for it. That warning is noise that hides real ones.
+
+% --------------------------------------------------------------------------- %
+\section{Problem Formulation}
+\label{sec:problem}
+% The formalisation must be a definition of the DECISION, not a notation dump.
+% Order: system description -> state/action/observation -> objective -> what makes
+% it hard. State the objective as an optimisation with explicit constraints; an
+% objective without constraints is not a formulation.
+% The notation table is mandatory and must be referenced before it appears.
+% --------------------------------------------------------------------------- %
+
+<TODO: system definition, agent set, state, action, observation, transition.>
+
+<TODO: objective and constraints. Give the lower bound / best case if one exists —
+a bound turns every later number into a ratio and makes the results interpretable.>
+
+% NOTE ON FLOAT WIDTH — this matters as soon as you switch to a two-column venue.
+% A data table with four columns does NOT fit an ICML/AAAI column (~3.2in), and
+% LaTeX reports it as an Overfull \hbox rather than failing: the table silently
+% runs into the gutter. Verified by compiling this exact template with
+% [twocolumn,icml,...]: both tables below produced Overfull \hbox (16.5pt and
+% 55.4pt too wide).
+% `table*` spans both columns, and in a single-column document it behaves exactly
+% like `table`, so the starred form is the portable choice for wide data tables.
+% Use the unstarred form only for narrow tables that genuinely fit one column.
+\begin{table*}[t]
+  \centering
+  \caption{Notation. Every symbol used in \cref{sec:model} must appear here, and
+    no symbol that appears only once in the paper should.}
+  \label{tab:notation}
+  \begin{tabular}{@{}lll@{}}
+    \toprule
+    Symbol & Meaning & Domain \\
+    \midrule
+    $N$ & number of agents & $\N$ \\
+    $S$ & set of service stations & --- \\
+    $c_j$ & capacity (service rate) of station $j$ & $\R_{>0}$ \\
+    $T$ & makespan (last completion time) & $\R_{\ge 0}$ \\
+    $T^{\mathrm{lb}}$ & capacity lower bound on $T$ & $\R_{\ge 0}$ \\
+    \bottomrule
+  \end{tabular}
+\end{table*}
+
+\begin{csfasm}[Assumptions]
+% Each assumption needs: the statement, its real-world justification, and what
+% changes if it is relaxed. An assumption list without the third item is a list of
+% excuses; the third item is what a reviewer is actually looking for.
+\begin{enumerate}
+  \item <Statement.> \emph{Justification:} <why it holds in this domain.>
+    \emph{If relaxed:} <which result changes and in which direction.>
+\end{enumerate}
+\end{csfasm}
+
+% --------------------------------------------------------------------------- %
+\section{Model and Method}
+\label{sec:model}
+% For every component, give the design RATIONALE, not just the design. The pattern
+% to use is: "Because <mechanism>, the allocation must satisfy <property>, which
+% rules out <obvious choice> and leaves <our choice>." A component presented
+% without its why is indistinguishable from a component copied from a textbook.
+% Use run-in \paragraph{...} headings for these rationale blocks; they read far
+% better than another numbered level.
+% --------------------------------------------------------------------------- %
+
+\subsection{Model}
+<TODO: transitions, decision epochs, information available to each agent, and the
+crucial question of WHEN an agent may re-decide.>
+
+\subsection{Allocation rule}
+<TODO: state the rule, then prove or argue the property it has.>
+
+\begin{csfproposition}
+  <A property of the rule, stated so it can be falsified.>
+\end{csfproposition}
+\begin{proof}
+  <Proof, or, for an empirical claim, an explicit pointer to the experiment that
+  tests it. Do not dress up a simulation observation as a theorem.>
+\end{proof}
+
+\paragraph{Design rationale.} <Why this rule and not the two obvious alternatives.>
+
+\subsection{Algorithm}
+<TODO: pseudocode only if the procedure cannot be stated in prose; a 40-line
+listing that restates the equations is padding.>
+
+% --------------------------------------------------------------------------- %
+\section{Experiments}
+\label{sec:exp}
+% Order: setup -> baselines -> main result -> mechanism -> ablation -> sensitivity
+%        -> failure cases.
+%
+% The baseline TAXONOMY matters more than the baseline count. A reviewer wants to
+% see at least three distinct classes represented: a rule/heuristic, a
+% single-agent learned method, and a multi-agent learned method. Three variants of
+% one family is not a comparison, and \code{csf\_readiness.py} fails the paper for it.
+% --------------------------------------------------------------------------- %
+
+\subsection{Setup}
+<TODO: instance generation, size, seeds, hardware, wall-clock. State the number of
+independent runs and the seed policy — "we report the mean over 10 seeds" without
+a seed policy is not reproducible.>
+
+\subsection{Baselines}
+<TODO: one sentence per baseline, naming its class and its information access. A
+baseline given less information than the proposed method is not a baseline.>
+
+\subsection{Main result}
+% The caption must state the comparison rule: what is bold, what the error bars
+% are, how many runs. Never bold the best value without stating the rule, and
+% never claim a win that is inside the noise.
+% `table*` for the same reason as the notation table above: four columns of data
+% overflow a two-column measure silently (Overfull \hbox, not an error).
+\begin{table*}[t]
+  \centering
+  \caption{Main comparison on <instance family>. Mean $\pm$ s.d.\ over $n=<k>$
+    seeds. Bold marks the best mean within one standard deviation;
+    $T^{\mathrm{lb}}$ is the capacity lower bound from \cref{sec:problem}.}
+  \label{tab:main}
+  \begin{tabular}{@{}lS[table-format=3.2]S[table-format=1.3]l@{}}
+    \toprule
+    Method & {$T$ (min)} & {$T/T^{\mathrm{lb}}$} & Class \\
+    \midrule
+    Nearest station            & 483.94 & 3.387 & rule \\
+    Random assignment          & 238.56 & 1.670 & rule \\
+    Capacity-proportional (\ours{ours}) & \best{157.01} & \best{1.099} & rule + bound \\
+    \midrule
+    Capacity lower bound       & 142.86 & 1.000 & --- \\
+    \bottomrule
+  \end{tabular}
+\end{table*}
+
+<TODO: one paragraph that reads the table. State the effect size, the direction,
+and the mechanism that explains it. "Our method performs better" is not a reading
+of a table; "the gap closes from 3.4x to 1.1x of the lower bound, which means the
+remaining inefficiency is no longer allocation but travel" is.>
+
+\begin{csftake}
+  <One sentence the reader should be able to repeat from memory after closing the
+  paper. If you cannot write this sentence, the experiment does not have a result
+  yet.>
+\end{csftake}
+
+\subsection{Mechanism}
+% This subsection is what separates a simulation paper from a benchmark report:
+% show WHY the effect exists, not only that it does. Plot the intermediate
+% quantity, not just the outcome.
+<TODO: the intermediate quantity that carries the effect.>
+
+\subsection{Ablation}
+<TODO: one row per design decision, each removed individually. An ablation that
+changes two things at once explains nothing.>
+
+\subsection{Sensitivity and robustness}
+<TODO: vary the parameters the conclusion depends on, and report the range over
+which the conclusion survives. "Robust" must come with the range in which it is
+robust.>
+
+\subsection{When it fails}
+<TODO: the regime where the method loses, with the numbers that show it. A paper
+with no failure case is either trivial or not yet understood.>
+
+% --------------------------------------------------------------------------- %
+\section{Discussion}
+<TODO: what the mechanism implies beyond this instance, and what would falsify the
+mechanism. Keep it short; speculation padded to a page is worse than one honest
+paragraph.>
+
+% --------------------------------------------------------------------------- %
+\section{Limitations}
+% Mandatory and non-negotiable. Concrete limits, not "our method has limitations".
+% Each limitation names the assumption it comes from and the direction of the
+% resulting bias.
+<TODO: three concrete limits with the direction of the bias each induces.>
+
+\section*{Reproducibility Statement}
+\csfstatement{Reproducibility.}
+<TODO: where the code, instances and seeds live; which command reproduces which
+figure; the exact software versions. A statement that says "code available on
+request" is worth nothing and \code{csf\_readiness.py} reports it.>
+
+\section*{Compute Statement}
+\csfstatement{Compute.}
+<TODO: hardware, wall-clock, number of runs. Required by ICML and increasingly by
+everyone else.>
+
+% --------------------------------------------------------------------------- %
+% Figures. Place them near the text that needs them, and never refer to a figure
+% without saying what the reader should conclude from it.
+%
+% DRAFTING BEFORE THE ART EXISTS: \csffigplaceholder occupies the EXACT final size
+% and carries the caption, so line breaking, page count and caption length are all
+% final before any drawing is done. Replace it with \includegraphics when the
+% vector art is ready.
+% --------------------------------------------------------------------------- %
+\begin{figure}[t]
+  \centering
+  \csffigplaceholder{4.2cm}
+  \caption{<What the reader must conclude, not what the figure contains.>
+    Panels: (a)~<role>; (b)~<role>. Labels and vector art are produced separately;
+    see \texttt{figures/contracts/} for the label ledger.}
+  \label{fig:main}
+\end{figure}
+
+\bibliography{refs}
+
+\end{document}

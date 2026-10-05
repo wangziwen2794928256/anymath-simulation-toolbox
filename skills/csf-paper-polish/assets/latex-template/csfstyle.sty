@@ -1,0 +1,236 @@
+% csfstyle.sty —— A 赛道论文的「顶会风中性壳」
+%
+% 设计选择：不新建 documentclass，而是做**可叠加的 style 包**。
+% 原因：cumcmthesis.cls 里的 `\IfFontExistsTF{...}` 中文/西文字体配置已经实测可用
+% （SimSun/SimHei/SimKai + Times New Roman），换 class 会把这些推翻重来。
+% 本包只负责"观感与版式"这一层，与文档类解耦，也因此可叠加到任何 class 上。
+%
+% 用法：
+%   \documentclass[withoutpreface,bwprint]{cumcmthesis}
+%   \usepackage{csfstyle}
+%
+% 它提供：
+%   - 紧致几何（顶会比数模更紧的行距/边距，信息密度更高）
+%   - 彩色章节标题 + 紧凑间距（去掉数模模板的松散留白）
+%   - 五个顶会风格盒子：contrib / keyresult / assumption / takeaway / limitation
+%   - 三线表字体与 row 距、图注规范化
+%   - 算法伪代码环境 algobox（基于 algorithm2e）
+%
+% 依赖宏包（MiKTeX 会自动按需下载）：geometry tcolorbox titlesec fancyhdr xcolor
+%   booktabs caption algorithm2e iftex
+
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{csfstyle}[2026/02/05 v1.0 CSF A-track conference-style shell]
+
+\RequirePackage{iftex}
+\RequirePackage{xcolor}
+\RequirePackage{geometry}
+\RequirePackage{titlesec}
+\RequirePackage{titletoc}
+\RequirePackage{fancyhdr}
+\RequirePackage{tcolorbox}
+\tcbuselibrary{skins,breakable}
+\RequirePackage{booktabs}
+\RequirePackage{array}
+\RequirePackage{caption}
+\RequirePackage{enumitem}
+
+% --------------------------------------------------------------------------- %
+% 语义配色：与 csf-figure-forge/scripts/csf_fig.py 的 SEMANTIC 表**保持一致**。
+% 图与正文用同一套颜色语义，是"顶会风"最容易被忽略却最见效的一环。
+% --------------------------------------------------------------------------- %
+\definecolor{csfOurs}{HTML}{0F4D92}       % 本文方法 / 强调
+\definecolor{csfOursAlt}{HTML}{3775BA}
+\definecolor{csfBaseline}{HTML}{7F7F7F}   % 基线 / 中性
+\definecolor{csfBottleneck}{HTML}{D62728} % 瓶颈 / 告警
+\definecolor{csfImprove}{HTML}{009E73}    % 改善
+\definecolor{csfRef}{HTML}{E69F00}        % 参考值 / 上界
+\definecolor{csfLight}{HTML}{EAF1F8}      % 浅底
+\definecolor{csfRule}{HTML}{CFCECE}
+
+% --------------------------------------------------------------------------- %
+% 几何：顶会论文信息密度高于数模模板
+% --------------------------------------------------------------------------- %
+\geometry{
+  a4paper,
+  top=22mm, bottom=22mm,
+  left=22mm, right=22mm,
+  headsep=6mm, footskip=10mm,
+}
+
+% --------------------------------------------------------------------------- %
+% 章节标题：无衬线、彩色、紧凑
+% --------------------------------------------------------------------------- %
+\titleformat{\section}
+  {\normalfont\large\bfseries\color{csfOurs}}{\thesection}{0.6em}{}
+\titlespacing*{\section}{0pt}{1.6ex plus .3ex minus .2ex}{0.8ex plus .1ex}
+
+\titleformat{\subsection}
+  {\normalfont\normalsize\bfseries\color{csfOurs!85!black}}{\thesubsection}{0.5em}{}
+\titlespacing*{\subsection}{0pt}{1.2ex plus .2ex minus .2ex}{0.5ex plus .1ex}
+
+\titleformat{\subsubsection}
+  {\normalfont\normalsize\bfseries}{\thesubsubsection}{0.5em}{}
+\titlespacing*{\subsubsection}{0pt}{1.0ex plus .2ex minus .2ex}{0.4ex plus .1ex}
+
+% 段落间距略紧，避免"数模式的松散感"
+\setlength{\parskip}{0.25em}
+\linespread{1.06}
+
+% --------------------------------------------------------------------------- %
+% 页眉页脚
+% --------------------------------------------------------------------------- %
+\pagestyle{fancy}
+\fancyhf{}
+\renewcommand{\headrulewidth}{0.3pt}
+\renewcommand{\footrulewidth}{0pt}
+\fancyhead[L]{\footnotesize\color{csfBaseline}\nouppercase{\leftmark}}
+\fancyhead[R]{\footnotesize\color{csfBaseline}\thepage}
+\fancyfoot[C]{}
+
+% --------------------------------------------------------------------------- %
+% 图注 / 表注规范化
+%   实证教训：`\caption` 里用加粗 CJK 会触发 xelatex
+%   `Font shape 'TU/SimSun/b/n' undefined`，回退字体并把行距撑到两倍。
+%   因此这里用 `labelfont={bf,up}` 只让"图 1"两个字符走粗体，
+%   并用 `font={up}` + 显式字号，避免整段中文字体回退。
+% --------------------------------------------------------------------------- %
+\captionsetup{
+  font={small,up},
+  labelfont={bf,up},
+  labelsep=quad,
+  justification=centering,
+  singlelinecheck=false,
+  skip=6pt,
+}
+\captionsetup[table]{position=top, skip=4pt}
+\captionsetup[figure]{position=bottom}
+
+% --------------------------------------------------------------------------- %
+% 中文字体的粗体回退（实测教训）
+%
+% 本机 `SimSun` 没有粗体字形，一旦正文出现 `\textbf{中文}`，xelatex 会报
+%   LaTeX Font Warning: Font shape `TU/SimSun(1)/b/n' undefined
+% 并把该段行距撑开、字形回退到另一种字体，视觉上非常明显。
+% 解决办法：注册一个 CJK 字体族（默认 `csfbold`），BoldFont 指向真正有粗体的
+% 字体（SimHei / Noto Sans SC），然后把 `\textbf` 在该族内重定向到它。
+% 需要在文档类设置完中文字体**之后**再调用本包的 `\csfsetupcjkbold`。
+%
+% 实现注意：初版把 \renewcommand{\textbf} 写在 \newcommand{\csfsetupcjkbold}
+% 内部，需要把参数 #1 转义成 ##1，实测触发
+%   `! Illegal parameter number in definition of \reserved@a.`
+% （\IfFontExistsTF 内部用 \reserved@a 展开，与嵌套的 ##1 冲突）。
+% 改为用 \AtBeginDocument 注册，彻底消除双重定义层，不再需要转义。
+% --------------------------------------------------------------------------- %
+\newcommand{\csfsetupcjkbold}{%
+  \ifcsname setCJKmainfont\endcsname
+    \AtBeginDocument{%
+      % 关键且**唯一必要**的修复：AutoFakeBold 让没有粗体字形的 SimSun
+      % 也能输出粗体中文，从而消除
+      %   `LaTeX Font Warning: Font shape 'TU/SimSun(1)/b/n' undefined`
+      % 以及它带来的字体回退与行距被撑开。
+      % 实测对照：不设 AutoFakeBold 必报该告警；设了则干净。
+      \IfFontExistsTF{SimSun}{\setCJKmainfont[AutoFakeBold=2.5]{SimSun}}{}%
+    }%
+  \fi
+}
+
+% 兜底：\textbf 的重定义 —— **已放弃，不要恢复**。
+%
+% 曾尝试把 \textbf 在 CJK 范围内重定向到带粗体的 csfbold 族，连踩四坑：
+%   ① 写在 \newcommand{\csfsetupcjkbold} 内 → `Illegal parameter number
+%      in definition of \csfsetupcjkbold`（#1 需写成 ##1）；
+%   ② 条件宏（\ifcsname/\IfFontExistsTF/\IfFileExists）用 \reserved@a 读入
+%      整个分支，分支内 #1 也必须写成 ##1，否则报
+%      `Illegal parameter number in definition of \reserved@a`；
+%   ③ 在 \AtBeginDocument 内才 \let 旧 \textbf，由于外层 \newcommand 的展开
+%      时机，\csfoldtextbf 捕获到的是新定义 → 无限递归 →
+%      `TeX capacity exceeded [save size=200000]`；
+%   ④ 即便把 \let 提到宏外，\textbf 在 ctex 下的 robust 结构仍让递归无法彻底消除。
+%
+% 结论：**不需要**重定义 \textbf。`AutoFakeBold=2.5`（见 \csfsetupcjkbold）
+% 已能让 SimSun 正常输出粗体中文，实测无 `font shape b/n undefined` 告警。
+% 少一个全局劫持，就少一类难查的排版事故。
+
+% 兜底：把 \textbf 在 CJK 范围内导向有粗体的族（已废弃，保留说明）
+\providecommand{\csfoldtextbf}{}
+
+% --------------------------------------------------------------------------- %
+% 顶会风格盒子
+%
+% 命名教训：初版把盒子命名为 `contrib` / `assumption` / `proposition`，与
+% cumcmthesis.cls 里的已有命令冲突，报 `Command \assumption already defined`，
+% 并进一步引发 calc 宏包级联错误。故**所有环境统一加 csf 前缀**避免重名。
+% --------------------------------------------------------------------------- %
+\tcbset{
+  csfbase/.style={
+    enhanced, breakable,
+    boxrule=0pt, leftrule=2.2pt,
+    arc=1.2mm, outer arc=1.2mm,
+    left=6pt, right=6pt, top=4pt, bottom=4pt,
+    fonttitle=\bfseries\small,
+    coltitle=white,
+    attach boxed title to top left={xshift=4pt, yshift=-2pt},
+    boxed title style={boxrule=0pt, arc=1mm, left=4pt, right=4pt, top=1pt, bottom=1pt},
+  }
+}
+
+% 贡献列表（引言末尾）
+\newtcolorbox{csfcontrib}[1][本文贡献]{csfbase,
+  colback=csfLight, colframe=csfOurs, colbacktitle=csfOurs, title={#1}}
+% 关键结果（模型/实验结论，带数值）
+\newtcolorbox{csfkey}[1][关键结果]{csfbase,
+  colback=csfImprove!6, colframe=csfImprove, colbacktitle=csfImprove, title={#1}}
+% 假设（每条假设的现实依据与被放宽后的影响）
+\newtcolorbox{csfasm}[1][建模假设]{csfbase,
+  colback=csfRef!6, colframe=csfRef, colbacktitle=csfRef, title={#1}}
+% 图/表要读者读出的结论（替代“见图X”）
+\newtcolorbox{csftake}[1][结论]{csfbase,
+  colback=csfOursAlt!7, colframe=csfOursAlt, colbacktitle=csfOursAlt, title={#1}}
+% 局限与失效条件
+\newtcolorbox{csflimit}[1][局限与失效条件]{csfbase,
+  colback=csfBottleneck!5, colframe=csfBottleneck, colbacktitle=csfBottleneck, title={#1}}
+% 命题/引理统一样式
+\newtcolorbox{csfprop}[1][命题]{csfbase,
+  colback=white, colframe=csfBaseline, colbacktitle=csfBaseline, title={#1}}
+
+% --------------------------------------------------------------------------- %
+% 表格：三线表默认样式
+% --------------------------------------------------------------------------- %
+\renewcommand{\arraystretch}{1.15}
+\setlength{\tabcolsep}{5pt}
+
+% --------------------------------------------------------------------------- %
+% 紧凑列表
+% --------------------------------------------------------------------------- %
+\setlist[itemize]{leftmargin=1.4em, topsep=2pt, itemsep=1pt, parsep=0pt}
+\setlist[enumerate]{leftmargin=1.6em, topsep=2pt, itemsep=1pt, parsep=0pt}
+
+% --------------------------------------------------------------------------- %
+% 摘要样式（竞赛仍要求"摘要一页"，但排版按顶会 summary paragraph 的观感）
+% --------------------------------------------------------------------------- %
+\newcommand{\csfkeywords}[1]{%
+  \vspace{0.6em}\noindent{\bfseries\color{csfOurs}关键词：}\ #1}
+
+% --------------------------------------------------------------------------- %
+% 算法伪代码环境（可选，algorithm2e 存在时才启用）
+%
+% 实现教训（第三处，也是最初那个报错的真正元凶）：
+%   `\IfFileExists` / `\IfFontExistsTF` 这类条件宏会用 `\reserved@a` 把**两个分支
+%   整体读进来**，因此分支里任何 `#1` 都会被当成外层宏的参数，报
+%     `! Illegal parameter number in definition of \reserved@a.`
+%   初版两条分支里都写了 `\newcommand{\algoref}[1]{...#1}`，所以必然报错。
+%   正解：把带参数的 \newcommand 提到条件**外面**（用 \providecommand 只定义一次），
+%   条件里只放不带参数的宏包加载与配置。
+% --------------------------------------------------------------------------- %
+\providecommand{\algoref}[1]{算法~#1}
+\IfFileExists{algorithm2e.sty}{%
+  \RequirePackage[ruled,vlined,linesnumbered]{algorithm2e}%
+  \SetKwComment{Comment}{// }{}%
+  \SetAlgoLined
+  \DontPrintSemicolon
+  \SetKwInput{KwIn}{输入}%
+  \SetKwInput{KwOut}{输出}%
+}{}
+
+\endinput

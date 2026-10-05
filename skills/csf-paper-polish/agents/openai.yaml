@@ -1,0 +1,4 @@
+interface:
+  display_name: "CSF 论文润色与排版"
+  short_description: "仿真建模挑战赛/国赛论文的语言润色、LaTeX排版与终稿审计"
+  default_prompt: "使用 $csf-paper-polish 把已核实的建模成果润色并排版成可提交的中文论文。"

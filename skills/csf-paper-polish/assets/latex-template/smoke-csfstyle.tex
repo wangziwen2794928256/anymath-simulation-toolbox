@@ -1,0 +1,93 @@
+% 冒烟测试：验证 csfstyle.sty 在本机 MiKTeX / xelatex 下能否干净编译，
+% 并逐个用到每个新盒子与样式，避免“写了但从没编译过”。
+\documentclass[withoutpreface,bwprint]{cumcmthesis}
+
+\usepackage{booktabs,graphicx,amsmath,amssymb,float}
+\usepackage{csfstyle}
+
+\IfFontExistsTF{Times New Roman}{\setmainfont{Times New Roman}}{\setmainfont{TeX Gyre Termes}}
+% 中文：只设 SimSun + AutoFakeBold（实测这一条即可消除粗体缺字告警）。
+% 两个坑：① fontspec 认不出族名 "SimKai"，必须写文件名 simkai.ttf；
+%        ② 不要写 ItalicFont=SimKai，会报 "The font SimKai cannot be found"
+%           并级联出 nullfont 错误。
+\IfFontExistsTF{SimSun}{\setCJKmainfont[AutoFakeBold=2.5]{SimSun}}{}
+\IfFontExistsTF{SimHei}{\setCJKsansfont{SimHei}}{}
+
+% 必须在文档类设好中文字体之后再调用
+\csfsetupcjkbold
+
+\title{csfstyle 冒烟测试}
+\begin{document}
+\maketitle
+
+\begin{abstract}
+本节验证版式壳：彩色章节标题、六个顶会风格盒子、三线表、图注、算法环境。
+若本页能编译且中文无缺字、无字体回退告警，说明 P3 版式壳可用。
+\csfkeywords{版式壳\quad 顶会风格\quad 冒烟测试}
+\end{abstract}
+
+\section{盒子测试}
+
+\begin{csfcontrib}
+\begin{itemize}
+  \item 把问题重述为带拥堵外部性的分布式资源分配；
+  \item 将机制显式化为可证伪假设并以递进实验验证；
+  \item 给出排队论闭合估计与 Lagrange 影子价格解释。
+\end{itemize}
+\end{csfcontrib}
+
+\begin{csfkey}
+动态拥塞感知把总疏散时间从 $426.7\pm5.3$ s 降到 $204.1\pm25.7$ s，
+达容量下界 $152.2$ s 的 $74\%$。
+\end{csfkey}
+
+\begin{csfasm}
+出口服务率恒为 $\mu_e=w_e q$。若出口出现堵塞导致有效宽度下降，
+则本文低估疏散时间，偏差方向已知（偏乐观）。
+\end{csfasm}
+
+\begin{csfprop}[命题 1（容量下界）]
+任意可行疏散满足 $T\ge N/\sum_e\mu_e\approx152.2$ s。
+\end{csfprop}
+
+\begin{csftake}
+出口流量 Gini 由 $0.322$ 降至 $0.056$，说明收益来自均衡而非单纯加速。
+\end{csftake}
+
+\begin{csflimit}
+下界假设出口全程满负荷，实际不可达；本文结果仍高于下界约 $34\%$。
+\end{csflimit}
+
+\section{表格}
+
+\begin{table}[H]
+  \centering
+  \caption{方法对比（5 次独立运行，最优加粗）}
+  \label{tab:smoke}
+  \begin{tabular}{lccc}
+    \toprule
+    方法 & 总疏散时间/s & 吞吐/(人/s) & Gini \\
+    \midrule
+    最近出口 & $426.7\pm5.3$ & 0.94 & 0.322 \\
+    静态拥塞感知 & $426.7\pm5.3$ & 0.94 & 0.322 \\
+    \textbf{动态拥塞感知（本文）} & $\mathbf{204.1\pm25.7}$ & \textbf{1.96} & \textbf{0.056} \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+\section{算法环境}
+
+\begin{algorithm}[H]
+  \caption{拥塞感知动态重分配}
+  \label{alg:smoke}
+  \KwIn{位置 $\{p_i\}$，出口宽度 $\{w_e\}$，权重 $\lambda$}
+  \KwOut{总疏散时间 $T$}
+  \ForEach{时间步 $t$}{
+    各出口按 $\mu_e=w_e q$ 服务队列\Comment{分数容量累计取整}\;
+    计算代价 $c_i(e)=d_i(e)+\lambda Q_e$\;
+    $a_i\gets\arg\min_e c_i(e)$\;
+    移动并入队\;
+  }
+\end{algorithm}
+
+\end{document}

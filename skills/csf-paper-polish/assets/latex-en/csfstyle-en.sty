@@ -1,0 +1,1092 @@
+% =========================================================================== %
+% csfstyle-en.sty —— Neutral English top-venue shell
+%
+% WHY THIS FILE EXISTS
+% --------------------
+% The earlier stack wrote Chinese first inside `cumcmthesis.cls` and translated
+% afterwards. Two independent defects followed; only the second is a translation
+% problem, and fixing only that one would have changed almost nothing visible:
+%
+%   (1) CLASS-LEVEL (the dominant cause of "the appearance is poor").
+%       cumcmthesis.cls is a Chinese contest template: SimSun body, 1.5 line
+%       spacing, two-character first-line indent, wide white space, and a
+%       "Problem Restatement / Assumptions / Notation" front matter. No amount of
+%       good English inside that class looks like a top-venue paper, because the
+%       measure, leading, paragraph style, heading case, caption style and front
+%       matter are all contest-flavoured.
+%   (2) RHETORIC-LEVEL. Chinese contest prose is evaluative and
+%       nominalisation-heavy ("有效提升了…具有重要意义"). Rendered literally it
+%       becomes agentless passive plus "firstly/secondly/finally" plus
+%       unsupported adjectives, which a reviewer discounts within one paragraph.
+%
+% This shell fixes (1) by construction. (2) is handled by
+% `references/english-narrative.md` and `scripts/csf_prose.py`.
+%
+% PROVENANCE OF THE VENUE PRESETS — read this before editing any number below.
+%   Every parameter in the `neurips`, `icml` and `aaai` presets was copied from the
+%   OFFICIAL style file, which is vendored in this repo and can be re-read:
+%     _vendor/venue-styles/neurips/_raw/neurips_2025.sty
+%     _vendor/venue-styles/icml/_raw/icml2025.sty
+%     _vendor/venue-styles/aaai/_raw/CameraReady/LaTeX/aaai25.sty
+%   Each preset cites the defining line numbers. `aamas` is an acmart/sigconf
+%   approximation because the official AAMAS kit was unreachable (Cloudflare 403);
+%   `nature` and `elsevier` are stylised, because neither venue publishes a
+%   general LaTeX class. See `references/venue-style-specs.md` for the full table,
+%   the verification ledger and the venues that could NOT be verified.
+%
+%   This shell remains an AUTHORING tool, not a compliance check. Official classes
+%   impose constraints a competition report does not want (anonymisation, page
+%   limits, mandatory checklists, and in AAAI's case \PackageError on 16 packages
+%   including geometry and hyperref). For an actual submission, use the official
+%   class from `_vendor/venue-styles/`.
+%
+% USAGE
+%   \documentclass[10pt]{article}          % add `twocolumn` for icml/aaai/aamas
+%   \usepackage[neurips,stix,final]{csfstyle-en}
+%
+% OPTIONS
+%   venue : neurips (default) | icml | aaai | aamas | nature | elsevier
+%   fonts : stix (default) | times | libertinus | charter
+%   mode  : final (default) | draft   (draft = line numbers + visible claim tags)
+%   print :                            (black links instead of dark blue)
+%   boxes :                            (soft tinted fills; default is plain rules)
+%
+% ENGINE
+%   LuaLaTeX strongly preferred: microtype font EXPANSION is unavailable under
+%   XeLaTeX, and expansion is the larger half of microtype's benefit. The shell
+%   still compiles under XeLaTeX, with a warning and no expansion.
+% =========================================================================== %
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{csfstyle-en}[2026/02/06 v1.1 English top-venue shell, values verified against official .sty files]
+
+% --------------------------------------------------------------------------- %
+% Options. Parsed BEFORE packages load, so geometry and fonts are configured
+% once and cannot be half-overridden later.
+% --------------------------------------------------------------------------- %
+\def\csf@venue{neurips}
+\def\csf@fontset{stix}
+\newif\ifcsf@print
+\newif\ifcsf@tinted
+\newif\ifcsf@draft
+\csf@printfalse
+\csf@tintedfalse
+\csf@draftfalse
+
+\DeclareOption{neurips}{\def\csf@venue{neurips}}
+\DeclareOption{icml}{\def\csf@venue{icml}}
+\DeclareOption{aaai}{\def\csf@venue{aaai}}
+\DeclareOption{aamas}{\def\csf@venue{aamas}}
+\DeclareOption{nature}{\def\csf@venue{nature}}
+\DeclareOption{elsevier}{\def\csf@venue{elsevier}}
+\DeclareOption{stix}{\def\csf@fontset{stix}}
+\DeclareOption{times}{\def\csf@fontset{times}}
+\DeclareOption{libertinus}{\def\csf@fontset{libertinus}}
+\DeclareOption{charter}{\def\csf@fontset{charter}}
+\DeclareOption{draft}{\csf@drafttrue}
+\DeclareOption{final}{\csf@draftfalse}
+\DeclareOption{print}{\csf@printtrue}
+\DeclareOption{boxes}{\csf@tintedtrue}
+\DeclareOption*{\PackageWarning{csfstyle-en}{Unknown option `\CurrentOption'}}
+\ProcessOptions\relax
+
+% --------------------------------------------------------------------------- %
+% Engine gate. An explicit early error beats a downstream fontspec explosion.
+% --------------------------------------------------------------------------- %
+\RequirePackage{iftex}
+\ifPDFTeX
+  \PackageError{csfstyle-en}{XeLaTeX or LuaLaTeX required}%
+    {This shell loads real OTF text and math fonts through fontspec.\MessageBreak
+     Compile with `lualatex paper.tex` (preferred) or `xelatex paper.tex`.\MessageBreak
+     pdfLaTeX cannot load STIX Two / Libertinus and would silently fall back to\MessageBreak
+     Computer Modern, which is the opposite of the intended appearance.}%
+\fi
+
+% --------------------------------------------------------------------------- %
+% Mathematics.
+%
+% LOAD ORDER MATTERS: mathtools must be loaded BEFORE unicode-math, otherwise it
+% warns "For best results, please load mathtools *before* unicode-math" and some
+% multi-line constructs are built against the wrong math setup.
+%
+% NOTE: amssymb is deliberately NOT loaded. unicode-math already defines every
+% AMS symbol, and loading amssymb afterwards aborts with
+%   "Command `\eth' already defined."
+% That failure is a known unicode-math interaction, not a font problem.
+% --------------------------------------------------------------------------- %
+\RequirePackage{amsmath}
+\RequirePackage{mathtools}
+
+% --------------------------------------------------------------------------- %
+% Fonts.
+%
+% Files are referenced by FILENAME on purpose. MiKTeX ships these OTFs but does
+% not register them with the Windows font database, so family-name lookup
+% (`\setmainfont{Libertinus Serif}`) is unreliable, while filenames always
+% resolve through kpathsea. Only genuinely installed system fonts (Times New
+% Roman) are addressed by name.
+%
+%   stix       STIX Two Text + STIX Two Math. A scholarly superfamily that is
+%              metric-compatible with Times AND ships a matched math font. The
+%              default, because text/math harmony is the most visible single cue
+%              that a paper was typeset rather than word-processed.
+%   times      Times New Roman body — what NeurIPS and ICML actually mandate
+%              (neurips_2025.sty:92 `\renewcommand{\rmdefault}{ptm}`) — with STIX
+%              Two Math, which shares Times metrics.
+%   libertinus Libertinus Serif + Libertinus Math. Also what ACM acmart uses.
+%   charter    XCharter + XCharter Math; large x-height, legible at two-column 9-10pt.
+%
+% The definitions are DECLARED here and INVOKED after unicode-math exists.
+% --------------------------------------------------------------------------- %
+\RequirePackage{fontspec}
+
+\def\csf@loadfonts@stix{%
+  \setmainfont{STIXTwoText-Regular.otf}[
+    BoldFont       = STIXTwoText-Bold.otf,
+    ItalicFont     = STIXTwoText-Italic.otf,
+    BoldItalicFont = STIXTwoText-BoldItalic.otf,
+    Ligatures      = TeX, Numbers = Lining,
+    SlantedFont    = STIXTwoText-Italic.otf,
+    BoldSlantedFont= STIXTwoText-BoldItalic.otf,
+  ]%
+  \setsansfont{libertinussans-regular.otf}[
+    BoldFont   = libertinussans-bold.otf,
+    ItalicFont = libertinussans-italic.otf, Ligatures = TeX,
+  ]%
+  \setmonofont{texgyrecursor-regular.otf}[
+    BoldFont = texgyrecursor-bold.otf, Scale = 0.90,
+  ]%
+  \setmathfont{STIXTwoMath-Regular.otf}%
+}
+
+\def\csf@loadfonts@times{%
+  \setmainfont{Times New Roman}[Ligatures=TeX,
+    SlantedFont     = timesi.ttf,
+    BoldSlantedFont = timesbi.ttf]%
+  \setsansfont{libertinussans-regular.otf}[
+    BoldFont   = libertinussans-bold.otf,
+    ItalicFont = libertinussans-italic.otf,
+  ]%
+  \setmonofont{texgyrecursor-regular.otf}[
+    BoldFont = texgyrecursor-bold.otf, Scale = 0.90,
+  ]%
+  \setmathfont{STIXTwoMath-Regular.otf}%
+}
+
+\def\csf@loadfonts@libertinus{%
+  \setmainfont{libertinusserif-regular.otf}[
+    BoldFont       = libertinusserif-bold.otf,
+    ItalicFont     = libertinusserif-italic.otf,
+    BoldItalicFont = libertinusserif-bolditalic.otf, Ligatures = TeX,
+    SlantedFont    = libertinusserif-italic.otf,
+    BoldSlantedFont= libertinusserif-bolditalic.otf,
+  ]%
+  \setsansfont{libertinussans-regular.otf}[
+    BoldFont   = libertinussans-bold.otf,
+    ItalicFont = libertinussans-italic.otf,
+  ]%
+  \setmonofont{libertinusmono-regular.otf}[Scale=0.90]%
+  \setmathfont{libertinusmath-regular.otf}%
+}
+
+\def\csf@loadfonts@charter{%
+  \setmainfont{XCharter-Roman.otf}[
+    BoldFont       = XCharter-Bold.otf,
+    ItalicFont     = XCharter-Italic.otf,
+    BoldItalicFont = XCharter-BoldItalic.otf, Ligatures = TeX,
+    SlantedFont    = XCharter-Italic.otf,
+    BoldSlantedFont= XCharter-BoldItalic.otf,
+  ]%
+  \setsansfont{libertinussans-regular.otf}[
+    BoldFont   = libertinussans-bold.otf,
+    ItalicFont = libertinussans-italic.otf,
+  ]%
+  \setmonofont{texgyrecursor-regular.otf}[Scale=0.90]%
+  \setmathfont{XCharter-Math.otf}%
+}
+
+\RequirePackage{unicode-math}
+% Dispatch through \csname rather than a conditional. \IfFileExists-style
+% conditionals read whole branches with \reserved@a and therefore mis-handle any
+% parameter token inside them; that defect produced three separate
+% "Illegal parameter number" failures in the Chinese csfstyle.sty. An exact
+% \csname expansion has no such failure mode.
+\csname csf@loadfonts@\csf@fontset\endcsname
+
+% --------------------------------------------------------------------------- %
+% SHAPE DOCTOR — catches silent font-shape substitution.
+%
+% WHY THIS EXISTS. The ICML preset asks for a SLANTED caption label (`\slshape`,
+% copied from icml2025.sty:715 `\sbox{\newcaptionbox}{\small\sl #1.~}`). The first
+% build of this shell produced an upright label and NOTHING reported a problem:
+% STIX Two Text ships no slanted shape, so fontspec silently resolved `\slshape`
+% to the upright font. The defect was only found by rendering the page at 260 dpi
+% and comparing `\textsl{...}` with `\textup{...}` by eye — the two were
+% pixel-identical.
+%
+% This is the same failure mode as the CJK tofu problem elsewhere in this repo: a
+% font request that cannot be satisfied degrades silently instead of erroring. The
+% fix has two halves, and both are needed:
+%   1. declare SlantedFont/BoldSlantedFont in every font set above, so `\slshape`
+%      has something to resolve to;
+%   2. run this check at \begin{document} so that if a font set is ever changed and
+%      the shape stops resolving, the build SAYS SO instead of quietly producing
+%      upright text.
+%
+% The test compares the actual font identifier (`\the\font`) selected by each shape
+% against the upright one. Equal identifiers mean the shape did not change the
+% font, which for a declared shape is always a defect and never a real design.
+%
+% The definitions MUST be \xdef (global). The first version used \edef inside
+% \begingroup...\endgroup, so both macros died at \endgroup, \ifx then compared two
+% undefined macros, and the guard reported EVERY shape as broken — including
+% \bfseries and \itshape, which demonstrably work. A guard that always fires is
+% worse than no guard, so the fix is paired with the two-way test recorded in
+% references/latex-workflow.md.
+% --------------------------------------------------------------------------- %
+\def\csf@shapefont#1{\begingroup#1\xdef\csf@tmpa{\the\font}\endgroup}
+\def\csf@checkshape#1#2{%
+  \begingroup\xdef\csf@tmpup{\the\font}\endgroup
+  \csf@shapefont{#1}%
+  \ifx\csf@tmpa\csf@tmpup
+    \PackageWarning{csfstyle-en}{Shape `#2' resolves to the SAME font as upright.
+      The selected font set (\csf@fontset) cannot satisfy this shape, so the
+      output is silently UPRIGHT where a distinct shape was requested. Declare
+      the matching font file in \string\csf@loadfonts@\csf@fontset, or stop using
+      this shape in the text}%
+  \fi}
+\AtBeginDocument{%
+  \csf@checkshape{\itshape}{itshape}%
+  \csf@checkshape{\slshape}{slshape}%
+  \csf@checkshape{\bfseries}{bfseries}%
+  \csf@checkshape{\scshape}{scshape}%
+}
+
+% Semantic operators, declared once so the prose never fakes them with italic
+% text (a reliable tell in contest drafts: "argmin" set as five italic letters).
+\providecommand{\argmin}{\operatorname*{arg\,min}}
+\providecommand{\argmax}{\operatorname*{arg\,max}}
+\providecommand{\Expect}{\mathbb{E}}
+\providecommand{\Prob}{\mathbb{P}}
+\providecommand{\Var}{\operatorname{Var}}
+\providecommand{\Cov}{\operatorname{Cov}}
+\providecommand{\Corr}{\operatorname{Corr}}
+\providecommand{\R}{\mathbb{R}}
+\providecommand{\N}{\mathbb{N}}
+\providecommand{\ind}[1]{\mathbb{I}\!\left[#1\right]}
+\providecommand{\set}[1]{\left\{#1\right\}}
+\providecommand{\abs}[1]{\left\lvert#1\right\rvert}
+\providecommand{\norm}[1]{\left\lVert#1\right\rVert}
+% Conditional probability with correct spacing: \Prob(x \given y). A bare `|` is a
+% relation and receives relation spacing, which reads as a typo.
+\providecommand{\given}{\;\middle|\;}
+
+% --------------------------------------------------------------------------- %
+% Colour semantics — MUST match csf-figure-forge/scripts/csf_fig.py SEMANTIC.
+% One palette shared by text and figures is the cheapest large gain in perceived
+% quality, and the first thing to break when text and figures are produced in
+% different sessions.
+% --------------------------------------------------------------------------- %
+\RequirePackage{xcolor}
+\definecolor{csfOurs}{HTML}{0F4D92}
+\definecolor{csfOursAlt}{HTML}{3775BA}
+\definecolor{csfBaseline}{HTML}{7F7F7F}
+\definecolor{csfBaselineTwo}{HTML}{B0B0B0}
+\definecolor{csfBottleneck}{HTML}{D62728}
+\definecolor{csfImprove}{HTML}{009E73}
+\definecolor{csfAblation}{HTML}{9A4D8E}
+\definecolor{csfReference}{HTML}{E69F00}
+\definecolor{csfHighlight}{HTML}{FFD700}
+\definecolor{csfFillLight}{HTML}{A6C8E8}
+\definecolor{csfGrid}{HTML}{CFCECE}
+\definecolor{csfInk}{HTML}{1A1A1A}
+\definecolor{csfLink}{HTML}{12457F}
+\definecolor{csfTint}{HTML}{EAF1F8}
+\definecolor{csfTintWarn}{HTML}{FBEDED}
+
+% --------------------------------------------------------------------------- %
+% VENUE PRESETS — VALUE DEFINITIONS ONLY. Nothing is applied here; the single
+% "apply" section further down consumes these values. Keeping definition and
+% application apart is what allows the values to be checked line-by-line against
+% the official files without also having to trace a chain of side effects.
+%
+% Values marked [official] were copied from the vendored official style file and
+% the defining line is cited. Values marked [approx] are the cross-venue common
+% denominator where the official file does not define the parameter.
+% --------------------------------------------------------------------------- %
+\RequirePackage{geometry}
+
+\def\csf@venue@neurips{%
+  % [official] neurips_2025.sty:117-124 — SINGLE column: textwidth 5.5in on
+  % letterpaper leaves a 1.5in margin on each side. A 5.5in measure at 10pt holds
+  % ~66 characters, the readable optimum.
+  \def\csf@geometry{letterpaper,textwidth=5.5in,textheight=9in,top=1in,%
+                    headheight=12pt,headsep=25pt,footskip=30pt}%
+  \def\csf@twocolreq{0}%
+  % [official] :155-157 `\large`=12/14pt, `\Large`=14/16pt, `\LARGE`=17/20pt
+  % [official] :311 title is `\LARGE\bf`, centred between two rules (:290-300)
+  \def\csf@titlefmt{\LARGE\bfseries}%
+  \def\csf@titlebars{1}%
+  \def\csf@authorfmt{\bfseries}%
+  % [official] :163-182 section `\large\bf\raggedright`, subsection and
+  % subsubsection both `\normalsize\bf\raggedright`
+  \def\csf@secfmt{\large\bfseries\raggedright}%
+  \def\csf@subsecfmt{\normalsize\bfseries\raggedright}%
+  \def\csf@subsubfmt{\normalsize\bfseries\raggedright}%
+  \def\csf@secbefore{-2.0ex plus -0.5ex minus -0.2ex}%
+  \def\csf@secafter{1.5ex plus 0.3ex minus 0.2ex}%
+  \def\csf@subbefore{-1.8ex plus -0.5ex minus -0.2ex}%
+  \def\csf@subafter{0.8ex plus 0.2ex}%
+  \def\csf@subsubbefore{-1.5ex plus -0.5ex minus -0.2ex}%
+  \def\csf@subsubafter{0.5ex plus 0.2ex}%
+  % [official] :228-229 BLOCK paragraphs. This is a real style signature of the
+  % AI conferences and it is invisible until you see the two styles side by side:
+  % no first-line indent, and a visible 5.5pt gap between paragraphs.
+  \def\csf@parindent{0pt}%
+  \def\csf@parskip{5.5pt}%
+  % [official] :132 flushbottom, not raggedbottom
+  \def\csf@bottom{\flushbottom}%
+  \def\csf@secdepth{3}%
+  % [official] :203-206
+  \def\csf@topfraction{0.85}%
+  \def\csf@bottomfraction{0.4}%
+  % [approx] neurips_2025.sty does not configure the caption package at all, so
+  % the shell uses the modern cross-venue convention: bold label, period, 9pt.
+  \def\csf@captionlabelformat{csfperiod}%
+  \def\csf@labelemph{\bfseries}%
+  \def\csf@captionfont{small}%
+  \def\csf@captionlabelfontsize{\small}%
+  \def\csf@captionjust{justified}%
+  \def\csf@captioncenter{0}%
+  % [official] :346-357 abstract is `\centerline{\large\bf Abstract}` followed by
+  % a `quote`, i.e. the abstract body stays at NORMAL size and is narrowed by the
+  % quote indentation. Setting it to \small (as an earlier version did) both
+  % lightens it and diverges from the official look.
+  \def\csf@abstractheadfmt{\large\bfseries}%
+  \def\csf@abstractsize{\normalsize}%
+  \def\csf@abstractquote{1}%
+  \def\csf@listmargin{3pc}%
+}
+
+\def\csf@venue@icml{%
+  % [official] icml2025.sty:220-222 — TWO columns: textwidth 6.75in,
+  % columnsep 0.25in, textheight 9in. icml2025.sty:326 `\flushbottom \twocolumn`.
+  \def\csf@geometry{letterpaper,textwidth=6.75in,columnsep=0.25in,%
+                    textheight=9in,top=1in}%
+  \def\csf@twocolreq{1}%
+  % [official] :418 title is `\Large\bf` between top/bottom title bars
+  \def\csf@titlefmt{\Large\bfseries}%
+  \def\csf@titlebars{0}%
+  \def\csf@authorfmt{\bfseries}%
+  % [official] :641-646. NOTE subsubsection is `\sc` (small caps), not italic —
+  % a small detail that instantly distinguishes ICML-styled output.
+  \def\csf@secfmt{\large\bfseries\raggedright}%
+  \def\csf@subsecfmt{\normalsize\bfseries\raggedright}%
+  \def\csf@subsubfmt{\normalsize\scshape\raggedright}%
+  \def\csf@secbefore{-0.12in}%
+  \def\csf@secafter{0.02in}%
+  \def\csf@subbefore{-0.10in}%
+  \def\csf@subafter{0.01in}%
+  \def\csf@subsubbefore{-0.08in}%
+  \def\csf@subsubafter{0.01in}%
+  % [official] :659-664 BLOCK paragraphs, 6pt gap
+  \def\csf@parindent{0pt}%
+  \def\csf@parskip{6pt}%
+  \def\csf@bottom{\flushbottom}%
+  \def\csf@secdepth{3}%
+  \def\csf@topfraction{0.85}%
+  \def\csf@bottomfraction{0.4}%
+  % [official] :715-720 caption label is `\small\sl` (SLANTED, not bold) with a
+  % period; short captions are centred; long-caption body text is \footnotesize.
+  \def\csf@captionlabelformat{csfperiod}%
+  \def\csf@labelemph{\slshape}%
+  \def\csf@captionfont{footnotesize}%
+  \def\csf@captionlabelfontsize{\small}%
+  \def\csf@captionjust{justified}%
+  \def\csf@captioncenter{1}%
+  % [official] :580-586 abstract heading `\large\bf` + quote, body normal size
+  \def\csf@abstractheadfmt{\large\bfseries}%
+  \def\csf@abstractsize{\normalsize}%
+  \def\csf@abstractquote{1}%
+  \def\csf@listmargin{2em}%
+}
+
+\def\csf@venue@aaai{%
+  % [official] aaai25.sty:35-41 — TWO columns: textwidth 7.0in, columnsep
+  % 0.375in, textheight 9in, `\flushbottom \twocolumn \sloppy`.
+  \def\csf@geometry{letterpaper,textwidth=7.0in,columnsep=0.375in,%
+                    textheight=9in,top=0.75in}%
+  \def\csf@twocolreq{1}%
+  \def\csf@titlefmt{\LARGE\bfseries}%
+  \def\csf@titlebars{0}%
+  \def\csf@authorfmt{\bfseries}%
+  % [official] :163-173 section is `\Large\bf\centering` AND
+  % `\setcounter{secnumdepth}{0}` — AAAI centres its headings and turns numbering
+  % OFF. This is the most visible divergence between the AI venues, so the shell
+  % must not force its own numbering on it.
+  \def\csf@secfmt{\Large\bfseries\centering}%
+  \def\csf@subsecfmt{\large\bfseries\centering}%
+  \def\csf@subsubfmt{\normalsize\bfseries\centering}%
+  \def\csf@secbefore{-2.0ex plus -0.5ex minus -0.2ex}%
+  \def\csf@secafter{3pt plus 2pt minus 1pt}%
+  \def\csf@subbefore{-2.0ex plus -0.5ex minus -0.2ex}%
+  \def\csf@subafter{2pt plus 1pt}%
+  \def\csf@subsubbefore{-6pt plus -2pt minus -1pt}%
+  \def\csf@subsubafter{1pt}%
+  % [official] :147,185 parskip 2pt and parindent 10pt — AAAI INDENTS, unlike
+  % NeurIPS and ICML. Do not "tidy" this into consistency: the differences are real.
+  \def\csf@parindent{10pt}%
+  \def\csf@parskip{2pt}%
+  \def\csf@bottom{\flushbottom}%
+  \def\csf@secdepth{0}%   [official] :173 secnumdepth = 0
+  \def\csf@topfraction{0.85}%
+  \def\csf@bottomfraction{0.4}%
+  % [approx] AAAI's instructions set captions in 10pt roman and state explicitly
+  % that they are NOT bold or italic, which no other venue in scope does.
+  \def\csf@captionlabelformat{csfperiod}%
+  \def\csf@labelemph{\mdseries}%
+  \def\csf@captionfont{normalsize}%
+  \def\csf@captionlabelfontsize{\normalsize}%
+  \def\csf@captionjust{justified}%
+  \def\csf@captioncenter{0}%
+  \def\csf@abstractheadfmt{\large\bfseries}%
+  \def\csf@abstractsize{\normalsize}%
+  \def\csf@abstractquote{1}%
+  \def\csf@listmargin{2em}%
+}
+
+\def\csf@venue@aamas{%
+  % [approx, UNVERIFIED against the official 2025 kit] The official AAMAS kit was
+  % unreachable (Cloudflare 403 on every path). Values below come from the
+  % vendored third-party aamas.cls, which is an acmart/amsart fork using
+  % format=sigconf: `columnsep=2pc` (aamas.cls:507) and `parindent 10pt` (:542).
+  \def\csf@geometry{letterpaper,textwidth=7.03in,columnsep=2pc,%
+                    textheight=9.39in,top=0.75in}%
+  \def\csf@twocolreq{1}%
+  \def\csf@titlefmt{\Large\bfseries}%
+  \def\csf@titlebars{0}%
+  \def\csf@authorfmt{\bfseries}%
+  % ACM sigconf sets subsection to the SAME size as section (:e.g. acmart sigconf)
+  \def\csf@secfmt{\Large\bfseries\raggedright}%
+  \def\csf@subsecfmt{\large\bfseries\raggedright}%
+  \def\csf@subsubfmt{\normalsize\bfseries\raggedright}%
+  \def\csf@secbefore{-2.0ex plus -0.5ex minus -0.2ex}%
+  \def\csf@secafter{2pt plus 1pt}%
+  \def\csf@subbefore{-1.8ex plus -0.5ex minus -0.2ex}%
+  \def\csf@subafter{1pt}%
+  \def\csf@subsubbefore{-1.5ex plus -0.5ex minus -0.2ex}%
+  \def\csf@subsubafter{1pt}%
+  \def\csf@parindent{10pt}%   [official] aamas.cls:542
+  \def\csf@parskip{0pt}%
+  \def\csf@bottom{\flushbottom}%
+  \def\csf@secdepth{3}%
+  \def\csf@topfraction{0.85}%
+  \def\csf@bottomfraction{0.4}%
+  % [official-adjacent] aamas.cls / acmart use `labelsep=colon` with a bold label
+  % and bold caption text. The colon form is the ACM house style.
+  \def\csf@captionlabelformat{csfcolon}%
+  \def\csf@labelemph{\bfseries}%
+  \def\csf@captionfont{small}%
+  \def\csf@captionlabelfontsize{\small}%
+  \def\csf@captionjust{raggedright}%
+  \def\csf@captioncenter{0}%
+  \def\csf@abstractheadfmt{\large\bfseries}%
+  \def\csf@abstractsize{\small}%
+  \def\csf@abstractquote{1}%
+  \def\csf@listmargin{1.5em}%
+}
+
+\def\csf@venue@nature{%
+  % [stylised] Nature publishes no general LaTeX class, so this preset encodes the
+  % visual conventions of the journal rather than a file: generous single-column
+  % A4 measure and UNNUMBERED SANS-SERIF headings. This is the "top journal" look
+  % as opposed to the "top conference" look, and it is the reason the shell
+  % carries a sans family at all.
+  \def\csf@geometry{a4paper,textwidth=160mm,textheight=230mm,top=25mm}%
+  \def\csf@twocolreq{0}%
+  \def\csf@titlefmt{\fontsize{18}{22}\selectfont\sffamily\bfseries}%
+  \def\csf@titlebars{0}%
+  \def\csf@authorfmt{\sffamily}%
+  \def\csf@secfmt{\normalsize\sffamily\bfseries\raggedright}%
+  \def\csf@subsecfmt{\normalsize\sffamily\itshape\raggedright}%
+  \def\csf@subsubfmt{\normalsize\sffamily\raggedright}%
+  \def\csf@secbefore{2.0ex plus 0.4ex}%
+  \def\csf@secafter{0.8ex}%
+  \def\csf@subbefore{1.5ex plus 0.3ex}%
+  \def\csf@subafter{0.5ex}%
+  \def\csf@subsubbefore{1.2ex plus 0.2ex}%
+  \def\csf@subsubafter{0.4ex}%
+  \def\csf@parindent{0pt}%
+  \def\csf@parskip{0.5em}%
+  \def\csf@bottom{\raggedbottom}%
+  \def\csf@secdepth{0}%
+  \def\csf@topfraction{0.9}%
+  \def\csf@bottomfraction{0.5}%
+  \def\csf@captionlabelformat{csfperiod}%
+  \def\csf@labelemph{\bfseries}%
+  \def\csf@captionfont{small}%
+  \def\csf@captionlabelfontsize{\small}%
+  \def\csf@captionjust{justified}%
+  \def\csf@captioncenter{0}%
+  \def\csf@abstractheadfmt{\normalsize\sffamily\bfseries}%
+  \def\csf@abstractsize{\normalsize}%
+  \def\csf@abstractquote{0}%
+  \def\csf@listmargin{1.5em}%
+}
+
+\def\csf@venue@elsevier{%
+  % [stylised] Elsevier journals share a numbered, indented, single-column body.
+  \def\csf@geometry{a4paper,textwidth=160mm,textheight=230mm,top=25mm}%
+  \def\csf@twocolreq{0}%
+  \def\csf@titlefmt{\fontsize{16}{19}\selectfont\bfseries}%
+  \def\csf@titlebars{0}%
+  \def\csf@authorfmt{\normalsize}%
+  \def\csf@secfmt{\normalsize\bfseries\raggedright}%
+  \def\csf@subsecfmt{\normalsize\itshape\raggedright}%
+  \def\csf@subsubfmt{\normalsize\itshape\raggedright}%
+  \def\csf@secbefore{2.0ex plus 0.4ex}%
+  \def\csf@secafter{0.8ex}%
+  \def\csf@subbefore{1.5ex plus 0.3ex}%
+  \def\csf@subafter{0.5ex}%
+  \def\csf@subsubbefore{1.2ex plus 0.2ex}%
+  \def\csf@subsubafter{0.4ex}%
+  \def\csf@parindent{1.2em}%
+  \def\csf@parskip{0pt}%
+  \def\csf@bottom{\flushbottom}%
+  \def\csf@secdepth{3}%
+  \def\csf@topfraction{0.9}%
+  \def\csf@bottomfraction{0.4}%
+  \def\csf@captionlabelformat{csfperiod}%
+  \def\csf@labelemph{\bfseries}%
+  \def\csf@captionfont{small}%
+  \def\csf@captionlabelfontsize{\small}%
+  \def\csf@captionjust{justified}%
+  \def\csf@captioncenter{0}%
+  \def\csf@abstractheadfmt{\normalsize\bfseries}%
+  \def\csf@abstractsize{\small}%
+  \def\csf@abstractquote{0}%
+  \def\csf@listmargin{1.5em}%
+}
+
+\csname csf@venue@\csf@venue\endcsname
+
+% --------------------------------------------------------------------------- %
+% APPLY: geometry.
+%
+% THE DOUBLE \expandafter IS LOAD-BEARING, not decoration.
+%
+% geometry's key parser splits its argument on commas at the TOKEN level and does
+% not expand it first. Writing the obvious
+%     \geometry{\csf@geometry}
+% therefore hands the parser a single token, which it treats as ONE key named
+% `letterpaper,textwidth=5.5in,...`, and it fails with
+%     ! Package keyval Error: letterpaper,textwidth=5.5in,... undefined.
+% The failure is not fatal, so the document still compiles and a first glance at the
+% PDF looks plausible — but EVERY preset dimension is discarded and the body falls
+% back to the article class default (6.5in on letterpaper instead of 5.5in). Half of
+% what makes the shell look like the target venue silently disappears.
+% The idiom below expands the macro before the parser sees it.
+% --------------------------------------------------------------------------- %
+\expandafter\geometry\expandafter{\csf@geometry}
+% A two-column venue compiled single-column produces a very wide measure at the
+% single-column font size, which looks wrong in a way that is hard to diagnose
+% from the log; say so explicitly instead.
+\if@twocolumn\else
+  \ifnum\csf@twocolreq=1
+    \PackageWarning{csfstyle-en}{Venue `\csf@venue' is a TWO-column style;
+      add [twocolumn] to \string\documentclass\space or the measure will be wrong}%
+  \fi
+\fi
+
+% --------------------------------------------------------------------------- %
+% Microtype. Protrusion and expansion are the largest single "professionally
+% typeset" lever available: they remove the loose lines and rivers that justified
+% 10pt Times produces. Expansion needs LuaTeX; under XeLaTeX microtype silently
+% drops it, so say so rather than letting the author wonder why the lines look
+% worse than expected.
+%
+% microtype's `kerning` feature is NOT enabled: under LuaTeX it raises
+%   "Package microtype Error: The kerning feature only works with pdftex"
+% and aborts the run.
+% --------------------------------------------------------------------------- %
+\RequirePackage{microtype}
+\ifLuaTeX
+  \microtypesetup{protrusion=true, expansion=true, tracking=true}
+\else
+  \microtypesetup{protrusion=true, expansion=false, tracking=true}
+  \PackageWarning{csfstyle-en}{Compiling with XeLaTeX: microtype font expansion
+    is unavailable. Use lualatex for the final appearance pass}%
+\fi
+
+% --------------------------------------------------------------------------- %
+% Page-breaking discipline. Contest templates rarely set these, and the resulting
+% stranded lines are a page-level quality gap that readers notice without being
+% able to name. [official] neurips_2025.sty:130-133.
+% --------------------------------------------------------------------------- %
+\clubpenalty=10000
+\widowpenalty=10000
+\displaywidowpenalty=10000
+\brokenpenalty=10000
+\predisplaypenalty=10000
+\setlength{\emergencystretch}{2em}
+\csf@bottom
+
+% Float placement fractions, taken from the venue where defined.
+\renewcommand{\topfraction}{\csf@topfraction}
+\renewcommand{\bottomfraction}{\csf@bottomfraction}
+\renewcommand{\textfraction}{0.1}
+\renewcommand{\floatpagefraction}{0.7}
+
+% --------------------------------------------------------------------------- %
+% APPLY: paragraph style and headings.
+%
+% Case is authorial — write sentence case in the source. The shell must NOT
+% auto-uppercase or auto-title-case, because automatic casing destroys acronyms
+% ("MAPPO" becomes "Mappo") and is a visible defect.
+% --------------------------------------------------------------------------- %
+\setlength{\parindent}{\csf@parindent}
+\setlength{\parskip}{\csf@parskip}
+
+\RequirePackage{titlesec}
+
+% Unnumbered venues (aaai, nature) must not leave the label's separator space
+% behind, so the label and its separator are macros rather than literals.
+\def\csf@seclabel{\thesection}
+\def\csf@secsep{0.6em}
+\def\csf@sublabel{\thesubsection}
+\def\csf@subsep{0.5em}
+\def\csf@subsublabel{\thesubsubsection}
+\def\csf@subsubsep{0.5em}
+\ifnum\csf@secdepth=0
+  \def\csf@seclabel{}%
+  \def\csf@secsep{0pt}%
+  \def\csf@sublabel{}%
+  \def\csf@subsep{0pt}%
+  % subsubsection needs the same treatment: its titleformat names \thesubsubsection
+  % explicitly, and that macro still expands to "0.0.1" even when secnumdepth is 0.
+  \def\csf@subsublabel{}%
+  \def\csf@subsubsep{0pt}%
+\fi
+\setcounter{secnumdepth}{\csf@secdepth}
+
+\titleformat{\section}{\normalfont\csf@secfmt}{\csf@seclabel}{\csf@secsep}{}
+\titleformat{\subsection}{\normalfont\csf@subsecfmt}{\csf@sublabel}{\csf@subsep}{}
+\titleformat{\subsubsection}{\normalfont\csf@subsubfmt}{\csf@subsublabel}{\csf@subsubsep}{}
+% Run-in bold paragraph headings: the standard way to label a design rationale
+% without spending a numbered level on it, and much tighter than a subsubsection.
+%
+% NO automatic trailing period. An earlier version appended one via the optional
+% after-code and produced "Design rationale.." whenever the author had also
+% written the period — a defect that survived two readings of the compiled page.
+% The convention is the standard LaTeX one: the author writes the period, and
+% csf_prose.py checks that the style is applied consistently.
+\titleformat{\paragraph}[runin]{\normalfont\normalsize\bfseries}{}{0pt}{}
+
+\titlespacing*{\section}{0pt}{\csf@secbefore}{\csf@secafter}
+\titlespacing*{\subsection}{0pt}{\csf@subbefore}{\csf@subafter}
+\titlespacing*{\subsubsection}{0pt}{\csf@subsubbefore}{\csf@subsubafter}
+\titlespacing*{\paragraph}{0pt}{0.8ex plus .2ex minus .2ex}{0.5em}
+
+% --------------------------------------------------------------------------- %
+% Captions. Labels and separators differ per venue by design:
+%   neurips  bold label, period        (approx; the official file is silent)
+%   icml     slanted label, period, short captions CENTRED, long body footnotesize
+%   aaai     roman, unemphasised, 10pt (AAAI states this explicitly)
+%   aamas    bold label, COLON — the ACM house style
+% Tables above, figures below — universal except AAAI's instructions, which ask
+% for both below, contradicting its own class default.
+% --------------------------------------------------------------------------- %
+\RequirePackage{caption}
+% LABEL FORMATS ARE DECLARED EXPLICITLY, not routed through the `labelfont` key.
+%
+% Empirical finding, and the reason this block looks the way it does: passing a
+% font list to `labelfont` — `labelfont={\slshape,\small}` — produced a caption
+% label that was INDISTINGUISHABLE from the body text. The slanted emphasis never
+% appeared, and nothing warned: `labelsep` from the same option set applied fine,
+% so the option set itself was live and only the font list was silently dropped.
+% `\textsl` elsewhere in the same document rendered correctly, which ruled out the
+% font and pointed at the key's value parsing.
+%
+% `\DeclareCaptionLabelFormat` takes literal code, so the emphasis, the size and
+% the separator are all under direct control and cannot be reinterpreted. The
+% formats are declared once here and selected per venue by
+% `\csf@captionlabelformat`; `\csf@labelemph` and `\csf@captionlabelfontsize` carry
+% the venue's emphasis and label size.
+\DeclareCaptionLabelFormat{csfperiod}{{\csf@captionlabelfontsize\csf@labelemph #1~#2.}}
+\DeclareCaptionLabelFormat{csfcolon}{{\csf@captionlabelfontsize\csf@labelemph #1~#2:}}
+\captionsetup{
+  font            = \csf@captionfont,
+  labelformat     = \csf@captionlabelformat,
+  labelsep        = quad,
+  justification   = \csf@captionjust,
+  singlelinecheck = \csf@captioncenter,
+  skip            = 5pt,
+}
+\captionsetup[table]{position=top, skip=4pt}
+\captionsetup[figure]{position=bottom, skip=5pt}
+\RequirePackage{subcaption}
+\captionsetup[sub]{font=small, labelfont=bf, labelsep=space}
+
+% --------------------------------------------------------------------------- %
+% Tables. booktabs everywhere; vertical rules and doubled rules are the clearest
+% "not typeset professionally" signal in a results table. siunitx supplies
+% decimal-aligned numeric columns, which readers use to compare magnitudes and
+% which hand-aligned tables reliably get wrong.
+%
+% NOTE: round-mode is deliberately NOT enabled. Silently rounding a number that
+% came out of an experiment is data corruption, however tidy it looks.
+% --------------------------------------------------------------------------- %
+\RequirePackage{booktabs}
+\RequirePackage{multirow}
+\RequirePackage{siunitx}
+\RequirePackage{array}
+\renewcommand{\arraystretch}{1.12}
+\setlength{\tabcolsep}{5pt}
+\sisetup{
+  detect-weight          = true,
+  detect-family          = true,
+  table-number-alignment = center,
+  group-separator        = {\,},
+}
+\newcolumntype{B}{S[table-format=3.2]}   % 3 integer digits, 2 decimals
+\newcolumntype{C}{S[table-format=2.2]}
+\newcolumntype{D}{S[table-format=1.3]}
+
+% --------------------------------------------------------------------------- %
+% Lists. Deep bullet nesting is where contest drafts get ugly. [official]
+% neurips_2025.sty:232-241 topsep 4pt, itemsep 2pt, leftmargin 3pc.
+% --------------------------------------------------------------------------- %
+\RequirePackage{enumitem}
+\setlist[itemize]{leftmargin=\csf@listmargin, topsep=2pt, itemsep=1.5pt, parsep=0pt}
+\setlist[enumerate]{leftmargin=\csf@listmargin, topsep=2pt, itemsep=1.5pt, parsep=0pt}
+% Manual "C1." labels so a reviewer can cite a contribution by name.
+\newlist{csfcontribs}{enumerate}{1}
+\setlist[csfcontribs]{label=\textbf{C\arabic*.}, leftmargin=2.2em, topsep=3pt,
+                      itemsep=2pt, parsep=0pt}
+
+% --------------------------------------------------------------------------- %
+% Theorem-like environments, named for what a simulation paper actually needs
+% (Assumption / Proposition / Lemma / Definition / Remark) rather than the
+% mathematics default of Theorem-first.
+% --------------------------------------------------------------------------- %
+\RequirePackage{amsthm}
+\theoremstyle{plain}
+\newtheorem{csfproposition}{Proposition}
+\newtheorem{csflemma}{Lemma}
+\theoremstyle{definition}
+\newtheorem{csfdefinition}{Definition}
+\newtheorem{csfassumption}{Assumption}
+\theoremstyle{remark}
+\newtheorem{csfremark}{Remark}
+\renewcommand{\proofname}{Proof}
+
+% --------------------------------------------------------------------------- %
+% Semantic boxes.
+%
+% DESIGN WARNING, learned from the earlier Chinese shell: heavy coloured boxes
+% with rounded corners are themselves a contest-paper marker. Top venues put this
+% content in ordinary prose. So the DEFAULT is plain — a thin left rule and no
+% fill, which reads as a page-level pull-quote rather than as decoration. The
+% `boxes` option (soft tints) exists for internal drafts where you want to find
+% the blocks fast. Style names carry a `csfbx` prefix so they cannot collide with
+% the environment names.
+% --------------------------------------------------------------------------- %
+\RequirePackage[most]{tcolorbox}
+
+\tcbset{
+  csfbase/.style={
+    enhanced, breakable,
+    boxrule=0pt, leftrule=1.6pt,
+    arc=0mm, outer arc=0mm,
+    left=6pt, right=4pt, top=3pt, bottom=3pt,
+    fonttitle=\bfseries\small,
+    coltitle=csfInk,
+    % `before skip` / `after skip` are LOAD-BEARING, not cosmetic.
+    %
+    % The official heading spacing copied into the presets uses a NEGATIVE
+    % before-space: NeurIPS -2.0ex, ICML -0.12in, AAAI -2.0ex (about -8.6pt each).
+    % That is tuned to follow a PARAGRAPH, where the paragraph's own skip absorbs it.
+    % Follow a tcolorbox and there is nothing to absorb it: the next \section rises
+    % into the box and its rule crosses the box's bottom edge.
+    %
+    % 16pt is not arbitrary: it must exceed the largest negative pre-space in any
+    % preset (~8.6pt) and still leave a visible gap (~7.4pt). An earlier value of
+    % 8pt cancelled almost exactly and the collision survived — confirmed by
+    % cropping the compiled page at 200 dpi, which is the only way this class of
+    % defect becomes visible.
+    before skip = 8pt,
+    after skip  = 16pt,
+    % A `breakable` box that splits across a column or page break gets NO padding at
+    % the break point by default, so the continuation starts flush against the rule
+    % and the next heading lands hard against the last line. `pad at break*` adds
+    % the breathing room at the break itself — which `after skip` cannot do, because
+    % `after skip` only applies where the box finally ENDS.
+    pad at break* = 6pt,
+    attach boxed title to top left={xshift=3pt, yshift=-1pt},
+    boxed title style={boxrule=0pt, arc=0mm, left=3pt, right=3pt,
+                       top=0pt, bottom=0pt},
+  }
+}
+
+\ifcsf@tinted
+  \tcbset{
+    csfbxcontrib/.style={csfbase, colback=csfTint, colframe=csfOurs,
+                         colbacktitle=csfTint},
+    csfbxkey/.style={csfbase, colback=csfTint, colframe=csfImprove,
+                     colbacktitle=csfTint},
+    csfbxasm/.style={csfbase, colback=csfTint, colframe=csfReference,
+                     colbacktitle=csfTint},
+    csfbxtake/.style={csfbase, colback=csfTint, colframe=csfOursAlt,
+                      colbacktitle=csfTint},
+    csfbxlimit/.style={csfbase, colback=csfTintWarn, colframe=csfBottleneck,
+                       colbacktitle=csfTintWarn},
+    csfbxmethod/.style={csfbase, colback=white, colframe=csfBaseline,
+                        colbacktitle=white},
+  }
+\else
+  \tcbset{
+    csfbxcontrib/.style={csfbase, colback=white, colframe=csfOurs,
+                         colbacktitle=white},
+    csfbxkey/.style={csfbase, colback=white, colframe=csfImprove,
+                     colbacktitle=white},
+    csfbxasm/.style={csfbase, colback=white, colframe=csfReference,
+                     colbacktitle=white},
+    csfbxtake/.style={csfbase, colback=white, colframe=csfOursAlt,
+                      colbacktitle=white},
+    csfbxlimit/.style={csfbase, colback=white, colframe=csfBottleneck,
+                       colbacktitle=white},
+    csfbxmethod/.style={csfbase, colback=white, colframe=csfBaseline,
+                        colbacktitle=white},
+  }
+\fi
+
+\newtcolorbox{csfcontrib}[1][Contributions]{csfbxcontrib, title={#1}}
+\newtcolorbox{csfkey}[1][Key result]{csfbxkey, title={#1}}
+\newtcolorbox{csfasm}[1][Assumptions]{csfbxasm, title={#1}}
+\newtcolorbox{csftake}[1][Takeaway]{csfbxtake, title={#1}}
+\newtcolorbox{csflimit}[1][Limitations]{csfbxlimit, title={#1}}
+\newtcolorbox{csfmethod}[1][Method]{csfbxmethod, title={#1}}
+
+% --------------------------------------------------------------------------- %
+% Figure placeholder.
+%
+% The art is produced separately (and in this project, redrawn in vector software
+% by hand). Two things must nevertheless be final BEFORE the art exists: the space
+% the figure occupies, and the caption. Otherwise the line breaking, the page
+% count and the caption length all change once the art lands and the text has to
+% be rewritten. This placeholder occupies the exact final size and carries the
+% caption, so the layout is frozen early.
+%
+% API: \csffigplaceholder[<width>]{<height>}   (width defaults to \linewidth)
+%
+% The width is an OPTIONAL argument and is never TYPESET. That is deliberate: a
+% dimen register such as \linewidth is illegal in horizontal text mode and raises
+%   "Missing number, treated as zero" + "Illegal unit of measure (pt inserted)"
+% the moment it is printed. Only the height — always a literal like 4.2cm — is
+% shown.
+% --------------------------------------------------------------------------- %
+\providecommand{\csffigplaceholder}[2][\linewidth]{%
+  \begingroup
+  \setlength{\fboxsep}{0pt}%
+  \fcolorbox{csfGrid}{white}{%
+    % Subtract the two frame rules, otherwise the box is 0.8pt wider than the
+    % text block and LaTeX reports an Overfull \hbox.
+    \parbox[c][#2][c]{\dimexpr#1-2\fboxrule\relax}{%
+      \centering\small\color{csfBaseline}%
+      figure placeholder\\[0.25em]%
+      \footnotesize height #2 --- supply vector art}}%
+  \endgroup}
+
+% --------------------------------------------------------------------------- %
+% Claim / evidence binding.
+%
+% The recurring failure is not "no figure" but "a figure no sentence needs": a
+% panel is included for completeness and no claim depends on it. The fix is to
+% make the dependency explicit IN THE SOURCE, where a script can verify it:
+%
+%   \csfclaim{C3}{Capacity-proportional allocation cuts mean clearance time.}%
+%   \csfevi{fig:main,tab:main}
+%
+% In draft mode both are printed inline, so the author sees the coupling while
+% writing and uncovered claims stand out. In final mode both vanish, leaving clean
+% prose. csf_prose.py parses the source in either mode.
+% --------------------------------------------------------------------------- %
+\providecommand{\csfclaim}[2]{%
+  \ifcsf@draft\textsuperscript{\textcolor{csfLink}{[#1]}}#2\else#2\fi}
+\providecommand{\csfevi}[1]{%
+  \ifcsf@draft\,{\footnotesize\textcolor{csfLink}{$\rightarrow$\,#1}}\fi}
+
+% --------------------------------------------------------------------------- %
+% Result-table emphasis. Bolding the best value is only meaningful when the
+% selection rule is stated in the caption ("bold = within one standard deviation
+% of the best"). These macros keep that rule out of the numbers themselves.
+% --------------------------------------------------------------------------- %
+\providecommand{\best}[1]{\textbf{#1}}
+\providecommand{\second}[1]{\underline{#1}}
+\providecommand{\ours}[1]{\textcolor{csfOurs}{\textbf{#1}}}
+\providecommand{\naref}{\textnormal{N/A}}
+
+% --------------------------------------------------------------------------- %
+% Prose macros: the micro-typography that separates a typeset paper from a
+% word-processed one — upright Latin abbreviations, non-breaking spaces, dashes.
+% --------------------------------------------------------------------------- %
+\RequirePackage{xspace}
+\providecommand{\eg}{e.g.,\xspace}
+\providecommand{\ie}{i.e.,\xspace}
+\providecommand{\etal}{et~al.\xspace}
+\providecommand{\cf}{cf.\@\xspace}
+\providecommand{\wrt}{w.r.t.\@\xspace}
+\providecommand{\code}[1]{\texttt{#1}}
+
+% --------------------------------------------------------------------------- %
+% Abstract. The official venues set the abstract in a NARROWER measure than the
+% body via a `quote` environment, and keep the body at NORMAL size. An earlier
+% version of this shell used \small, which both lightened the block and diverged
+% from every official file.
+% --------------------------------------------------------------------------- %
+\providecommand{\csfkeywordsname}{Keywords}
+\providecommand{\csfkeywords}[1]{%
+  \par\vspace{0.5em}\noindent
+  {\bfseries\csfkeywordsname:}~#1\par}
+
+\newenvironment{csfabstract}{%
+  \par\vspace{0.9em}%
+  \begin{center}{\csf@abstractheadfmt Abstract}\end{center}%
+  \vspace{0.3ex}%
+  \ifnum\csf@abstractquote=1
+    \begin{quote}%
+  \else
+    % A bare `list` demands an \item before any content; without it LaTeX aborts
+    % with "Something's wrong--perhaps a missing \item" at \end{csfabstract}.
+    % `quote` supplies its own \item, which is why only this branch needs one.
+    \begin{list}{}{%
+      \setlength{\leftmargin}{0.05\linewidth}%
+      \setlength{\rightmargin}{0.05\linewidth}%
+      \setlength{\listparindent}{0pt}%
+      \setlength{\topsep}{0.3em}%
+      \setlength{\parsep}{0pt}}%
+    \item\relax
+  \fi
+  \csf@abstractsize
+}{%
+  \ifnum\csf@abstractquote=1\end{quote}\else\end{list}\fi
+  \vspace{0.6em}%
+}
+
+% --------------------------------------------------------------------------- %
+% Title block, written as macros rather than \maketitle: contest classes inject
+% their own cover page, whereas a top-venue title block is a tight centred block
+% and nothing else. [official] neurips_2025.sty:290-332 wraps the title in a 4pt
+% rule above and a 1pt rule below, separated by 0.25in / 0.29in — a recognisable
+% signature of the venue, so it is reproduced when the preset asks for it.
+%
+% \suppressfloats[t] IS LOAD-BEARING. A `[t]` float declared in the body of page 1
+% is placed in the top float area, which sits ABOVE the title block, so without
+% this the first table or figure appears over the paper title. The official classes
+% avoid it because \maketitle runs before the first page's float queue is built;
+% here the title is an ordinary block, so the suppression has to be explicit.
+% Real papers show the same behaviour: page 1 carries title, abstract and text, and
+% the first top float appears on page 2.
+% --------------------------------------------------------------------------- %
+\providecommand{\csftitle}[1]{%
+  \par\vspace{0.4em}%
+  \ifnum\csf@titlebars=1
+    \begingroup\noindent\rule{\linewidth}{4pt}\par\vspace{0.25in}\endgroup
+  \fi
+  \begin{center}{\csf@titlefmt #1}\end{center}%
+  \ifnum\csf@titlebars=1
+    \begingroup\vspace{0.29in}\noindent\rule{\linewidth}{1pt}\par
+    \vspace{0.09in}\endgroup
+  \fi
+  \vspace{0.1em}%
+  \suppressfloats[t]}
+\providecommand{\csfauthors}[1]{%
+  \begin{center}\csf@authorfmt #1\end{center}\vspace{0.1em}}
+\providecommand{\csfaffil}[1]{%
+  \begin{center}\small\itshape #1\end{center}\vspace{0.2em}}
+\providecommand{\csfemail}[1]{%
+  \begin{center}\small #1\end{center}\vspace{0.4em}}
+% Nature-style standfirst: one sentence, larger and sans, that states the result
+% rather than the topic. Optional; omit for conference venues.
+\providecommand{\csfstandfirst}[1]{%
+  \begin{center}\normalsize\sffamily #1\end{center}\vspace{0.3em}}
+
+% --------------------------------------------------------------------------- %
+% Cross-references. cleveref must load AFTER hyperref. `nameinlink` makes the
+% whole "Figure 3" clickable, and `capitalise` guarantees a capital at sentence
+% start without hand-editing the source.
+% --------------------------------------------------------------------------- %
+\RequirePackage{hyperref}
+\ifcsf@print
+  \hypersetup{hidelinks}
+\else
+  \hypersetup{
+    colorlinks = true,
+    linkcolor  = csfLink,
+    citecolor  = csfLink,
+    urlcolor   = csfLink,
+    filecolor  = csfLink,
+    pdfborder  = {0 0 0},
+  }
+\fi
+\RequirePackage[capitalise,noabbrev,nameinlink]{cleveref}
+\crefname{figure}{Figure}{Figures}
+\crefname{table}{Table}{Tables}
+\crefname{section}{Sec.}{Secs.}
+\crefname{equation}{Eq.}{Eqs.}
+% These counter names must match the \newtheorem names above. Mapping cleveref to
+% `assumption` while the counter is `csfassumption` silently prints "??" — the
+% same class of mismatch that produced the earlier `KeyError: '方法'`.
+\crefname{csfassumption}{Assumption}{Assumptions}
+\crefname{csfproposition}{Proposition}{Propositions}
+\crefname{csflemma}{Lemma}{Lemmas}
+\crefname{csfdefinition}{Definition}{Definitions}
+\crefname{csfremark}{Remark}{Remarks}
+
+% --------------------------------------------------------------------------- %
+% Draft extras: line numbers for review. lineno is incompatible with two columns,
+% so it is enabled only when single-column.
+% --------------------------------------------------------------------------- %
+\ifcsf@draft
+  \if@twocolumn\else
+    \RequirePackage[mathlines,switch]{lineno}
+    \linenumbers
+  \fi
+\fi
+
+% --------------------------------------------------------------------------- %
+% Header/footer: a page number and nothing else. Running titles belong to the
+% camera-ready, not to the copy a reviewer annotates.
+% --------------------------------------------------------------------------- %
+\RequirePackage{fancyhdr}
+\pagestyle{fancy}
+\fancyhf{}
+\renewcommand{\headrulewidth}{0pt}
+\renewcommand{\footrulewidth}{0pt}
+\fancyfoot[C]{\small\thepage}
+
+% --------------------------------------------------------------------------- %
+% Back-matter statements (Reproducibility, Compute, Ethics, Impact). Rendered as
+% unnumbered bold run-in headings so they do not pollute section numbering.
+% --------------------------------------------------------------------------- %
+\providecommand{\csfstatement}[1]{%
+  \par\vspace{0.9em}\noindent{\bfseries #1}\par\nobreak\vspace{0.15em}}
+
+% --------------------------------------------------------------------------- %
+% Algorithms: ruled, vlined, numbered. The Chinese shell's 输入/输出 keywords are
+% replaced with English ones — a half-translated artefact reads as carelessness,
+% and algorithm keywords are exactly where it happens.
+% --------------------------------------------------------------------------- %
+\providecommand{\algoref}[1]{Algorithm~#1}
+\IfFileExists{algorithm2e.sty}{%
+  \RequirePackage[ruled,vlined,linesnumbered]{algorithm2e}%
+  \SetKwComment{Comment}{// }{}%
+  \SetAlgoLined
+  \DontPrintSemicolon
+  \SetKwInput{KwIn}{Input}%
+  \SetKwInput{KwOut}{Output}%
+  \SetKwInput{KwData}{Data}%
+  \SetKwInput{KwResult}{Result}%
+  \SetKw{Return}{return}%
+}{}
+
+\endinput

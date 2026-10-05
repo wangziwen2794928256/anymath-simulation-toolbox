@@ -1,0 +1,225 @@
+%=======================================================================
+% 前置部分：标题 / 摘要（summary paragraph 七句式）/ 第 1 章 / 第 2 章
+% 摘要按 csf-paper-polish/references/conference-narrative.md 的七句式组织。
+%=======================================================================
+\title{有限出口容量下的多智能体疏散：一个带拥堵外部性的分布式资源分配问题}
+\author{}
+\date{}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+有限服务率资源的分布式分配广泛存在于人群疏散、物流调度与计算资源调度中，
+其共同结构是：多个自利的个体在一组容量受限的资源间选择，而全局效率取决于
+选择是否均衡。然而，当个体仅依据局部距离决策时，拥堵外部性使个体均衡
+\textbf{系统性偏离}社会最优；既有研究多以微观动力学复现为目标，
+对该偏差缺乏定量刻画，也缺少可证伪的验证链条。本文把疏散重述为
+带容量约束的分布式资源分配问题，并将机制显式化为三条可证伪假设（H1--H3）。
+建模上以宏观出口容量 $\mu_e=w_e q$ 聚合局部动力学，把个体代价写作
+$c_i(e)=d_i(e)+\lambda Q_e$——该形式是容量约束影子价格的一阶近似。
+
+在 $24\times16$~m、三异宽出口（1.6/1.2/0.8~m）、$N=400$ 的场景中，
+5 个种子（公共随机数）下的结果为：最近出口 $426.7\pm6.0$~s，
+随机均衡 $223.2\pm15.6$~s（H1 成立，快 $47.7\%$）；
+动态拥塞感知 $\mathbf{184.5\pm15.9}$~s（H2 成立，降 $56.8\%$），
+达容量下界 $152.2$~s 的 $1.21$ 倍；$\lambda$ 扫描呈\textbf{单峰}，
+$\lambda=3$ 最优、稳健区间 $[2,5]$（H3 成立）。
+排队论闭合估计给出最近出口 $\approx411$~s、动态策略下瓶颈出口清空 $184.9$~s，
+与实测偏差分别 $3.7\%$ 与 $0.2\%$；Lagrangian 对偶给出乘子归一化条件
+$\sum_e\lambda_e\mu_e=1$ 与互补松弛，把 $\lambda$ 解释为影子价格的线性近似。
+本文另给出一个方法学结论：\textbf{六个静态策略变体的数值逐位相同}，
+这是"服务先于决策"下巴队初值为零导致的\textbf{数学必然}（命题 1--2），
+说明\textbf{策略的本质差异在于决策频率而非代价函数的构造}。
+独立学习在协同场景中塌缩为单一出口（流量 $0/0/400$，未在 $1200$~s 内完成），
+按信用分配的信息缺口给出结构性解释，反向论证全局拥堵信息进观测的必要性。
+
+该"拥堵外部性 $\to$ 影子价格 $\to$ 分布式实现"的链条不限于疏散，
+可直接迁移到 AGV 调度与缓存分配等同类容量受限分配问题。
+局限在于：模型忽略绕行与避让、忽略恐慌与从众行为，
+故对动态策略优势的估计偏乐观；且当出口宽度差异缩到 $\pm20\%$ 以内时，
+均衡收益降至 $8.2\%$，该链条失去用武之地。
+
+\csfkeywords{多智能体疏散\quad 拥堵外部性\quad 分布式资源分配\quad Lagrangian 对偶\quad 排队论}
+\end{abstract}
+
+\newpage
+
+%-----------------------------------------------------------------------
+\section{引言}
+\label{sec:intro}
+
+\subsection{研究缺口（Gap）}
+\label{sec:gap}
+
+行人疏散建模已形成三类成熟方法族，但它们共享一个未解决的缺口。
+社会力模型\cite{helbing1995socialforce}以连续受力刻画局部斥力与瓶颈摆动，
+地场元胞自动机\cite{burstedde2001ca,kirchner2002friction}以静/动态地场引导个体，
+基于智能体的方法赋予个体独立决策\cite{zheng2011stateofart}。
+三者在局部动力学层面各有优势，宏观上也共享比流量约 $0.7$--$1.0$~人/(m$\cdot$s)
+的基本图，但它们都\textbf{把出口选择当作给定条件}——
+个体按最近出口或固定规则行动，模型不解释"为什么这样选不好、应该怎样选"。
+
+出口分配一侧的研究多采用启发式规则（最近出口、最短队列）或近年兴起的
+多智能体强化学习\cite{rashid2018qmix,yu2022mappo}。前者的问题在于
+\textbf{不含外部性}：个体选择拥堵出口给后来者强加的等待成本未进入其代价函数；
+后者的问题在于\textbf{可解释性与样本效率有限}，且已有工作少有人回答
+"该策略为什么有效"这一机制问题。表 \ref{tab:related} 给出方法族的系统对照。
+
+\subsection{核心洞见（Insight）}
+\label{sec:insight}
+
+本文的洞见可以用一句话表述：\textbf{疏散不是"行人往哪走"的动力学问题，
+而是"有限出口容量下，个体局部最优如何偏离全局最优"的分配问题}，
+其偏差机制是\textbf{拥堵外部性}，而该偏差可以用一个可计算的量刻画。
+
+具体地，个体在出口 $e$ 前的等待为 $W_e=Q_e/\mu_e$；
+第 $j$ 个加入者使其后每个加入者的等待各增加 $1/\mu_e$，
+故边际外部性为 $\tau_e=\partial(W_eK_e)/\partial Q_e=K_e/\mu_e$
+（式 \eqref{eq:pigou}）。社会最优要求个体承担 $\tau_e$，而个体只承担 $d_i(e)$。
+这一缺口给出一个\textbf{可证伪的可算预测}：若机制成立，
+则存在有限的拥塞权重 $\lambda^\ast$ 使总疏散时间 $T(\lambda)$ 呈\textbf{单峰}——
+太小则外部性未内化，太大则过度绕行。
+
+\subsection{本文贡献（Contribution）}
+\label{sec:contrib}
+
+\begin{csfcontrib}
+\begin{enumerate}[label=\textbf{C\arabic*.}]
+  \item \textbf{重述问题并给出可证伪验证链}。把疏散重述为带拥堵外部性的
+        分布式资源分配，并把机制显式化为三条带具体判据的假设 H1--H3，
+        逐条以递进实验验证（第 \ref{sec:results} 节），而非并列铺陈结果。
+  \item \textbf{证明并验证静态策略的等价性}（命题 \ref{prop:degenerate}--\ref{prop:arrival}）。
+        我们给出"服务先于决策 $\Rightarrow$ 队列初值为零 $\Rightarrow$ 队列类策略
+        首步退化为距离策略"的闭式论证，并在 5 个种子上验证六个策略变体
+        \emph{逐位相同}。由此得到方法学结论：\textbf{策略的本质差异在于决策频率，
+        而非代价函数的构造}。
+  \item \textbf{给出可独立核算的三层理论解释}。容量下界（命题 \ref{prop:lb}）、
+        排队闭合估计（两处对照偏差 $<4\%$）、以及 Lagrangian 对偶
+        （乘子归一化条件 $\sum_e\lambda_e\mu_e=1$ 与互补松弛），
+        把拥塞权重从超参升格为容量约束的影子价格近似（\ref{sec:lagrangian} 节）。
+  \item \textbf{解释失败并给出诚实边界}。独立学习的塌缩（$0/0/400$）被解释为
+        信用分配的信息缺口（式 \eqref{eq:credit}），而非"训练不充分"；
+        并明确报告结论的失效条件（出口宽度趋等时收益降至 $8.2\%$）。
+\end{enumerate}
+\end{csfcontrib}
+
+\subsection{全文组织（Roadmap）}
+\label{sec:roadmap}
+
+第 \ref{sec:related} 节按方法族成表对照并定位本文位置；
+第 \ref{sec:problem} 节形式化问题、给出数据与符号；
+第 \ref{sec:formal} 节把系统写成多智能体决策过程，并给出五个建模假设及其
+放宽影响；第 \ref{sec:model} 节推导代价函数、证明静态策略的退化性质、
+给出排队闭合估计与 Lagrangian 分解；第 \ref{sec:exp} 节交代实验设计、
+指标定义与三层校验；第 \ref{sec:results} 节按假设逐条报告结果，
+并在每个实验后解释"为什么是这个量级"；第 \ref{sec:conclusion} 节总结并给出边界。
+
+%-----------------------------------------------------------------------
+\section{相关工作：方法族对照}
+\label{sec:related}
+
+本节不罗列文献，而是按方法族给出\textbf{可对照的维度}，并明确本文的位置与缺口。
+表 \ref{tab:related} 的最后一列要求每个方法族写清"在本文场景下的失效点"，
+最后一行是本文，且同样写出自身的失效点。
+
+\begin{table}[H]
+  \centering
+  \caption{方法族对照（最后一行写出本文自身的失效点，而非只列优点）}
+  \label{tab:related}
+  \small
+  \begin{tabular}{p{0.15\linewidth}p{0.13\linewidth}p{0.13\linewidth}p{0.09\linewidth}p{0.10\linewidth}p{0.26\linewidth}}
+    \toprule
+    方法族 & 代表工作 & 建模对象 & 可解释性 & 数据/算力 & 本文场景下的失效点 \\
+    \midrule
+    社会力 & \cite{helbing1995socialforce} & 连续受力 & 高 & 低 &
+      引入 $\tau$、斥力强度等无实测来源的参数，且不回答"该去哪个出口" \\
+    元胞自动机 & \cite{burstedde2001ca,kirchner2002friction} & 离散格点 & 中 & 低 &
+      网格各向异性影响瓶颈流量；出口选择仍为外生给定 \\
+    启发式分配 & 最近出口/最短队列 & 距离或队列 & 高 & 极低 &
+      \textbf{不含外部性}；且仅在 $t=0$ 决策时首步退化为最近出口（命题 1） \\
+    排队论近似 & \cite{little1961,law2015} & 到达-服务 & 高 & 低 &
+      给出下界与量级，但\textbf{不产生}分配策略，需与仿真结合 \\
+    值分解 MARL & \cite{sunehag2018vdn,rashid2018qmix} & 联合价值 & 低 & 中 &
+      受 IGM 单调性限制；同质共享策略难以破对称（MECH-06/07） \\
+    CTDE on-policy & \cite{yu2022mappo,foerster2018coma} & 策略梯度 & 低 & 高 &
+      样本效率与训练成本高，短期难收敛到可报告水平（本文未真训） \\
+    \midrule
+    \textbf{本文} & --- & \textbf{宏观容量 + 影子价格} & \textbf{高} & \textbf{低} &
+      \textbf{忽略绕行与从众行为，故对动态策略优势偏乐观；出口宽度趋等时收益降至 $8.2\%$（\ref{sec:robust} 节）} \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+\begin{csftake}[相关工作表的结论]
+本文位于"排队论给出量级 + 启发式给出策略"的交叉点：
+用排队论与对偶理论\textbf{解释}策略为何有效，用仿真\textbf{验证}解释是否成立。
+与 MARL 路线相比，本文牺牲了策略的表达能力上限，换取了可解释性与零训练成本；
+与纯启发式相比，本文补上了缺失的机制层与可证伪验证链。
+\end{csftake}
+
+%-----------------------------------------------------------------------
+\section{问题形式化与数据}
+\label{sec:problem}
+
+礼堂长 $24$~m、宽 $16$~m，三个出口位于左墙（E1，宽 $1.6$~m）、
+右墙（E2，宽 $1.2$~m）与下墙（E3，宽 $0.8$~m）中部。
+总人数 $N=400$，自由行走速度 $v_0=1.34$~m/s，
+出口单位宽度比流量 $q=0.73$~人/(m$\cdot$s)。
+
+初始分布\textbf{刻意制造最近出口失衡}：$60\%$ 的个体集中于 E3 附近
+（质心约 $(12,3)$），$25\%$ 在 E2 附近（约 $(19,8)$），$15\%$ 在 E1 附近（约 $(5,8)$），
+各簇为各向异性高斯（标准差 $2.2\times1.6$~m）截断到场地内。
+场景与初始分布见图 \ref{fig:layout}。
+
+出口服务率与服务能力见表 \ref{tab:mu}：
+$\mu=(\mu_1,\mu_2,\mu_3)=(1.168,0.876,0.584)$~人/s，合计 $\sum_e\mu_e=2.628$~人/s，
+由此得容量下界 $T_{\mathrm{lb}}=N/\sum_e\mu_e=152.2$~s。
+注意三个出口的容量份额为 $44.5\%/33.3\%/22.2\%$，
+而初始分布把 $60\%$ 的人放在容量份额最小（$22.2\%$）的 E3 附近——
+这一\textbf{结构性错配}是本文全部现象的根源。
+
+符号总表见表 \ref{tab:sym}。
+
+\begin{table}[H]
+  \centering
+  \caption{符号总表}
+  \label{tab:sym}
+  \begin{tabular}{clcl}
+    \toprule
+    符号 & 含义 & 单位 & 首次出现 \\
+    \midrule
+    $N$ & 个体总数 & 人 & \ref{sec:problem} 节 \\
+    $W,H$ & 场院长与宽 & m & \ref{sec:env} 节 \\
+    $E$ & 出口集合，$|E|=3$ & --- & \ref{sec:env} 节 \\
+    $w_e$ & 出口 $e$ 净宽 & m & 式 \eqref{eq:mu} \\
+    $q$ & 出口单位宽度比流量 & 人/(m$\cdot$s) & 式 \eqref{eq:mu} \\
+    $\mu_e$ & 出口 $e$ 服务率，$\mu_e=w_e q$ & 人/s & 式 \eqref{eq:mu} \\
+    $\mathbf p_i$ & 个体 $i$ 的位置 & m & \ref{sec:agent} 节 \\
+    $d_i(e)$ & 个体 $i$ 到出口 $e$ 的欧氏距离 & m & 式 \eqref{eq:cost} \\
+    $Q_e(t)$ & 出口 $e$ 在 $t$ 时刻的排队长度 & 人 & 式 \eqref{eq:cost} \\
+    $a_i(t)$ & 个体 $i$ 在 $t$ 时刻的目标出口 & --- & 式 \eqref{eq:proposed} \\
+    $\lambda$ & 拥塞权重 & --- & 式 \eqref{eq:cost} \\
+    $\lambda_e$ & 容量约束的影子价格（乘子） & s/人 & 式 \eqref{eq:lagrange} \\
+    $c_i(e;t)$ & 个体 $i$ 对出口 $e$ 的代价 & m & 式 \eqref{eq:cost} \\
+    $T$ & 总疏散时间 $\max_i t_i^{\text{dep}}$ & s & 式 \eqref{eq:global} \\
+    $T_{\mathrm{lb}}$ & 容量下界 $N/\sum_e\mu_e$ & s & 命题 \ref{prop:lb} \\
+    $F_e$ & 出口 $e$ 的累计离场人数 & 人 & 式 \eqref{eq:gini} \\
+    $G$ & 出口流量标准 Gini 系数 & --- & 式 \eqref{eq:gini} \\
+    $\rho_e$ & 出口 $e$ 的瓶颈利用率 & --- & \ref{sec:emergence} 节 \\
+    $\tau_e$ & 边际拥堵外部性 & s & 式 \eqref{eq:pigou} \\
+    $\Delta t$ & 仿真时间步长 & s & \ref{sec:transition} 节 \\
+    $\epsilon$ & 到达判定阈值 & m & \ref{sec:transition} 节 \\
+    $v_0$ & 自由行走速度 & m/s & \ref{sec:problem} 节 \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.82\linewidth]{figures/fig1_layout.png}
+  \caption{礼堂平面与 $400$ 名个体的初始分布。三个出口净宽不同
+  （E1 $1.6$~m、E2 $1.2$~m、E3 $0.8$~m），而 $60\%$ 的个体初始位于
+  容量份额最小的 E3 附近，形成结构性错配。}
+  \label{fig:layout}
+\end{figure}

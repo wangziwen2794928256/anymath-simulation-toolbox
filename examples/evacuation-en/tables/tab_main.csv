@@ -1,0 +1,5 @@
+method,T (s),Gini,T/T_lb,flow E1/E2/E3,re-decision
+Random assignment,223.20$\pm$15.60,0.0333,1.467,133/137/130,0
+Static rules*,426.70$\pm$6.00,0.3220,2.803,56/95/249,0-3
+Dynamic (ours)*,184.50$\pm$15.90,0.0833,1.212,158/134/108,0
+Capacity lower bound,152.21,N/A,1.000,N/A,N/A

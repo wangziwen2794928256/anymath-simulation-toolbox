@@ -1,0 +1,50 @@
+# acm-acmart — 官方样式文件来源 / source of truth
+
+## https://mirrors.ctan.org/macros/latex/contrib/acmart.zip
+- 本地路径: `D:\anymath-and-simulation\_vendor\venue-styles\acm-acmart\_raw\ (extracted)`
+- 字节数: 15,106,903
+- sha256: `93933ce58fbeffa13e23398bb523fcb68275ecc73369c6bc73b421eeef2c10de`
+- 获取时间(UTC): 2026-10-05T10:57:09+00:00
+- 解压条目 (41):
+  - `ACM-Reference-Format.bst`
+  - `Makefile`
+  - `README`
+  - `acm-jdslogo.png`
+  - `acmart.bib`
+  - `acmart.dtx`
+  - `acmart.ins`
+  - `acmart.pdf`
+  - `acmauthoryear.bbx`
+  - `acmauthoryear.cbx`
+  - `acmdatamodel.dbx`
+  - `acmguide.pdf`
+  - `acmnumeric.bbx`
+  - `acmnumeric.cbx`
+  - `samples/Makefile`
+  - `samples/abbrev.bib`
+  - `samples/acmcp.pdf`
+  - `samples/acmengage.dtx`
+  - `samples/acmengage.pdf`
+  - `samples/acmlarge.pdf`
+  - `samples/acmmanuscript.pdf`
+  - `samples/acmsmall-biblatex.pdf`
+  - `samples/acmsmall-conf.pdf`
+  - `samples/acmsmall-submission.pdf`
+  - `samples/acmsmall-tagged.pdf`
+  - `samples/acmsmall.pdf`
+  - `samples/acmtog-conf.pdf`
+  - `samples/acmtog.pdf`
+  - `samples/sample-base.bib`
+  - `samples/sample-franklin.png`
+  - `samples/samples.dtx`
+  - `samples/samples.ins`
+  - `samples/sampleteaser.pdf`
+  - `samples/sigconf-authordraft.pdf`
+  - `samples/sigconf-biblatex.pdf`
+  - `samples/sigconf-i13n.pdf`
+  - `samples/sigconf-lualatex.pdf`
+  - `samples/sigconf-tagged.pdf`
+  - `samples/sigconf.pdf`
+  - `samples/sigplan.pdf`
+  - `samples/software.bib`
+

@@ -1,0 +1,15 @@
+\begin{table}[H]
+  \centering
+  \caption{tab main (best in bold, second best in italics)}
+  \label{tab:main}
+  \begin{tabular}{lccccc}
+    \toprule
+    method & T (s) & Gini & T/T_lb & flow E1/E2/E3 & re-decision \\
+    \midrule
+    Random assignment & 223.20$\pm$15.60 & \textbf{0.0333} & 1.467 & 133/137/130 & 0 \\
+    Static rules* & 426.70$\pm$6.00 & 0.3220 & 2.803 & 56/95/249 & 0-3 \\
+    Dynamic (ours)* & \textit{184.50$\pm$15.90} & \textit{0.0833} & \textit{1.212} & 158/134/108 & 0 \\
+    Capacity lower bound & \textbf{152.21} & N/A & \textbf{1.000} & N/A & N/A \\
+    \bottomrule
+  \end{tabular}
+\end{table}

@@ -1,0 +1,469 @@
+{
+  "meta": {
+    "name": "csf-en-zh-glossary",
+    "version": 1,
+    "source_language": "en",
+    "target_language": "zh-Hans",
+    "purpose": "英文定稿 -> 中文派生物 的术语账本。csf_localize.py 用它做三件事：报禁用译法、报'英文词条出现但首选译法缺失'、把允许保留英文的缩写加入未译检测白名单。",
+    "why_it_exists": [
+      "本地化阶段最隐蔽的漂移不是漏译整句，而是同一个词在译文里被两种中文写法交替使用（'鲁棒性' 与 '稳健性'），或者被译成了一个技术含义不同的近义词（policy -> '政策'）。这两种都不会让句子读不通，所以人工校对看不见。",
+      "术语表是'可判断'的部分：一个词条要么用了禁用译法，要么没有。判断不了的（例如整句语义是否等价）本工具不判断。"
+    ],
+    "field_notes": {
+      "en": "英文词条。匹配时允许复数（-s / -es），大小写不敏感。",
+      "zh": "首选中文译法。为 null 表示**尚未确定**——本工具对该词条不做任何一致性判定，只在 --emit-glossary-template 里列出，等人来定。宁可留空也不要编一个。",
+      "aliases_en": "同一概念的其它英文写法（例如 maximum completion time = makespan），参与'英文出现次数'统计。",
+      "avoid": "禁止译法列表。collision=true 表示该中文词在中文技术语境里**另有技术含义**，用错就是语义错误（ERROR / MUST-FIX）；collision=false 表示两种译法都成立、只是必须与全文统一（WARN / FIXABLE）。",
+      "keep_en": "true 表示该英文词条可以合法地原样留在中文文本里（多为缩写与专名）。false 表示它必须被译出来——留在中文里就是'半翻译'。",
+      "confidence": "high = 可以当门禁用；medium = 主流文献这么用，但存在可接受的异体；uncertain = 没有稳定译名，本工具只用它做提示，不判定。",
+      "domain": "便于按章筛选（MARL / OR / queueing / evac / stats / writing）。"
+    },
+    "how_to_grow": [
+      "运行 python csf_localize.py --en paper.tex --emit-glossary-template 得到'英文源里出现、但术语表里没有'的候选词条。",
+      "候选是启发式的（2-3 个实词构成的 n-gram，出现次数 >= 阈值），**只是待人工分流的清单**，不是判定结果。人工确认后把 zh 填上，不许留 null 混过检查。"
+    ]
+  },
+
+  "abbreviations_keep_en": [
+    "MAPPO", "QMIX", "VDN", "QTRAN", "COMA", "MADDPG", "IPPO", "IQL", "DQN", "DDQN",
+    "PPO", "TRPO", "A2C", "A3C", "SAC", "TD3", "DDPG", "GAE", "RL", "MARL", "MDP",
+    "POMDP", "ODD", "API", "JSON", "JSONL", "CSV", "YAML", "XML", "GPU", "CPU", "TPU",
+    "RAM", "URL", "DOI", "ISBN", "ID", "UUID", "PDF", "SVG", "PNG", "HTML", "HTTP",
+    "IEEE", "ACM", "AAAI", "AAMAS", "IJCAI", "NeurIPS", "ICML", "ICLR", "JASSS",
+    "LaTeX", "LuaLaTeX", "XeLaTeX", "BibTeX", "TikZ", "PGF", "Makefile",
+    "Python", "Julia", "NumPy", "pandas", "PyTorch", "TensorFlow", "Gym", "PettingZoo",
+    "AnyMath", "MATLAB", "CPLEX", "Gurobi", "OR-Tools", "SQLite", "Docker",
+    "SMAC", "MPE", "GRF", "SOTA", "AUC", "ROC", "RMSE", "MAE", "MAPE", "IQM",
+    "CI", "SE", "SD", "IQR", "ANOVA", "TTL", "FIFO", "LIFO", "M/M/c", "ODD+"
+  ],
+
+  "terms": [
+    {
+      "en": "multi-agent system",
+      "zh": "多智能体系统",
+      "aliases_en": ["multiagent system", "MAS"],
+      "avoid": [
+        {"term": "多代理系统", "why": "「代理」在中文里首先是 proxy / 商务代理；MARL 文献的 agent 一律译「智能体」。用「多代理」会让读者以为是代理（proxy）机制。", "collision": true},
+        {"term": "多主体系统", "why": "「多主体」是经济学 / 基于主体建模（多主体仿真）的惯用词，与本文的强化学习语境不同。同篇内必须统一。", "collision": false}
+      ],
+      "keep_en": false,
+      "confidence": "high",
+      "domain": "MARL"
+    },
+    {
+      "en": "agent",
+      "zh": "智能体",
+      "aliases_en": [],
+      "avoid": [
+        {"term": "代理", "why": "proxy / broker；在强化学习语境里语义错误。", "collision": true}
+      ],
+      "keep_en": false,
+      "confidence": "high",
+      "domain": "MARL"
+    },
+    {
+      "en": "emergent behaviour",
+      "zh": "涌现行为",
+      "aliases_en": ["emergent behavior", "emergence"],
+      "avoid": [
+        {"term": "突现行为", "why": "复杂系统文献里「突现」也有人用；两种都见得到，但对错不在于此——一篇论文里只能有一种。", "collision": false},
+        {"term": "紧急行为", "why": "把 emergence 当成 emergency 的误译。", "collision": true}
+      ],
+      "keep_en": false,
+      "confidence": "medium",
+      "domain": "complexity"
+    },
+    {
+      "en": "makespan",
+      "zh": "完工时间",
+      "aliases_en": ["maximum completion time", "max completion time"],
+      "avoid": [
+        {"term": "清空时间", "why": "那是 clearance time（疏散完成），与调度里的 makespan 是两个量。混用会让结果章的数字失去参照。", "collision": true},
+        {"term": "制造跨度", "why": "机翻直译，中文调度文献不用。", "collision": true},
+        {"term": "工期", "why": "工期 = project duration，是项目管理里的总周期，不是单个算例最后一个完工时刻。", "collision": false}
+      ],
+      "keep_en": false,
+      "confidence": "high",
+      "domain": "OR"
+    },
+    {
+      "en": "clearance time",
+      "zh": "疏散完成时间",
+      "aliases_en": ["clearance duration"],
+      "avoid": [
+        {"term": "完工时间", "why": "「完工时间」在本项目里已被 makespan 占用。疏散语境再用它，读者会以为是调度问题。", "collision": false},
+        {"term": "疏散时限", "why": "时限是 deadline（ASET 之类的设计限值），不是实测的完成时刻。", "collision": false}
+      ],
+      "keep_en": false,
+      "confidence": "medium",
+      "domain": "evac"
+    },
+    {
+      "en": "capacity lower bound",
+      "zh": "容量下界",
+      "aliases_en": [],
+      "avoid": [
+        {"term": "容量下限", "why": "「下限」通常指某个区间的下端；数学上证明出来的 bound，中文写作「下界」。", "collision": false}
+      ],
+      "keep_en": false,
+      "confidence": "medium",
+      "domain": "OR"
+    },
+    {
+      "en": "lower bound",
+      "zh": "下界",
+      "aliases_en": ["LB"],
+      "avoid": [
+        {"term": "下限", "why": "见「容量下界」。全文必须统一，否则 T/T^lb 这个比值的分母在读者眼里会变两次意思。", "collision": false}
+      ],
+      "keep_en": false,
+      "confidence": "high",
+      "domain": "math"
+    },
+    {
+      "en": "upper bound",
+      "zh": "上界",
+      "aliases_en": ["UB"],
+      "avoid": [
+        {"term": "上限", "why": "与「下界」同一理由：bound 译「界」，range endpoint 才译「限」。", "collision": false}
+      ],
+      "keep_en": false,
+      "confidence": "high",
+      "domain": "math"
+    },
+    {
+      "en": "evacuation",
+      "zh": "疏散",
+      "aliases_en": [],
+      "avoid": [
+        {"term": "撤离", "why": "「撤离」指人员 / 部队主动撤出；消防与人群动力学文献用「疏散」。", "collision": false}
+      ],
+      "keep_en": false,
+      "confidence": "high",
+      "domain": "evac"
+    },
+    {
+      "en": "egress",
+      "zh": null,
+      "aliases_en": [],
+      "avoid": [],
+      "keep_en": false,
+      "confidence": "uncertain",
+      "domain": "evac",
+      "note": "未定，不判定。理由：egress 与 evacuation 在中文里常被合并成「疏散」；建筑防火规范里有「安全出口 / 疏散出口」，但没有单指 egress（作为通行能力或通行过程）的名词。我无法在「疏散出口」「出口通行」「疏散通行」之间选出唯一正确的一个，所以留空而不是编一个。"
+    },
+    {
+      "en": "throughput",
+      "zh": "吞吐量",
+      "aliases_en": [],
+      "avoid": [
+        {"term": "通过量", "why": "机翻；中文排队论 / 网络文献不用。", "collision": true},
+        {"term": "处理量", "why": "处理量 = processed volume，是工作量而不是速率。吞吐量的量纲是 1/时间。", "collision": true}
+      ],
+      "keep_en": false,
+      "confidence": "high",
+      "domain": "queueing"
+    },
+    {
+      "en": "bottleneck",
+      "zh": "瓶颈",
+      "aliases_en": [],
+      "avoid": [
+        {"term": "隘路", "why": "日文汉字，中文技术文献不用。", "collision": false},
+        {"term": "卡点", "why": "口语，非论文用词。", "collision": false}
+      ],
+      "keep_en": false,
+      "confidence": "high",
+      "domain": "OR"
+    },
+    {
+      "en": "queue",
+      "zh": "队列",
+      "aliases_en": [],
+      "avoid": [
+        {"term": "排队", "why": "「排队」是过程（排队现象 / 排队论）；指那条队本身时用「队列」。'queue length' 译「排队长度」也见得到，但同篇内必须统一。", "collision": false}
+      ],
+      "keep_en": false,
+      "confidence": "high",
+      "domain": "queueing"
+    },
+    {
+      "en": "service rate",
+      "zh": "服务率",
+      "aliases_en": ["service capacity"],
+      "avoid": [
+        {"term": "处理速度", "why": "口语，且「速度」与「率」在量纲叙述上不是一回事。", "collision": true},
+        {"term": "服务速率", "why": "也见得到，但排队论中文文献以「服务率」为通行写法；同篇内统一。", "collision": false}
+      ],
+      "keep_en": false,
+      "confidence": "medium",
+      "domain": "queueing"
+    },
+    {
+      "en": "allocation",
+      "zh": "分配",
+      "aliases_en": ["allocation rule"],
+      "avoid": [
+        {"term": "指派", "why": "「指派」对应 assignment（指派问题指派的是任务与人），与 allocation 的份额分配不是一回事。", "collision": true},
+        {"term": "调度", "why": "「调度」= scheduling，决定顺序与时刻，不决定份额。", "collision": true}
+      ],
+      "keep_en": false,
+      "confidence": "high",
+      "domain": "OR"
+    },
+    {
+      "en": "ablation study",
+      "zh": "消融实验",
+      "aliases_en": ["ablation"],
+      "avoid": [
+        {"term": "烧蚀实验", "why": "「烧蚀」是航天 / 材料的热烧蚀，与机器学习无关。", "collision": true},
+        {"term": "删减实验", "why": "机翻；中文机器学习文献用「消融」。", "collision": false}
+      ],
+      "keep_en": false,
+      "confidence": "high",
+      "domain": "ML"
+    },
+    {
+      "en": "sensitivity analysis",
+      "zh": "敏感性分析",
+      "aliases_en": ["sensitivity study"],
+      "avoid": [
+        {"term": "灵敏度分析", "why": "工程领域同样常见，两者都不算错；问题是同篇里出现两种写法会被读成两件事。", "collision": false}
+      ],
+      "keep_en": false,
+      "confidence": "medium",
+      "domain": "stats"
+    },
+    {
+      "en": "robustness",
+      "zh": "鲁棒性",
+      "aliases_en": ["robust"],
+      "avoid": [
+        {"term": "稳健性", "why": "统计 / 计量里「稳健性」指估计量的稳健（robust estimator）；本文若指策略对扰动的鲁棒，统一用「鲁棒性」。", "collision": false},
+        {"term": "健壮性", "why": "软件工程里「健壮性」指程序不崩；模型鲁棒不用它。", "collision": false}
+      ],
+      "keep_en": false,
+      "confidence": "medium",
+      "domain": "stats"
+    },
+    {
+      "en": "seed",
+      "zh": "随机种子",
+      "aliases_en": ["random seed", "seeds"],
+      "avoid": [
+        {"term": "种子", "why": "单独一个「种子」有生物学歧义，且中文论文里「10 个种子」这种写法会让外行读者不知所云。统一写「随机种子」。", "collision": false}
+      ],
+      "keep_en": false,
+      "confidence": "high",
+      "domain": "repro"
+    },
+    {
+      "en": "instance",
+      "zh": "算例",
+      "aliases_en": ["instance family"],
+      "avoid": [
+        {"term": "实例", "why": "「实例」在面向对象语境里指 class instance，与优化问题的 instance 语义冲突；运筹 / 调度中文文献用「算例」。", "collision": false},
+        {"term": "案例", "why": "「案例」= case study，不是一份随机生成的输入。", "collision": false}
+      ],
+      "keep_en": false,
+      "confidence": "medium",
+      "domain": "OR"
+    },
+    {
+      "en": "ground truth",
+      "zh": "真实值",
+      "aliases_en": ["ground-truth"],
+      "avoid": [
+        {"term": "地面真值", "why": "把 ground 当地面的机翻；中文技术文献不用。", "collision": true},
+        {"term": "标准答案", "why": "口语。", "collision": false}
+      ],
+      "keep_en": false,
+      "confidence": "high",
+      "domain": "ML"
+    },
+    {
+      "en": "baseline",
+      "zh": "基线",
+      "aliases_en": ["baselines"],
+      "avoid": [
+        {"term": "基准线", "why": "「基准线」是测量学里的水准线；算法比较对象用「基线」。", "collision": false},
+        {"term": "对照组", "why": "「对照组」是实验设计概念（控制组），与算法比较的基线不同。", "collision": false}
+      ],
+      "keep_en": false,
+      "confidence": "high",
+      "domain": "ML"
+    },
+    {
+      "en": "credit assignment",
+      "zh": "信用分配",
+      "aliases_en": [],
+      "avoid": [
+        {"term": "功劳分配", "why": "机翻；中文 MARL 文献用「信用分配」。", "collision": true},
+        {"term": "贡献分配", "why": "「贡献」在中文里偏 attribution（归因），与 credit assignment 的信用分配不是通行写法。", "collision": false}
+      ],
+      "keep_en": false,
+      "confidence": "medium",
+      "domain": "MARL"
+    },
+    {
+      "en": "value decomposition",
+      "zh": "值分解",
+      "aliases_en": ["value function decomposition"],
+      "avoid": [
+        {"term": "数值分解", "why": "numerical decomposition，完全不同的意思。", "collision": true},
+        {"term": "价值分解", "why": "「价值」在中文里偏经济学价值 / 价值观；强化学习里 value function 写作「值函数」，故用「值分解」。", "collision": false}
+      ],
+      "keep_en": false,
+      "confidence": "medium",
+      "domain": "MARL"
+    },
+    {
+      "en": "policy",
+      "zh": "策略",
+      "aliases_en": ["policies"],
+      "avoid": [
+        {"term": "政策", "why": "「政策」= government policy。这是本表里最典型的一处近义词塌陷：译错了句子照样通顺，但读者会以为论文在讲政府政策。", "collision": true},
+        {"term": "方针", "why": "非技术用词。", "collision": false}
+      ],
+      "keep_en": false,
+      "confidence": "high",
+      "domain": "MARL"
+    },
+    {
+      "en": "reward shaping",
+      "zh": "奖励塑形",
+      "aliases_en": ["shaped reward"],
+      "avoid": [
+        {"term": "回报塑形", "why": "「回报」= return（折扣累计奖励），与单步 reward 不是一个量。", "collision": true},
+        {"term": "奖励塑造", "why": "也见得到；「势能奖励塑形」是中文 RL 文献里更通行的一种写法，同篇内统一。", "collision": false}
+      ],
+      "keep_en": false,
+      "confidence": "medium",
+      "domain": "MARL"
+    },
+    {
+      "en": "observation space",
+      "zh": "观测空间",
+      "aliases_en": ["observation"],
+      "avoid": [
+        {"term": "观察空间", "why": "控制论 / 强化学习中文文献用「观测」（可测量的量）；「观察」偏日常义。", "collision": false}
+      ],
+      "keep_en": false,
+      "confidence": "medium",
+      "domain": "MARL"
+    },
+    {
+      "en": "action space",
+      "zh": "动作空间",
+      "aliases_en": ["action set"],
+      "avoid": [
+        {"term": "行为空间", "why": "「行为」= behaviour，与 action 不同。", "collision": true},
+        {"term": "行动空间", "why": "「行动」偏日常 / 军事义。", "collision": false}
+      ],
+      "keep_en": false,
+      "confidence": "high",
+      "domain": "MARL"
+    },
+    {
+      "en": "state transition",
+      "zh": "状态转移",
+      "aliases_en": ["transition probability", "transition function"],
+      "avoid": [
+        {"term": "状态转换", "why": "「转换」= conversion / switch；马尔可夫链的中文术语是「状态转移」。", "collision": false}
+      ],
+      "keep_en": false,
+      "confidence": "high",
+      "domain": "MARL"
+    },
+    {
+      "en": "reproducibility",
+      "zh": "可复现性",
+      "aliases_en": ["reproducible"],
+      "avoid": [
+        {"term": "可重复性", "why": "中文里「可重复性」对应 repeatability（同一人、同一设备重测）；「可复现性」才是 reproducibility，两者是不同层级的概念。", "collision": true},
+        {"term": "再现性", "why": "分析化学的法定译名，在计算机领域会引起误读。", "collision": false}
+      ],
+      "keep_en": false,
+      "confidence": "high",
+      "domain": "repro"
+    },
+    {
+      "en": "limitation",
+      "zh": "局限性",
+      "aliases_en": ["limitations"],
+      "avoid": [
+        {"term": "限制", "why": "「限制」在中文里指约束 / restriction（约束条件是 constraint）；章节名与论述用「局限性」。", "collision": false}
+      ],
+      "keep_en": false,
+      "confidence": "high",
+      "domain": "writing"
+    },
+    {
+      "en": "confidence interval",
+      "zh": "置信区间",
+      "aliases_en": ["CI"],
+      "avoid": [
+        {"term": "可信区间", "why": "非统计学规范用词；GB/T 统计学名词与中文统计教材都用「置信区间」。", "collision": false}
+      ],
+      "keep_en": false,
+      "confidence": "high",
+      "domain": "stats"
+    },
+    {
+      "en": "stratified bootstrap",
+      "zh": "分层自助法",
+      "aliases_en": ["stratified bootstrap resampling"],
+      "avoid": [
+        {"term": "自举法", "why": "「自举」在计算机领域是 bootstrapping（编译器自举、引导程序），读者会读成完全无关的东西。", "collision": true},
+        {"term": "靴带法", "why": "机翻。", "collision": true},
+        {"term": "分层重采样", "why": "「重采样」是更大的类（含 permutation / jackknife），不足以指代 bootstrap。", "collision": false}
+      ],
+      "keep_en": false,
+      "confidence": "medium",
+      "domain": "stats"
+    },
+    {
+      "en": "interquartile mean",
+      "zh": "四分位均值",
+      "aliases_en": ["IQM"],
+      "avoid": [
+        {"term": "中位数", "why": "IQM 是均值不是中位数。这是本表里后果最严重的一处误译：中位数与 IQM 在重尾分布下能差出结论。", "collision": true},
+        {"term": "截尾均值", "why": "trimmed mean 按固定**比例**截尾，IQM 按四分位区间取中间 50%；两者只在特定设定下重合。", "collision": false}
+      ],
+      "keep_en": false,
+      "confidence": "medium",
+      "domain": "stats"
+    },
+    {
+      "en": "performance profile",
+      "zh": null,
+      "aliases_en": ["performance profiles"],
+      "avoid": [],
+      "keep_en": false,
+      "confidence": "uncertain",
+      "domain": "stats",
+      "note": "未定，不判定。理由：rliable 意义上的 performance profile 在中文里没有稳定译名——「性能剖线图」「性能概况图」「性能分布图」都在用，而「剖面图」在中文里另有建筑 / 地质断面图的意思。留空，等人定。"
+    },
+    {
+      "en": "wall-clock time",
+      "zh": null,
+      "aliases_en": ["wall clock", "wallclock"],
+      "avoid": [],
+      "keep_en": false,
+      "confidence": "uncertain",
+      "domain": "repro",
+      "note": "未定，不判定。理由：「墙钟时间」「墙上时钟时间」「实际运行时间」「真实耗时」并用，且「实际运行时间」与 CPU time 的区分在中文里常被忽略。留空。"
+    },
+    {
+      "en": "operational design domain",
+      "zh": "运行设计域",
+      "aliases_en": ["ODD"],
+      "avoid": [
+        {"term": "操作设计域", "why": "「操作」偏 operator 的动作；JASSS ODD 协议与自动驾驶中文文献通行「运行设计域」。", "collision": false}
+      ],
+      "keep_en": true,
+      "confidence": "medium",
+      "domain": "ABM"
+    }
+  ]
+}

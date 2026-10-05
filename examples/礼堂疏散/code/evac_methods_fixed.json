@@ -1,0 +1,175 @@
+{
+  "meta": {
+    "n": 400,
+    "seeds": 5,
+    "lam": 3.0,
+    "mu": [
+      1.168,
+      0.876,
+      0.584
+    ],
+    "T_lb": 152.21,
+    "seed_list": [
+      2026,
+      2027,
+      2028,
+      2029,
+      2030
+    ]
+  },
+  "methods": {
+    "random_once": {
+      "T_mean": 223.2,
+      "T_std": 15.6,
+      "T_seeds": [
+        205.4,
+        234.5,
+        236.3,
+        232.8,
+        207.1
+      ],
+      "completed_all": true,
+      "flow_mean": [
+        133,
+        137,
+        130
+      ],
+      "gini_mean": 0.0333,
+      "thr_mean": 1.7991,
+      "ratio_vs_lb": 1.467,
+      "reassign_count_mean": 0
+    },
+    "nearest_once": {
+      "T_mean": 426.7,
+      "T_std": 6.0,
+      "T_seeds": [
+        422.9,
+        422.9,
+        422.9,
+        428.0,
+        436.6
+      ],
+      "completed_all": true,
+      "flow_mean": [
+        56,
+        95,
+        249
+      ],
+      "gini_mean": 0.322,
+      "thr_mean": 0.9377,
+      "ratio_vs_lb": 2.803,
+      "reassign_count_mean": 0
+    },
+    "shortest_queue_once": {
+      "T_mean": 426.7,
+      "T_std": 6.0,
+      "T_seeds": [
+        422.9,
+        422.9,
+        422.9,
+        428.0,
+        436.6
+      ],
+      "completed_all": true,
+      "flow_mean": [
+        56,
+        95,
+        249
+      ],
+      "gini_mean": 0.322,
+      "thr_mean": 0.9377,
+      "ratio_vs_lb": 2.803,
+      "reassign_count_mean": 0
+    },
+    "static_cong_once": {
+      "T_mean": 426.7,
+      "T_std": 6.0,
+      "T_seeds": [
+        422.9,
+        422.9,
+        422.9,
+        428.0,
+        436.6
+      ],
+      "completed_all": true,
+      "flow_mean": [
+        56,
+        95,
+        249
+      ],
+      "gini_mean": 0.322,
+      "thr_mean": 0.9377,
+      "ratio_vs_lb": 2.803,
+      "reassign_count_mean": 0
+    },
+    "shortest_queue_arrival": {
+      "T_mean": 426.7,
+      "T_std": 6.0,
+      "T_seeds": [
+        422.9,
+        422.9,
+        422.9,
+        428.0,
+        436.6
+      ],
+      "completed_all": true,
+      "flow_mean": [
+        56,
+        95,
+        249
+      ],
+      "gini_mean": 0.322,
+      "thr_mean": 0.9377,
+      "ratio_vs_lb": 2.803,
+      "reassign_count_mean": 3
+    },
+    "static_cong_arrival": {
+      "T_mean": 426.7,
+      "T_std": 6.0,
+      "T_seeds": [
+        422.9,
+        422.9,
+        422.9,
+        428.0,
+        436.6
+      ],
+      "completed_all": true,
+      "flow_mean": [
+        56,
+        95,
+        249
+      ],
+      "gini_mean": 0.322,
+      "thr_mean": 0.9377,
+      "ratio_vs_lb": 2.803,
+      "reassign_count_mean": 3
+    },
+    "dynamic_cong": {
+      "T_mean": 184.5,
+      "T_std": 15.9,
+      "T_seeds": [
+        190.0,
+        160.9,
+        176.3,
+        196.9,
+        198.6
+      ],
+      "completed_all": true,
+      "flow_mean": [
+        158,
+        134,
+        108
+      ],
+      "gini_mean": 0.0833,
+      "thr_mean": 2.1812,
+      "ratio_vs_lb": 1.212,
+      "reassign_count_mean": 0
+    }
+  },
+  "equivalence_checks": {
+    "nearest_once == shortest_queue_once": true,
+    "nearest_once == static_cong_once": true,
+    "shortest_queue_once == static_cong_once": true
+  },
+  "note": "nearest_once / shortest_queue_once / static_cong_once 三者逐位相同是数学必然：t=0 时三个出口队列全为 0，故「最短队列」与 cost=d+λ·0 都退化为最近出口。必须把它们当作**同一基线的三种等价表述**报告，而不是三次独立评测。shortest_queue_arrival / static_cong_arrival 才是真实语义（到达时按当时队列重决策）。"
+}

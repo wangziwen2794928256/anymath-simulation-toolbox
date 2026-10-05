@@ -1,0 +1,211 @@
+%=======================================================================
+% 第 3 章：系统与多智能体形式化（A 赛道核心章，09 号标准要求约 3 页）
+%
+% 为什么单独成文件：本章是旧稿最薄的一环（原稿全章仅 1 段 8 行）。
+% csf_gate.py 的 MAS_INCOMPLETE 检查会核对本章是否含
+% (S, A, P, O, R) + 交互拓扑 + 信用分配 + 涌现宏观量 八要素。
+%=======================================================================
+\section{系统与多智能体形式化}
+\label{sec:formal}
+
+本章把疏散场景严格写成多智能体决策过程，并为第 \ref{sec:model} 章的算法与第
+\ref{sec:exp} 章的实验提供统一形式化基础。所有符号在表 \ref{tab:sym} 中给出。
+
+\subsection{环境形式化}
+\label{sec:env}
+
+环境为二维连续有界空间 $\mathcal S=[0,W]\times[0,H]$，$W=24$~m，$H=16$~m。
+出口集合 $E=\{e_1,e_2,e_3\}$ 位于场地边界，出口 $e$ 的元素用三元组刻画：
+位置 $(x_e,y_e)$、净宽 $w_e$ 与外法向 $\mathbf n_e$。场地几何与初始分布见图 \ref{fig:layout}。
+
+出口的服务能力由\textbf{单位宽度比流量} $q$ 聚合，服务率
+\begin{equation}
+\mu_e \;=\; w_e\,q,
+\qquad
+q = 0.73\ \text{人/(m}\cdot\text{s)} .
+\label{eq:mu}
+\end{equation}
+取 $q=0.73$ 的依据是行人流基本图的瓶颈段实测区间
+（Weidmann 基本图给出自由行走速度 $v_0\approx1.34$~m/s，瓶颈比流量约
+$0.7$–$1.0$~人/(m$\cdot$s)）\cite{weidmann1993,helbing1995socialforce}。
+三个出口的服务率与容量份额列于表 \ref{tab:mu}。
+
+\begin{table}[H]
+  \centering
+  \caption{出口服务率与理想均衡负载（$N=400$）}
+  \label{tab:mu}
+  \begin{tabular}{lcccc}
+    \toprule
+    出口 & 净宽 $w_e$/m & 服务率 $\mu_e$/(人/s) & 容量份额 $\mu_e/\sum\mu$ & 理想负载 $n_e^\ast$/人 \\
+    \midrule
+    E1（左墙） & 1.6 & 1.168 & 0.4445 & 177.8 \\
+    E2（右墙） & 1.2 & 0.876 & 0.3333 & 133.3 \\
+    E3（下墙） & 0.8 & 0.584 & 0.2222 & 88.9 \\
+    \midrule
+    合计 & 3.6 & 2.628 & 1.0000 & 400.0 \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+\subsection{智能体元组与异质性}
+\label{sec:agent}
+
+共 $N=400$ 个智能体。智能体 $i$ 用元组
+$\langle \mathcal O_i,\mathcal A_i,\mathcal R_i,\pi_i\rangle$ 刻画：
+
+\begin{itemize}
+  \item \textbf{观测空间} $\mathcal O_i$：智能体 $i$ 能看到的量。
+        本文采用\textbf{全局共享观测}
+        $\mathbf o_i=\bigl(\mathbf p_i,\{Q_e\}_{e\in E}\bigr)\in\mathbb R^{2}\times\mathbb R^{3}$，
+        即自身位置 $\mathbf p_i$ 与\textbf{全部}出口的实时排队长度 $Q_e$。
+        共享全局排队信息是"把外部性内化到个体决策"的前提
+        （见 \ref{sec:externality} 节）；若只给局部观测，个体无法感知自己给他人
+        施加的等待，这一点在第 \ref{sec:fail} 节由独立学习的失败直接验证。
+  \item \textbf{动作空间} $\mathcal A_i=E$：选择三个出口之一，$|\mathcal A_i|=3$，
+        联合动作空间 $|\mathcal A|=\prod_i|\mathcal A_i|=3^{400}$。
+  \item \textbf{奖励} $\mathcal R_i$：采用单元组设计，每个智能体只关心自身离场时刻，
+        $r_i=-1$（每单位时间步），即最小化自身疏散时间。全局目标是
+        $\min \max_i t_i^{\text{dep}}$，与个体奖励\textbf{不一致}——这个不一致
+        正是 \ref{sec:credit} 节要处理的信用分配问题。
+  \item \textbf{策略} $\pi_i(a_i\mid \mathbf o_i)$：本文所有智能体\textbf{同质且共享参数}
+        $\pi_\theta$（参数共享），即 $\pi_i=\pi_\theta,\ \forall i$。
+        这一设计选择有重要后果：在对称场景下共享策略存在\textbf{对称均衡}，
+        可能无法自发分化出不同角色，第 \ref{sec:fail} 节将量化该后果。
+\end{itemize}
+
+\textbf{异质性说明}：正文主实验采用同质智能体（相同 $v_0$），以便把"分配策略"
+的效应与"个体差异"的效应分离——这是受控实验的必要设计。人群速度异质性的影响
+在 \ref{sec:hetero} 节作为独立消融单独报告。
+
+\subsection{状态转移}
+\label{sec:transition}
+
+状态 $s_t=\bigl(\{\mathbf p_i\},\{Q_e\},\{a_i\}\bigr)$ 按离散时间演化，
+步长 $\Delta t=0.1$~s。一步转移由四个子过程按固定顺序复合而成：
+
+\begin{enumerate}
+  \item \textbf{出口服务}。出口 $e$ 在一步内服务的人数为其服务率与步长之积：
+        $m_e(t)=\mu_e\Delta t$。为保证长期服务率精确（避免离散取的累积偏差），
+        实现上对每个出口维护\textbf{分数容量累计器} $\phi_e$：
+        \begin{equation}
+          \phi_e \leftarrow \phi_e + \mu_e\Delta t,
+          \qquad
+          m_e=\lfloor \phi_e\rfloor,
+          \qquad
+          \phi_e \leftarrow \phi_e-m_e .
+          \label{eq:frac}
+        \end{equation}
+        被服务的个体按 FIFO 移出队列并记录离场时刻 $t_i^{\text{dep}}=t$。
+  \item \textbf{决策}。尚未到达出口的个体按各自策略重算目标出口（见第 \ref{sec:model} 章）。
+  \item \textbf{移动}。个体沿指向其目标出口的直线以 $v_0$ 移动，单步位移
+        $\min(v_0\Delta t,\ \|\mathbf p_i-(x_e,y_e)\|)$，并投影回场地边界内。
+  \item \textbf{入队}。当个体与目标出口的距离小于 $\epsilon=0.5$~m 时判定为"到达"，
+        加入该出口 FIFO 队列。
+\end{enumerate}
+
+该复合转移可写成
+$P(s_{t+1}\mid s_t,a_t)=P_{\text{svc}}\circ P_{\text{move}}\circ P_{\text{queue}}$。
+注意\textbf{服务先于决策}：这保证 $t=0$ 时排队长度全为 $0$，
+从而所有"感知队列"的策略在首步都退化为距离策略——该性质在
+命题 \ref{prop:degenerate} 中被形式化，并直接解释了第 \ref{sec:exp1} 节的实验结果。
+
+\subsection{交互拓扑}
+\label{sec:topology}
+
+智能体之间的交互由\textbf{信息共享图} $G=(V,\mathcal E_{\text{info}})$ 描述，
+$V$ 为 $N$ 个智能体。本文采用\textbf{完全共享图}
+（$\mathcal E_{\text{info}}$ 为完全图），即每个个体可观测全部出口队列。
+该拓扑的选择是"内化外部性"的必要条件：个体 $i$ 选择出口 $e$ 时对外部性的
+唯一感知通道就是 $Q_e$。若改为\textbf{局部观测}（只见最近出口的队列），
+则拥挤出口对远处个体的"排他信号"不可见，均衡性必然下降。第 \ref{sec:fail} 节
+的独立学习实验正是局部化信用分配的一个实例。
+
+需要强调的是，本文的交互拓扑是\textbf{观测层}的完全图，而非\textbf{决策层}的
+集中控制：每个个体仍独立做决策，不存在中心调度器。这使方法与真实疏散场景
+（个体自主决策、无中央广播）保持一致性。
+
+\subsection{协同目标与信用分配}
+\label{sec:credit}
+
+定义全局目标为社会最优（最小化最后一个人的离场时刻）：
+\begin{equation}
+  J^\star \;=\; \min_{\{a_i(t)\}} \; \max_i\, t_i^{\text{dep}} .
+  \label{eq:global}
+\end{equation}
+个体奖励之和为 $\sum_i r_i=-\sum_i t_i^{\text{dep}}=-N\bar T$，即\textbf{最小化平均}
+疏散时间；而式 \eqref{eq:global} 最小化\textbf{最大值}。
+两者一般不相等（$\bar T\le\max t_i^{\text{dep}}$，等号仅在完全同步时成立），
+因此\textbf{个体最优的加总不是全局最优}。这一不匹配是信用分配问题的根源
+\cite{foerster2018coma}：个体 $i$ 无法从其自身回报中读出"因为选了这个出口，
+我让后面 20 个人各多等了 3 秒"。
+
+形式上，设 $\mathbf a_{-i}$ 为其他个体的动作，则个体 $i$ 的动作对全局目标的
+\textbf{边际贡献}为
+\begin{equation}
+  \Delta_i(\mathbf a)
+  \;=\;
+  J^\star(\mathbf a_{-i})
+  -
+  J^\star(a_i,\mathbf a_{-i}),
+  \label{eq:credit}
+\end{equation}
+而个体实际感知到的是 $r_i(a_i,\mathbf a_{-i})-r_i(\varnothing,\mathbf a_{-i})$。
+信用分配问题即 $\Delta_i$ 与个体可感知量之间的\textbf{信息缺口}。
+由于 $\Delta_i$ 依赖 $\mathbf a_{-i}$ 而个体观测不含他人的动作，
+该缺口在分散执行下无法闭合——这解释了为什么纯独立学习会塌缩
+（\ref{sec:fail} 节实验），以及为什么"把 $\{Q_e\}$ 放进观测"
+（即把外部性\textbf{代理}为可观测量）是本文的关键设计。
+
+\subsection{涌现宏观量与微观规则的定量联系}
+\label{sec:emergence}
+
+多智能体仿真论文必须交代"微观规则如何产生宏观量"。本文涉及的宏观量有三个，
+它们与微观规则的联系如下：
+
+\begin{enumerate}
+  \item \textbf{出口流量与均衡度}。微观层：个体按 $\arg\min_e[d_i(e)+\lambda Q_e]$
+        选出口；宏观层：各出口的累计离场人数 $F_e$ 及其不均衡度（标准 Gini 系数）
+        \begin{equation}
+          G(\mathbf F)=\frac{\sum_{e}\sum_{e'} |F_e-F_{e'}|}{2\,|E|^2\,\bar F},
+          \qquad \bar F=\frac{1}{|E|}\sum_e F_e .
+          \label{eq:gini}
+        \end{equation}
+        $G=0$ 表示完全均衡。微观规则中 $\lambda$ 越大，个体越倾向最短队列，
+        故 $G$ 应随 $\lambda$ 单调下降——这是 \ref{sec:exp3} 节的可证伪预测之一。
+  \item \textbf{总疏散时间}。微观层：个体移动与服务事件；宏观层：$T=\max_i t_i^{\text{dep}}$。
+        由守恒律，$T$ 存在与微观规则无关的下界（命题 \ref{prop:lb}）。
+  \item \textbf{瓶颈利用率}。微观层：出口被服务事件的时间占比；
+        宏观层：$\rho_e=F_e/(\mu_e T)$。$\rho_e\to1$ 表示出口 $e$ 全程满负荷，
+        即成为绑定瓶颈。该量是"剩余改进空间"的直接度量。
+\end{enumerate}
+
+三个宏观量共同刻画了系统的"均衡—效率—瓶颈"三角，
+第 \ref{sec:results} 节将用它们解释每一个数值结果，而不只是报告数值。
+
+\subsection{建模假设及其放宽影响}
+\label{sec:assumptions}
+
+\begin{csfasm}[建模假设与现实依据]
+\begin{enumerate}[label=A\arabic*.]
+  \item \textbf{宏观容量假设}：出口汇聚动力学可用比流量 $q$ 聚合为常服务率 $\mu_e=w_e q$。
+        \emph{依据}：出口容量是系统瓶颈，基本图在瓶颈段的比流量近似为常数。
+        \emph{放宽后的影响}：若出口出现拱形堵塞使有效宽度下降 $10\%$，
+        则 $\mu_e$ 下降 $10\%$、$T_{\mathrm{lb}}$ 上升约 $11\%$，本文结果\textbf{系统性偏乐观}，
+        但策略之间的\textbf{相对}排序不变（因为所有策略同等受影响）。
+  \item \textbf{直线移动假设}：个体沿指向目标出口的直线移动，不计绕行与避让。
+        \emph{依据}：本问题关注的是"资源分配"而非"局部动力学"。
+        \emph{放宽后的影响}：真实绕行会削弱频繁重分配的收益（重分配伴随路径改变），
+        故本文对动态策略的优势估计\textbf{偏乐观}；见 \ref{sec:limitation} 节。
+  \item \textbf{同质速度假设}：主实验取 $v_0=1.34$~m/s 对所有个体相同。
+        \emph{依据}：受控实验需先分离分配策略的效应。
+        \emph{放宽后的影响}：见 \ref{sec:hetero} 节的异质性消融。
+  \item \textbf{无恐慌/无结伴假设}：个体不因拥堵产生非理性行为，也不结伴移动。
+        \emph{依据}：本题未给出行为学参数。
+        \emph{放宽后的影响}：恐慌会放大从众倾向（个体倾向跟随人流），
+        使均衡策略的收益下降——这是本文结论最主要的适用边界。
+  \item \textbf{完全信息假设}：个体可观测全部出口实时队列。
+        \emph{依据}：礼堂等开阔空间内出口排队可视。
+        \emph{放宽后的影响}：若只能观测局部（如只见最近出口），
+        需引入信息传播机制，均衡性下降，退化为 \ref{sec:fail} 节的情形。
+\end{enumerate}
+\end{csfasm}

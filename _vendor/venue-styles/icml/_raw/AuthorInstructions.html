@@ -1,0 +1,2187 @@
+
+
+
+
+
+
+
+
+
+<!DOCTYPE html>
+<html lang="en"> 
+
+<head>
+    <style>html { scroll-padding-top: 70px; /* height of sticky header plus extra */ }</style>
+    
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="/static/virtual/js/virtual.js"></script>
+    <meta name="google-site-verification" content="0jwPnVXIAk4FvFdT37dwMmd-kjHF86e5DKwvqlStUW0">
+
+
+    
+    <link rel="stylesheet" href="/static/core/css/core.css" type="text/css">
+    <link rel="stylesheet" href="/static/virtual/css/virtual.css" type="text/css">
+     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+
+    <link rel="stylesheet" href="/static/core/css/custom.css" type="text/css">
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.14.0-beta3/dist/css/bootstrap-select.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Exo:wght@400;700&family=Lato:wght@400;700&display=swap" rel="stylesheet">
+    <script nonce="O6PhEffCTC4Paq2TJ2e/Qg==">
+        window.MathJax = {
+          tex: {
+            // Workshop/competition imports store inline formulas with doubled dollars.
+            inlineMath: [['$$', '$$'], ['$', '$'], ['\\(', '\\)']],
+            displayMath: [['\\[', '\\]']],
+            processEscapes: true,
+          },
+          options: {
+            ignoreHtmlClass: 'no-mathjax',
+          }
+        };
+    </script>
+
+    <script id="MathJax-script" async
+            src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"
+            nonce="O6PhEffCTC4Paq2TJ2e/Qg==" >
+    </script>
+
+    <!--This script keeps local links inside the web app rather than opening them
+in Safari, and has nothing to do with editing or Aloha.-->
+
+<script nonce="O6PhEffCTC4Paq2TJ2e/Qg==">
+    (function (document, navigator, standalone) {
+
+        if ((standalone in navigator) && navigator[standalone]) {
+            var curnode, location = document.location, stop = /^(a|html)$/i;
+            document.addEventListener('click', function (e) {
+                curnode = e.target;
+                while (!(stop).test(curnode.nodeName)) {
+                    curnode = curnode.parentNode;
+                }
+
+                if (
+                    'href' in curnode && // is a link
+                    (chref = curnode.href).replace(location.href, '').indexOf('#') && // is not an anchor
+                    (!(/^[a-z\+\.\-]+:/i).test(chref) ||                       // either does not have a proper scheme (relative links)
+                        chref.indexOf(location.protocol + '//' + location.host) === 0) // or is in the same protocol and domain
+                ) {
+                    e.preventDefault();
+                    location.href = curnode.href;
+                }
+            }, false);
+        }
+    })(document, window.navigator, 'standalone');
+</script>
+
+
+<style>
+
+    @media screen and (min-width: 767px) {
+        .blurb {
+            min-height: 260px;
+        }
+    }
+</style>
+    
+
+<script src="https://code.jquery.com/jquery-3.6.1.min.js"
+        integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous">
+</script>
+
+<script nonce="O6PhEffCTC4Paq2TJ2e/Qg==">
+    if (typeof jQuery === 'undefined') {
+        var script = document.createElement('script');
+        script.type = 'text/javascript';
+        script.src = "/static/core/js/jquery-3.6.1.min.js";
+        document.head.appendChild(script);
+    }
+</script>
+
+    
+    <script nonce="O6PhEffCTC4Paq2TJ2e/Qg==">
+        var $ = jQuery;
+    </script>
+
+    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
+
+    <script src="/static/core/js/ajax-csrf-snippet.js"></script>
+    
+    <link rel="stylesheet" href="/static/fontawesomefree/css/all.min.css">
+    <script src="/static/fontawesomefree/js/all.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.14.0-beta3/dist/js/bootstrap-select.min.js"></script>
+
+
+    <style nonce="O6PhEffCTC4Paq2TJ2e/Qg==">
+        body {
+            font-family: Exo;}
+    </style>
+
+
+
+
+
+
+
+
+        
+
+
+    <link rel="stylesheet"
+          href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic">
+    <link href="https://fonts.googleapis.com/css2?family=Exo:wght@400;700&family=Lato:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/virtual/css/virtual.css">
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/corejs-typeahead/1.3.1/typeahead.bundle.min.js" integrity="sha512-lEb9Vp/rkl9g2E/LdHIMFTqz21+LA79f84gqP75fbimHqVTu6483JG1AwJlWLLQ8ezTehty78fObKupq3HSHPQ==" crossorigin="anonymous"></script>
+    <script src="/static/core/js/moment/min/moment.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script>
+    <script src="/static/core/js/ajax-csrf-snippet.js" ></script>
+    <script src="/static/virtual/js/virtual.js"></script>
+    
+
+    
+
+    
+    <link rel="canonical" href="https://ICML.cc/Conferences/2025/AuthorInstructions">
+
+    <title>Author Instructions</title>
+</head>
+
+<body>
+<!-- <h1><a href="#" onclick="alert('CSP Test');">CSP Test</a></h1> -->
+
+
+
+
+<div class="noprint">
+    
+        
+            <!--Navbar start-->
+<header>
+    <a href="#child-menu" class="off-screen">Skip to yearly menu bar</a>
+    <a href="#main" class="off-screen">Skip to main content</a>
+    <div id="id_navbar" class="navbar navbar-expand-sm navbar-dark" aria-label="Main Navigation"
+         style="background-color:#212529">
+        <h2 class="off-screen">Main Navigation</h2>
+        <div class="container-fluid">
+            <div><a class="navbar-brand" href="/" aria-label="Home">
+
+                <img src="/static/core/img/icml-navbar-logo.svg" alt="conference_logo" height="40"></a></div>
+
+
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#navbarToggler1"
+                    aria-expanded="false" aria-label="Toggle main navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarToggler1">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    
+    <li class="dropdown-item dropdown pe-3">
+        <a class="nav-link dropdown-toggle  p-1" 
+           href="#"
+           role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            ICML
+        </a>
+        <ul class="dropdown-menu dropdown-menu-dark">
+            
+    
+        
+            <li class="dropdown-item  pe-2" >
+                <a class="nav-link p-1"  href="/FAQ">
+                    <span >
+                        Help/FAQ
+                    </span>
+                </a>
+                
+                    <hr class="dropdown-divider" aria-hidden="true">
+                
+            </li>
+
+        
+
+    
+
+
+
+    
+        
+            <li class="dropdown-item  pe-2" >
+                <a class="nav-link p-1"  href="/Help/Contact">
+                    <span >
+                        Contact ICML
+                    </span>
+                </a>
+                
+                    <hr class="dropdown-divider" aria-hidden="true">
+                
+            </li>
+
+        
+
+    
+
+
+
+    
+        
+            <li class="dropdown-item  pe-2" >
+                <a class="nav-link p-1"  href="/Profile/create">
+                    <span >
+                        Create Profile
+                    </span>
+                </a>
+                
+                    <hr class="dropdown-divider" aria-hidden="true">
+                
+            </li>
+
+        
+
+    
+
+
+
+    
+        
+            <li class="dropdown-item  pe-2" >
+                <a class="nav-link p-1"  href="/yearly-document/CodeOfConduct">
+                    <span >
+                        Code of Conduct
+                    </span>
+                </a>
+                
+                    <hr class="dropdown-divider" aria-hidden="true">
+                
+            </li>
+
+        
+
+    
+
+
+
+    
+        
+            <li class="dropdown-item  pe-2" >
+                <a class="nav-link p-1"  href="/public/PrivacyPolicy">
+                    <span >
+                        Privacy Policy
+                    </span>
+                </a>
+                
+                    <hr class="dropdown-divider" aria-hidden="true">
+                
+            </li>
+
+        
+
+    
+
+
+
+    
+        
+            <li class="dropdown-item  pe-2" >
+                <a class="nav-link p-1"  href="/Conferences/2026/Press">
+                    <span >
+                        Press
+                    </span>
+                </a>
+                
+                    <hr class="dropdown-divider" aria-hidden="true">
+                
+            </li>
+
+        
+
+    
+
+
+
+    
+        
+            <li class="dropdown-item  pe-2" >
+                <a class="nav-link p-1"  href="/public/JournalToConference">
+                    <span >
+                        Journal To Conference Track
+                    </span>
+                </a>
+                
+                    <hr class="dropdown-divider" aria-hidden="true">
+                
+            </li>
+
+        
+
+    
+
+
+
+    
+        
+            <li class="dropdown-item  pe-2" >
+                <a class="nav-link p-1"  href="/careers">
+                    <span >
+                        Careers
+                    </span>
+                </a>
+                
+                    <hr class="dropdown-divider" aria-hidden="true">
+                
+            </li>
+
+        
+
+    
+
+
+
+    
+        
+            <li class="dropdown-item  pe-2" >
+                <a class="nav-link p-1"  href="/Downloads">
+                    <span >
+                        Downloads
+                    </span>
+                </a>
+                
+                    <hr class="dropdown-divider" aria-hidden="true">
+                
+            </li>
+
+        
+
+    
+
+
+
+    
+        
+            <li class="dropdown-item  pe-2" >
+                <a class="nav-link p-1"  href="/public/Inclusion">
+                    <span >
+                        Inclusion
+                    </span>
+                </a>
+                
+                    <hr class="dropdown-divider" aria-hidden="true">
+                
+            </li>
+
+        
+
+    
+
+
+
+    
+        
+            <li class="dropdown-item  pe-2" >
+                <a class="nav-link p-1"  href="/Conferences/FutureMeetings">
+                    <span >
+                        Future Meetings
+                    </span>
+                </a>
+                
+            </li>
+
+        
+
+    
+
+
+
+        </ul>
+    </li>
+    
+
+
+
+    
+        
+            <li class="dropdown-item  pe-2" >
+                <a class="nav-link p-1"  href="/MyStuff">
+                    <span >
+                        My Stuff
+                    </span>
+                </a>
+                
+            </li>
+
+        
+
+    
+
+
+
+                    
+                </ul>
+
+                
+                <form class="d-flex mx-2" aria-label="Search" role="search" action="/search">
+                    <div class="input-group" role="search" style="outline-color:green;">
+                        <input type="text" class="form-control" placeholder="Search" name="q"
+                               value=""
+                               aria-label="Search" aria-describedby="btnGroupAddon"
+                                id="navbar-search">
+                        <div class="input-group-text btn-primary" id="btnGroupAddon">
+                            <button style="border: none; background-color: transparent; padding: 0;" type="submit" aria-label="execute search">
+                                <i class="fa-solid fa-magnifying-glass"></i>
+                            </button>
+                        </div>
+                    </div>
+                </form>
+                
+
+                
+                    <a href="/accounts/login?nextp=/virtual/2025/poster/45487 " class="navbar-brand"><span
+                            class="fa-solid fa-right-to-bracket"></span> Login</a>
+                
+
+            </div>
+        </div>
+    </div>
+</header>
+<!--Navbar end-->
+        
+    
+</div><!--noprint div-->
+
+<!--This holds the whole page including the navbar-->
+<main id="main">
+    
+        
+            <div class="container-fluid">
+                
+<!--Navbar start-->
+
+
+
+
+<div class="container-fluid">
+
+    <div class="dropdown" id="child-menu">
+        <nav class="align-middle navbar navbar-expand-md mx-4 border border-3 border-top-0 rounded-bottom"
+             style="min-height: 57px; background-color: #F6f6f6;">
+            <div class="container-fluid">
+
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#navbarToggler1329"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <div class="collapse navbar-collapse" id="navbarToggler1329">
+                    <ul class="navbar-nav me-auto mb-lg-0">
+                        
+
+
+    <li class="dropdown-item dropdown pe-3">
+        <a class="nav-link dropdown-toggle border-3  btn btn-primary text-white p-1" style= "background-color: #070bff; font-size: 1.2 em;"
+           href="#"
+           role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Select Year: (2025)
+        </a>
+        <ul class="dropdown-menu">
+            
+    
+        
+            <li class="dropdown-item " >
+                <a class="dropdown-item p-1"
+                   href="/Conferences/2026">2026
+                </a>
+                
+                    <hr class="dropdown-divider" aria-hidden="true">
+                
+            </li>
+        
+
+    
+
+
+
+    
+        
+            <li class="dropdown-item " >
+                <a class="dropdown-item p-1"
+                   href="/Conferences/2025">2025
+                </a>
+                
+                    <hr class="dropdown-divider" aria-hidden="true">
+                
+            </li>
+        
+
+    
+
+
+
+    
+        
+            <li class="dropdown-item " >
+                <a class="dropdown-item p-1"
+                   href="/Conferences/2024">2024
+                </a>
+                
+                    <hr class="dropdown-divider" aria-hidden="true">
+                
+            </li>
+        
+
+    
+
+
+
+    
+        
+            <li class="dropdown-item " >
+                <a class="dropdown-item p-1"
+                   href="/Conferences/2023">2023
+                </a>
+                
+                    <hr class="dropdown-divider" aria-hidden="true">
+                
+            </li>
+        
+
+    
+
+
+
+    
+        
+            <li class="dropdown-item " >
+                <a class="dropdown-item p-1"
+                   href="/Conferences/2022">2022
+                </a>
+                
+                    <hr class="dropdown-divider" aria-hidden="true">
+                
+            </li>
+        
+
+    
+
+
+
+    
+        
+            <li class="dropdown-item " >
+                <a class="dropdown-item p-1"
+                   href="/Conferences/2021/index.html">2021
+                </a>
+                
+                    <hr class="dropdown-divider" aria-hidden="true">
+                
+            </li>
+        
+
+    
+
+
+
+    
+        
+            <li class="dropdown-item " >
+                <a class="dropdown-item p-1"
+                   href="/Conferences/2020/">2020
+                </a>
+                
+                    <hr class="dropdown-divider" aria-hidden="true">
+                
+            </li>
+        
+
+    
+
+
+
+    
+        
+            <li class="dropdown-item " >
+                <a class="dropdown-item p-1"
+                   href="/Conferences/2019/">2019
+                </a>
+                
+                    <hr class="dropdown-divider" aria-hidden="true">
+                
+            </li>
+        
+
+    
+
+
+
+    
+        
+            <li class="dropdown-item " >
+                <a class="dropdown-item p-1"
+                   href="/Conferences/2018">2018
+                </a>
+                
+                    <hr class="dropdown-divider" aria-hidden="true">
+                
+            </li>
+        
+
+    
+
+
+
+    
+        
+            <li class="dropdown-item " >
+                <a class="dropdown-item p-1"
+                   href="/Conferences/2017">2017
+                </a>
+                
+                    <hr class="dropdown-divider" aria-hidden="true">
+                
+            </li>
+        
+
+    
+
+
+
+    
+        
+            <li class="dropdown-item " >
+                <a class="dropdown-item p-1"
+                   href="/Conferences/2016">2016
+                </a>
+                
+                    <hr class="dropdown-divider" aria-hidden="true">
+                
+            </li>
+        
+
+    
+
+
+
+    
+        
+            <li class="dropdown-item " >
+                <a class="dropdown-item p-1"
+                   href="/Conferences/2015">2015
+                </a>
+                
+                    <hr class="dropdown-divider" aria-hidden="true">
+                
+            </li>
+        
+
+    
+
+
+
+    
+        
+            <li class="dropdown-item " >
+                <a class="dropdown-item p-1"
+                   href="/Conferences/2014">2014
+                </a>
+                
+                    <hr class="dropdown-divider" aria-hidden="true">
+                
+            </li>
+        
+
+    
+
+
+
+    
+        
+            <li class="dropdown-item " >
+                <a class="dropdown-item p-1"
+                   href="/Conferences/2013">2013
+                </a>
+                
+                    <hr class="dropdown-divider" aria-hidden="true">
+                
+            </li>
+        
+
+    
+
+
+
+    
+        
+            <li class="dropdown-item " >
+                <a class="dropdown-item p-1"
+                   href="/Conferences/2012">2012
+                </a>
+                
+                    <hr class="dropdown-divider" aria-hidden="true">
+                
+            </li>
+        
+
+    
+
+
+
+    
+        
+            <li class="dropdown-item " >
+                <a class="dropdown-item p-1"
+                   href="/Conferences/2011">2011
+                </a>
+                
+                    <hr class="dropdown-divider" aria-hidden="true">
+                
+            </li>
+        
+
+    
+
+
+
+    
+        
+            <li class="dropdown-item " >
+                <a class="dropdown-item p-1"
+                   href="/Conferences/2010">2010
+                </a>
+                
+                    <hr class="dropdown-divider" aria-hidden="true">
+                
+            </li>
+        
+
+    
+
+
+
+    
+        
+            <li class="dropdown-item " >
+                <a class="dropdown-item p-1"
+                   href="/Conferences/2009">2009
+                </a>
+                
+                    <hr class="dropdown-divider" aria-hidden="true">
+                
+            </li>
+        
+
+    
+
+
+
+    
+        
+            <li class="dropdown-item " >
+                <a class="dropdown-item p-1"
+                   href="/Conferences/2008">2008
+                </a>
+                
+                    <hr class="dropdown-divider" aria-hidden="true">
+                
+            </li>
+        
+
+    
+
+
+
+    
+        
+            <li class="dropdown-item " >
+                <a class="dropdown-item p-1"
+                   href="/Conferences/2008">2007
+                </a>
+                
+                    <hr class="dropdown-divider" aria-hidden="true">
+                
+            </li>
+        
+
+    
+
+
+
+    
+        
+            <li class="dropdown-item " >
+                <a class="dropdown-item p-1"
+                   href="/Conferences/2007">2006
+                </a>
+                
+                    <hr class="dropdown-divider" aria-hidden="true">
+                
+            </li>
+        
+
+    
+
+
+
+    
+        
+            <li class="dropdown-item " >
+                <a class="dropdown-item p-1"
+                   href="/Conferences/2005">2005
+                </a>
+                
+                    <hr class="dropdown-divider" aria-hidden="true">
+                
+            </li>
+        
+
+    
+
+
+
+    
+        
+            <li class="dropdown-item " >
+                <a class="dropdown-item p-1"
+                   href="/Conferences/2005">2004
+                </a>
+                
+                    <hr class="dropdown-divider" aria-hidden="true">
+                
+            </li>
+        
+
+    
+
+
+
+    
+        
+            <li class="dropdown-item " >
+                <a class="dropdown-item p-1"
+                   href="/Conferences/2002">2002
+                </a>
+                
+                    <hr class="dropdown-divider" aria-hidden="true">
+                
+            </li>
+        
+
+    
+
+
+
+    
+        
+            <li class="dropdown-item " >
+                <a class="dropdown-item p-1"
+                   href="/Conferences/1996">1996
+                </a>
+                
+                    <hr class="dropdown-divider" aria-hidden="true">
+                
+            </li>
+        
+
+    
+
+
+
+    
+        
+            <li class="dropdown-item " >
+                <a class="dropdown-item p-1"
+                   href="http://www.machinelearning.org/archive.html">IMLS Archives
+                </a>
+                
+            </li>
+        
+
+    
+
+
+
+        </ul>
+    </li>
+    
+
+
+
+    
+        
+            <li class="dropdown-item  pe-2" >
+                <a class="nav-link p-1"  href="/Conferences/2025/Dates">
+                    <span >
+                        Dates
+                    </span>
+                </a>
+                
+            </li>
+
+        
+
+    
+
+
+
+    <li class="dropdown-item dropdown pe-3">
+        <a class="nav-link dropdown-toggle  p-1" 
+           href="#"
+           role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Calls
+        </a>
+        <ul class="dropdown-menu">
+            
+    
+        
+            <li class="dropdown-item  pe-2" >
+                <a class="nav-link p-1"  href="/Conferences/2025/CallForPapers">
+                    <span >
+                        Call for Papers
+                    </span>
+                </a>
+                
+            </li>
+
+        
+
+    
+
+
+
+    
+        
+            <li class="dropdown-item  pe-2" >
+                <a class="nav-link p-1"  href="/Conferences/2025/CallForTutorials">
+                    <span >
+                        Call for Tutorials
+                    </span>
+                </a>
+                
+            </li>
+
+        
+
+    
+
+
+
+    
+        
+            <li class="dropdown-item  pe-2" >
+                <a class="nav-link p-1"  href="/Conferences/2025/CallForPositionPapers">
+                    <span >
+                        Call for Position Papers
+                    </span>
+                </a>
+                
+            </li>
+
+        
+
+    
+
+
+
+    
+        
+            <li class="dropdown-item  pe-2" >
+                <a class="nav-link p-1"  href="/Conferences/2025/CallForWorkshops">
+                    <span >
+                        Call for Workshops
+                    </span>
+                </a>
+                
+                    <hr class="dropdown-divider" aria-hidden="true">
+                
+            </li>
+
+        
+
+    
+
+
+
+    
+        
+            <li class="dropdown-item  pe-2" >
+                <a class="nav-link p-1"  href="/Expo/applications">
+                    <span >
+                        Call for Expo Presentations
+                    </span>
+                </a>
+                
+                    <hr class="dropdown-divider" aria-hidden="true">
+                
+            </li>
+
+        
+
+    
+
+
+
+    
+        
+            <li class="dropdown-item  pe-2" >
+                <a class="nav-link p-1"  href="/Conferences/2025/CallForSocials">
+                    <span >
+                        Call for Socials and Mentoring
+                    </span>
+                </a>
+                
+            </li>
+
+        
+
+    
+
+
+
+        </ul>
+    </li>
+    
+
+
+
+    <li class="dropdown-item dropdown pe-3">
+        <a class="nav-link dropdown-toggle  p-1" 
+           href="#"
+           role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Resources
+        </a>
+        <ul class="dropdown-menu">
+            
+    
+        
+            <li class="dropdown-item  pe-2" >
+                <a class="nav-link p-1"  href="/Conferences/2025/AuthorInstructions">
+                    <span >
+                        Author Instructions
+                    </span>
+                </a>
+                
+            </li>
+
+        
+
+    
+
+
+
+    
+        
+            <li class="dropdown-item  pe-2" >
+                <a class="nav-link p-1"  href="/Conferences/2025/PeerReviewFAQ">
+                    <span >
+                        Peer Review FAQ
+                    </span>
+                </a>
+                
+            </li>
+
+        
+
+    
+
+
+
+    
+        
+            <li class="dropdown-item  pe-2" >
+                <a class="nav-link p-1"  href="/Conferences/2025/ReviewerInstructions">
+                    <span >
+                        Reviewer Instructions
+                    </span>
+                </a>
+                
+            </li>
+
+        
+
+    
+
+
+
+    
+        
+            <li class="dropdown-item  pe-2" >
+                <a class="nav-link p-1"  href="/Conferences/2025/AreaChairInstructions">
+                    <span >
+                        Area Chair Instructions
+                    </span>
+                </a>
+                
+            </li>
+
+        
+
+    
+
+
+
+    
+        
+            <li class="dropdown-item  pe-2" >
+                <a class="nav-link p-1"  href="/Conferences/2025/PublicationEthics">
+                    <span >
+                        Publication Ethics
+                    </span>
+                </a>
+                
+            </li>
+
+        
+
+    
+
+
+
+    
+        
+            <li class="dropdown-item  pe-2" >
+                <a class="nav-link p-1"  href="/Conferences/2025/ConflictOfInterestDefinitions">
+                    <span >
+                        Conflict of Interest Definitions
+                    </span>
+                </a>
+                
+            </li>
+
+        
+
+    
+
+
+
+    
+        
+            <li class="dropdown-item  pe-2" >
+                <a class="nav-link p-1"  href="/Conferences/2025/SeniorAreaChairInstructions">
+                    <span >
+                        Senior Area Chair Instructions
+                    </span>
+                </a>
+                
+                    <hr class="dropdown-divider" aria-hidden="true">
+                
+            </li>
+
+        
+
+    
+
+
+
+    
+        
+            <li class="dropdown-item  pe-2" >
+                <a class="nav-link p-1"  href="/Conferences/2025/WorkshopPerks">
+                    <span >
+                        Workshop Perks
+                    </span>
+                </a>
+                
+                    <hr class="dropdown-divider" aria-hidden="true">
+                
+            </li>
+
+        
+
+    
+
+
+
+    
+        
+            <li class="dropdown-item  pe-2" >
+                <a class="nav-link p-1"  href="/Conferences/2025/PosterInstructions">
+                    <span >
+                        Poster Instructions
+                    </span>
+                </a>
+                
+                    <hr class="dropdown-divider" aria-hidden="true">
+                
+            </li>
+
+        
+
+    
+
+
+
+    
+        
+            <li class="dropdown-item  pe-2" >
+                <a class="nav-link p-1"  href="/Conferences/2025/PresenterInstructions">
+                    <span >
+                        Oral Presenter Instructions
+                    </span>
+                </a>
+                
+            </li>
+
+        
+
+    
+
+
+
+        </ul>
+    </li>
+    
+
+
+
+    <li class="dropdown-item dropdown pe-3">
+        <a class="nav-link dropdown-toggle  p-1" 
+           href="#"
+           role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Attend
+        </a>
+        <ul class="dropdown-menu">
+            
+    
+        
+            <li class="dropdown-item  pe-2" >
+                <a class="nav-link p-1"  href="/Conferences/2025/VisitingVancouver">
+                    <span >
+                        Visiting Vancouver
+                    </span>
+                </a>
+                
+                    <hr class="dropdown-divider" aria-hidden="true">
+                
+            </li>
+
+        
+
+    
+
+
+
+    
+        
+            <li class="dropdown-item  pe-2" >
+                <a class="nav-link p-1"  href="/Conferences/2025/VisaInformation">
+                    <span >
+                        Visa Information
+                    </span>
+                </a>
+                
+                    <hr class="dropdown-divider" aria-hidden="true">
+                
+            </li>
+
+        
+
+    
+
+
+
+    
+        
+            <li class="dropdown-item  pe-2" >
+                <a class="nav-link p-1"  href="/Register2">
+                    <span >
+                        Register
+                    </span>
+                </a>
+                
+                    <hr class="dropdown-divider" aria-hidden="true">
+                
+            </li>
+
+        
+
+    
+
+
+
+    
+        
+            <li class="dropdown-item  pe-2" >
+                <a class="nav-link p-1"  href="/Conferences/2025/Hotels">
+                    <span >
+                        Hotels
+                    </span>
+                </a>
+                
+                    <hr class="dropdown-divider" aria-hidden="true">
+                
+            </li>
+
+        
+
+    
+
+
+
+    
+        
+            <li class="dropdown-item  pe-2" >
+                <a class="nav-link p-1"  href="/Conferences/2025/ChildCare">
+                    <span >
+                        Attending with Children
+                    </span>
+                </a>
+                
+                    <hr class="dropdown-divider" aria-hidden="true">
+                
+            </li>
+
+        
+
+    
+
+
+
+    
+        
+            <li class="dropdown-item  pe-2" >
+                <a class="nav-link p-1"  href="/Conferences/2025/BaggageCheck">
+                    <span >
+                        Baggage Check
+                    </span>
+                </a>
+                
+                    <hr class="dropdown-divider" aria-hidden="true">
+                
+            </li>
+
+        
+
+    
+
+
+
+    
+        
+            <li class="dropdown-item  pe-2" >
+                <a class="nav-link p-1"  href="/Conferences/2025/FinancialAid">
+                    <span >
+                        Volunteer and Financial Aid
+                    </span>
+                </a>
+                
+                    <hr class="dropdown-divider" aria-hidden="true">
+                
+            </li>
+
+        
+
+    
+
+
+
+    
+        
+            <li class="dropdown-item  pe-2" >
+                <a class="nav-link p-1"  href="/Conferences/2025/AtTheConference">
+                    <span >
+                        At the Conference
+                    </span>
+                </a>
+                
+            </li>
+
+        
+
+    
+
+
+
+        </ul>
+    </li>
+    
+
+
+
+    <li class="dropdown-item dropdown pe-3">
+        <a class="nav-link dropdown-toggle  p-1" 
+           href="#"
+           role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Organization
+        </a>
+        <ul class="dropdown-menu">
+            
+    
+        
+            <li class="dropdown-item  pe-2" >
+                <a class="nav-link p-1"  href="/Conferences/2025/Committees">
+                    <span >
+                        Organizing Committee
+                    </span>
+                </a>
+                
+                    <hr class="dropdown-divider" aria-hidden="true">
+                
+            </li>
+
+        
+
+    
+
+
+
+    
+        
+            <li class="dropdown-item  pe-2" >
+                <a class="nav-link p-1"  href="/Conferences/2025/Board">
+                    <span >
+                        ICML Board
+                    </span>
+                </a>
+                
+                    <hr class="dropdown-divider" aria-hidden="true">
+                
+            </li>
+
+        
+
+    
+
+
+
+    
+        
+            <li class="dropdown-item  pe-2" >
+                <a class="nav-link p-1"  href="/About">
+                    <span >
+                        About ICML
+                    </span>
+                </a>
+                
+                    <hr class="dropdown-divider" aria-hidden="true">
+                
+            </li>
+
+        
+
+    
+
+
+
+    
+        
+            <li class="dropdown-item  pe-2" >
+                <a class="nav-link p-1"  href="/Conferences/2025/ProgramCommittee">
+                    <span >
+                        Program Committee
+                    </span>
+                </a>
+                
+            </li>
+
+        
+
+    
+
+
+
+        </ul>
+    </li>
+    
+
+
+
+    <li class="dropdown-item dropdown pe-3">
+        <a class="nav-link dropdown-toggle  p-1" 
+           href="#"
+           role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Exhibitors
+        </a>
+        <ul class="dropdown-menu">
+            
+    
+        
+            <li class="dropdown-item  pe-2" >
+                <a class="nav-link p-1"  href="/FAQ/Exhibitors">
+                    <span >
+                        FAQ
+                    </span>
+                </a>
+                
+                    <hr class="dropdown-divider" aria-hidden="true">
+                
+            </li>
+
+        
+
+    
+
+
+
+    
+        
+            <li class="dropdown-item  pe-2" >
+                <a class="nav-link p-1"  href="/Exhibitors/exhibitorinfo">
+                    <span >
+                        Information
+                    </span>
+                </a>
+                
+                    <hr class="dropdown-divider" aria-hidden="true">
+                
+            </li>
+
+        
+
+    
+
+
+
+    
+        
+            <li class="dropdown-item  pe-2" >
+                <a class="nav-link p-1"  href="/Conferences/2025/Sponsors">
+                    <span >
+                        2025 Exhibitors
+                    </span>
+                </a>
+                
+            </li>
+
+        
+
+    
+
+
+
+        </ul>
+    </li>
+    
+
+
+
+    
+        
+            <li class="dropdown-item  pe-2" >
+                <a class="nav-link p-1"  href="/virtual/2025">
+                    <span >
+                        Conference Site
+                    </span>
+                </a>
+                
+            </li>
+
+        
+
+    
+
+
+
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </div>
+    <!--Navbar end-->
+
+            </div>
+            <br><br>
+        
+    
+    
+        
+        <div class="container">
+    
+    
+    
+
+    
+    <div class="container">
+        
+            <!--JUst above the HTML in document-snippet.html-->
+            <div> <div>
+<h1><span><span><span><span><span><span>ICML 2025 Author Instructions</span></span></span></span></span></span><span><span><span><span><span><span> </span></span></span></span></span></span></h1>
+
+<h4><span><span><span><span><span><span>Paper Submissions</span></span></span></span></span></span></h4>
+
+<p><span><span><span><span><span><span>Submitted papers are composed of a main body, which can be up to eight pages long, followed by any number of pages for references and appendices, all in a single PDF file. (Final versions of accepted papers will be published in the same way, with references and appendices included.)  The submission PDF has a maximum size of 50MB while the camera ready version will be limited to 20MB. The required format of the papers is specified in the</span></span></span></span></span></span><a href="https://media.icml.cc/Conferences/ICML2025/Styles/icml2025.zip"><span><span><span><span><span><u><span><span> LaTeX style files</span></span></u></span></span></span></span></span></a><span><span><span><span><span><span> and the </span></span></span></span></span></span><a href="https://media.icml.cc/Conferences/ICML2025/Styles/example_paper.pdf"><span><span><span><span><span><u><span><span>example paper</span></span></u></span></span></span></span></span></a><span><span><span><span><span><span>. There is no support for any typesetting software other than LaTeX. All submissions must be anonymized and follow the required format; otherwise, they will automatically be rejected. In particular, any submission whose main body goes over the 8 page limit will be automatically rejected. (The final version of each accepted paper will be allowed an extra page. See the example paper for further information.)</span></span></span></span></span></span></p>
+
+<p><span><span><span><span><span><span>Authors have the option of uploading extra files as Supplementary Materials to provide further details of their work (e.g., code/data that supports experimental findings, other (anonymized) papers of the authors whose results are needed by the submitted paper). It is entirely up to the reviewers to decide whether they wish to consult any of the appendices in the submitted paper or this Supplementary Material. Therefore, if there is material critical to the evaluation of the paper, it needs to be included in the main body of the paper. See below for more details.</span></span></span></span></span></span></p>
+
+<p><span><span><span><span><span><span>Authors are encouraged to submit code to foster reproducibility. Reproducibility of results and easy availability of code will be taken into account in the decision-making process. Authors should not include links to non-anonymized repositories; instead, they should submit the code base itself or anonymized repositories.</span></span></span></span></span></span></p>
+
+<p><span><span><span><span><span><span>Authors will be asked to confirm that their submissions accord with the </span></span></span></span></span></span><a href="https://icml.cc/public/CodeOfConduct"><span><span><span><span><span><u><span><span>ICML code of conduct</span></span></u></span></span></span></span></span></a><span><span><span><span><span><span>.</span></span></span></span></span></span></p>
+
+<p><span><span><span><span><span><span>Submissions will be handled through </span></span></span></span></span></span><a href="https://openreview.net/group?id=ICML.cc/2025/Conference"><span><span><span><span><span><u><span><span>OpenReview</span></span></u></span></span></span></span></span></a><span><span><span><span><span><span>. See the </span></span></span></span></span></span><a href="https://icml.cc/Conferences/2025/CallForPapers"><span><span><span><span><span><u><span><span>Call for Papers</span></span></u></span></span></span></span></span></a><span><span><span><span><span><span> for important dates and deadlines, including the suggested deadline for creating an account on OpenReview.</span></span></span></span></span></span></p>
+
+<h4><span><span><span><span><span><span>Supplementary Material</span></span></span></span></span></span></h4>
+
+<p><span><span><span><span><span><span>ICML 2025 supports the submission of two kinds of supplementary material: supplementary manuscripts and code/data. In particular, if an anonymous reference is made in the paper, authors should upload the referenced papers, so that the reviewers can check the results in the referred paper. The supplementary material must also be anonymized. Note that traditional text appendices to the paper need not be submitted as a separate Supplementary Material; as mentioned above, unlimited appendices are allowed in the main submission file of a paper.</span></span></span></span></span></span></p>
+
+<p><span><span><span><span><span><span>The supplementary code can be submitted as either a zip file or a pdf. For code submissions, we expect authors to anonymize the submitted code. This means that author names and licenses should be removed. Submission of code through anonymous GitHub repositories is also allowed; however, they have to be on a branch that will not be modified after the submission deadline. Please enter the GitHub link in a standalone text file in a submitted zip file. Data submissions (provided that the authors have the right to do so) in anonymous repositories are welcome.</span></span></span></span></span></span></p>
+
+<p><span><span><span><span><span><span>Supplementary Material will not be published or archived, and there are no format restrictions. Authors are therefore responsible for the archival and access of the supplementary if they want to refer to it in the final version of their paper.</span></span></span></span></span></span></p>
+
+<p><span><span><span><span><span><span>There is no separate deadline for Supplementary Material: All supplementalary material must be submitted by the same deadline as the paper submission.</span></span></span></span></span></span></p>
+
+<h4><span><span><span><span><span><span>Double-Blind Reviewing</span></span></span></span></span></span></h4>
+
+<p><span><span><span><span><span><span>Reviewing for ICML 2025 is double-blind: reviewers will not know the authors’ identities and vice versa. Detailed instructions for anonymizing the submission are contained in the aforementioned example paper. In brief, authors should refer to their prior work in the third person wherever possible. They should refrain from including acknowledgements, grant numbers, or links to public code repositories in their submissions.</span></span></span></span></span></span></p>
+
+<p><span><span><span><span><span><span>Previously published papers with substantial overlap written by the authors must be cited in such a way so as to preserve author anonymity. Differences relative to these earlier papers must be explained in the text of the submission. For example: “This work builds on [reference], which showed that…”. If an anonymous reference is needed in the paper (e.g., for referring to the authors’ own work that is under review elsewhere), include the referred work as Supplementary Material as noted above. Note that anonymizing the submissions is mandatory, and papers that explicitly or implicitly reveal the authors’ identities will be rejected.</span></span></span></span></span></span></p>
+
+<p><span><span><span><span><span><span>It may be possible for reviewers to deduce the authors’ identities by using external resources, such as technical reports published on the internet or elsewhere. The availability of such external resources that may allow reviewers to infer the authors’ identities does not constitute a breach of the double-blind submission policy. Reviewers are explicitly asked not to seek out this information.</span></span></span></span></span></span></p>
+
+<p><span><span><span><span><span><span>Please see the </span></span></span></span></span></span><a href="https://icml.cc/Conferences/2025/CallForPapers"><span><span><span><span><span><u><span><span>Call for Papers</span></span></u></span></span></span></span></span></a><span><span><span><span><span><span> for additional policies concerning double-blind reviewing.</span></span></span></span></span></span></p>
+
+<h4><span><span><span><span><span><span>Reviewing and Author Response</span></span></span></span></span></span></h4>
+
+<p><span><span><span><span><span><span>Submitted papers will not be publicly accessible during the review period. Only accepted papers will be made public through OpenReview. Reviewers are forbidden from sharing papers they receive for review, or using the material in any way other than to provide their review.</span></span></span></span></span></span></p>
+
+<p><span><span><span><span><span><span>After initial reviews, authors will have the opportunity to respond to reviewer comments. During this response period, authors can see the reviews and respond to their content, but these responses will only be visible to the reviewers after this period. During the subsequent discussion period, reviewers and authors will be able to engage in one additional round of communication, to follow-up on any remaining questions or concerns.</span></span></span></span></span></span></p>
+
+<p><span><span><span><span><span><span>Any of the authors of a paper can enter/edit the responses. As reviewing is double-blind, the response should not contain information that could reveal the authors’ identities. In addition, the response should not contain non-anonymized URLs, URLs for personal websites, or “shortened” URLs (e.g., as provided via tinyurl, which could log a reviewer’s IP). Reviewers are not expected to follow external URLs in the response.</span></span></span></span></span></span></p>
+
+<p><span><span><span><span><span><span>Keep in mind that there is no need to respond to every minor question or suggestion for improvement. Rather, the response is a good opportunity for addressing issues like a reviewer’s uncertainty about a point, a reviewer making an incorrect assumption, or a reviewer misunderstanding some part of the paper. Responses that use professional and polite language are generally the most effective.</span></span></span></span></span></span></p>
+
+<p><span><span><span><span><span><span>We aim to provide three reviews for every paper, although the precise number may vary. The reviewer IDs uniquely specify the reviewers of the paper but are otherwise arbitrary. The structure of the author response is up to the authors. It is typical to organize the response by reviewers and to use the reviewer IDs to refer to the particular reviews.</span></span></span></span></span></span></p>
+
+<p><span><span><span><span><span><span>There is no option to upload a revised version of the paper during the author feedback period.</span></span></span></span></span></span></p>
+
+<p><span><span><span><span><span><span>Update (March 24): <a href="https://icml.cc/Conferences/2025/ReviewerInstructions#discussions">Detailed instructions for the author response and author-reviewer discussions available here</a>.</span></span></span></span></span></span></p>
+
+<h4><span><span><span><span><span><span>Camera-Ready Papers and Post-Conference Revisions</span></span></span></span></span></span></h4>
+
+<p><span><span><span><span><span><span>Authors of accepted papers will be able to upload non-anonymized “camera-ready” versions of their paper. Authors may choose to (but are not required to) make changes as suggested by the reviewers, as well as other improvements, so long as the essential content of the paper remains unchanged compared to what the reviewers have seen.</span></span></span></span></span></span></p>
+
+<p><span><span><span><span><span><span>Authors must upload a camera-ready version of the paper by the camera-ready deadline prior to the conference; this version of the paper will be made publicly available through OpenReview after this deadline.</span></span></span></span></span></span></p>
+
+<p><span><span><span><span><span><span>After the conference, authors will be able to (but are not required to) revise the camera-ready version of their paper (e.g., to incorporate any feedback received during the conference). These revisions must be made by the post-conference revision deadline. After this deadline, the latest camera-ready version of the paper will be published in the ICML 2025 proceedings through PMLR.</span></span></span></span></span></span></p>
+
+<h4><span><span><span><span><span><span>Additional Policies</span></span></span></span></span></span></h4>
+
+<p><span><span><span><span><span><span>Please see the </span></span></span></span></span></span><a href="https://icml.cc/Conferences/2025/CallForPapers"><span><span><span><span><span><u><span><span>Call for Papers</span></span></u></span></span></span></span></span></a><span><span><span><span><span><span> for additional policies concerning dual submissions, use of generative AI tools (including LLMs), ethical conduct for peer review, impact statements, and lay summaries.</span></span></span></span></span></span></p>
+
+<h4><span><span><span><span><span><span>Accessibility</span></span></span></span></span></span></h4>
+
+<p><span><span><span><span><span><span>Authors are encouraged to make their submissions as accessible as possible for everyone including people with disabilities and sensory or neurological differences.</span></span></span></span></span></span></p>
+
+<hr>
+<h1><a id="camera-ready-main" name="camera-ready-main"></a>Camera-ready instructions for accepted papers - main track</h1>
+
+<p><span><span><span><span><span><span>The camera-ready submission is due on </span></span></span></span></span></span><span><span><span><strong><span><span><s>May 29</s> June 5, 2025 (11:59pm AoE)</span></span></strong></span></span></span><span><span><span><span><span><span>. Please make sure to follow the steps below before this deadline to avoid your paper being withdrawn from ICML. Detailed instructions are given below, with the main mandatory actions being the following:</span></span></span></span></span></span></p>
+
+<ul>
+	<li><span><span><span><span><span><span>At least one author must register for the conference with the ‘Conference’ option checked in the registration form; ‘Virtual Pass’ alone is not sufficient (see item 4 below).</span></span></span></span></span></span></li>
+	<li><span><span><span><span><span><span>At least one author needs to digitally sign the publication consent form (see item 5 below)</span></span></span></span></span></span></li>
+	<li><span><span><span><span><span><span>The presenting author needs to digitally sign the consent form (see item 5 below).</span></span></span></span></span></span></li>
+	<li><span><span><span><span><span><span>The corresponding author needs to sign the PMLR publication agreement form and upload it in pdf format together with the camera-ready submission (see item 6 below). </span></span></span></span></span></span><span><span><span><strong><span><u><span><span>(Note: Maximum file sizes 20MB)</span></span></u></span></strong></span></span></span></li>
+	<li><span><span><span><span><span><span>Your camera-ready pdf should include a mandatory impact statement just before the bibliography (see the call for papers for instructions). Acknowledgments, the impact statement, and references are excluded from the 9 page limit.</span></span></span></span></span></span></li>
+	<li><span><span><span><span><span><span>Complete the camera-ready form on OpenReview (see items 7-10 below).</span></span></span></span></span></span></li>
+</ul>
+
+<p><span><span><span><span><span><span>Please follow the guidelines below:</span></span></span></span></span></span></p>
+
+<ol>
+	<li><span><span><span><span><span><span>In the camera-ready version, you have an extra page to address reviewer comments, so the length limit of the paper body is </span></span></span></span></span></span><span><span><span><strong><span><span>9 pages</span></span></strong></span></span></span><span><span><span><span><span><span>, followed by any acknowledgements, the impact statement, and references.</span></span></span></span></span></span></li>
+	<li><span><span><span><span><span><span>You should include any appendices of the paper as part of the camera-ready pdf. There is </span></span></span></span></span></span><span><span><span><span><em><span>NO </span></em></span></span></span></span><span><span><span><span><span><span>camera-ready supplementary material of any kind, as these will not be listed on PMLR nor on OpenReview. If you have code or other material that you want the readers to have access to, please upload it to a repository (e.g., GitHub) and include a link in your paper. We also encourage you to include the url link to the code in the optional “code url” box on OpenReview – this will appear on the OpenReview entry of the paper as well as on PMLR.</span></span></span></span></span></span></li>
+	<li><span><span><span><span><span><span>You are allowed to change the author order on the camera-ready submission page, but no author additions are allowed. You are also allowed to change the title and abstract slightly. If you want to change the title significantly with a good reason (for instance, it was suggested by the meta reviewer), then you should get permission from the program chairs.</span></span></span></span></span></span></li>
+	<li><span><span><span><span><span><span>Register for the conference: go to </span></span></span></span></span></span><a href="http://icml.cc"><span><span><span><span><span><u><span><span>icml.cc</span></span></u></span></span></span></span></span></a><span><span><span><span><span><span> and click "Registration 2025". From there, you can log in if you have an existing profile, or create a new profile. At least one author must register with the checkbox ‘Conference’ ticked under the ‘Sessions’ list in the registration form; selecting ‘Virtual Pass’ alone is not sufficient.</span></span></span></span></span></span></li>
+	<li><span><span><span><span><span><span>At least one author needs to digitally sign the ICML 2025 Publishing Release form, and the presenting author needs to sign the ICML 2025 Recording Release and License form, both at </span></span></span></span></span></span><a href="https://icml.cc/ConsentForm"><span><span><span><span><span><u><span><span>https://icml.cc/ConsentForm</span></span></u></span></span></span></span></span></a><span><span><span><span><span><span> (you will need to log in to </span></span></span></span></span></span><a href="http://icml.cc"><span><span><span><span><span><u><span><span>icml.cc</span></span></u></span></span></span></span></span></a><span><span><span><span><span><span> to see your paper(s)).</span></span></span></span></span></span></li>
+	<li><span><span><span><span><span><span>The PMLR Publication Agreement form (available at </span></span></span></span></span></span><a href="http://proceedings.mlr.press/pmlr-license-agreement.pdf"><span><span><span><span><span><u><span><span>http://proceedings.mlr.press/pmlr-license-agreement.pdf</span></span></u></span></span></span></span></span></a><span><span><span><span><span><span>) should be filled and signed by the corresponding author and uploaded as part of the camera-ready form.</span></span></span></span></span></span></li>
+	<li><span><span><span><span><span><span>The camera-ready version should be prepared using the LaTeX style file from </span></span></span></span></span></span><a href="https://media.icml.cc/Conferences/ICML2025/Styles/icml2025.zip"><span><span><span><span><span><u><span><span>https://media.icml.cc/Conferences/ICML2025/Styles/icml2025.zip</span></span></u></span></span></span></span></span></a><span><span><span><span><span><span> with the \usepackage[accepted]{icml2025} option. Please note that for camera-ready there is a mandatory impact statement in an unnumbered section just before the bibliography. Acknowledgments can also optionally be included in another unnumbered section. Both Acknowledgments and Impact Statement are excluded from the 9-page limit.</span></span></span></span></span></span></li>
+	<li><span><span><span><span><span><span>Check the pdf file of your paper with the ICML format checker. Read the instructions at </span></span></span></span></span></span><a href="https://papercheck.icml.cc/papercheck.html"><span><span><span><span><span><u><span><span>https://papercheck.icml.cc/papercheck.html</span></span></u></span></span></span></span></span></a><span><span><span><span><span><span>, and upload your camera-ready paper for automatic checking of the guidelines (if there are errors, you can upload again until all detected violations are resolved). Upon successful completion of the paper checker, you will obtain a 5-letter submission code which you will enter in the camera-ready form.</span></span></span></span></span></span></li>
+	<li><span><span><span><span><span><span>Upload the required files to the camera-ready form, which you can access via your OpenReview console. Enter your title and abstract in the camera-ready form, exactly matching the paper. You can use TeX math (we suggest sparingly), but no custom macros or other TeX commands. Please make sure that accents, special characters, etc., are entered using TeX commands and not using non-English characters.</span></span></span></span></span></span></li>
+	<li><span><span><span><span><span><span><strong>New this year</strong>, you will be asked to enter a “lay summary” of your paper (also called “plain language summary”) in the OpenReview form. See </span></span></span></span></span></span><a href="https://medium.com/@icml2025pc/lay-summaries-at-icml-2025-8d15e395b7f3"><span><span><span><span><span><u><span><span>https://medium.com/@icml2025pc/lay-summaries-at-icml-2025-8d15e395b7f3</span></span></u></span></span></span></span></span></a><span><span><span><span><span><span> for additional guidelines and examples.</span></span></span></span></span></span></li>
+</ol>
+
+<p><span><span><span><span><span><span>Please do not wait until the last day, as fixes might require some time. Pay special attention to the following:</span></span></span></span></span></span></p>
+
+<ul>
+	<li><span><span><span><span><span><span>The main paper itself must contain no more than 9 pages (note the extra page compared to the length at submission time). Acknowledgements, impact statement, references, and appendices should follow the main paper in the same pdf file.</span></span></span></span></span></span></li>
+	<li><span><span><span><span><span><span>Enter author details as in the TeX file (example_paper.tex in icml2025_style.zip in step 7 above). Check that the affiliations footnote renders correctly. Make sure you have called \printAffiliationsAndNotice{\icmlEqualContribution} if multiple authors have made equal contributions, or \printAffiliationsAndNotice{} otherwise (see comments in the file example_paper.tex near line 113).</span></span></span></span></span></span></li>
+	<li><span><span><span><span><span><span>The title and section headings should have content words capitalized, not all caps. For instance, "Deep Learning for Artificial Intelligence", and not "DEEP LEARNING FOR ARTIFICIAL INTELLIGENCE". For further guidance on capitalization rules, please see here: </span></span></span></span></span></span><a href="https://grammar.yourdictionary.com/capitalization/rules-for-capitalization-in-titles.html"><span><span><span><span><span><u><span><span>https://grammar.yourdictionary.com/capitalization/rules-for-capitalization-in-titles.html</span></span></u></span></span></span></span></span></a><span><span><span><span><span><span>.</span></span></span></span></span></span></li>
+	<li><span><span><span><span><span><span>Carefully check your references and **replace arXiv citations with peer-reviewed papers** where possible (arXiv is generally not peer-reviewed). Please also check that capitalization in your references appears as you intended (for example, use braces like {Markov} in Bibtex entries to make sure that Markov (proper name) keeps its capitalization in the reference).</span></span></span></span></span></span></li>
+	<li><span><span><span><span><span><span>We kindly ask all authors to follow our guidelines for writing accessible papers. In particular, we expect that authors (1) review guidelines for accessibility to color-blind and visually impaired; (2) ensure their bibliography is up-to-date, including up-to-date names and venues; (3) use inclusive and respectful language throughout when talking about people.</span></span></span></span></span></span></li>
+	<li><span><span><span><span><span><span>This year, </span></span></span></span></span></span><span><span><span><span><em><span>there is no Type 3 font check</span></em></span></span></span></span><span><span><span><span><span><span>, so you do not have to use TrueType font to pass the check or convert eps figures to png figures to bypass the check. If possible, please use vector graphics (eps or pdf figures) for experimental results such as line plots and bar plots to maximize readability, and only use bitmap graphics for certain illustrations and visualizations that cannot be easily represented by vector graphics.</span></span></span></span></span></span></li>
+	<li><span><span><span><span><span><span>Abstracts should be a single paragraph and ideally 4-6 sentences.</span></span></span></span></span></span></li>
+	<li><span><span><span><span><span><span>The citation font size should be the same as that in the main body of the paper.</span></span></span></span></span></span></li>
+	<li><span><span><span><span><span><span>Your paper must be in US letter size (i.e., not A4 or other sizes).</span></span></span></span></span></span></li>
+</ul>
+
+<ul>
+	<li><span><span><span><span><span><span>Full paper (including appendices) in pdf format (</span></span></span></span></span></span><span><span><span><strong><span><u><span><span>max size 20 MB</span></span></u></span></strong></span></span></span><span><span><span><span><span><span>; please reduce the size/quality of large images if you exceed this).</span></span></span></span></span></span></li>
+	<li><span><span><span><span><span><span>Publication agreement form (max size 10 MB).</span></span></span></span></span></span></li>
+</ul>
+
+<p><span><span><span><span><span><span>Please double-check the order of authors in OpenReview to make sure it is consistent with that in the camera-ready version.</span></span></span></span></span></span></p>
+ 
+
+<p><span><span><span><span><span><span>After this year's conference, there will be another window where you may upload small corrections to the paper following the feedback received at the conference. More information on this will follow after the conference.</span></span></span></span></span></span></p>
+
+<hr>
+<h1><a id="camera-ready-position" name="camera-ready-position"></a>Camera-ready instructions for accepted papers - position paper track</h1>
+
+<p>The camera-ready submission is due on <strong><s>May 29</s> June 5, 2025 (11:59pm AoE)</strong>. Please make sure to follow the steps below before this deadline to avoid your paper being withdrawn from ICML. Detailed instructions are given below, with the main mandatory actions being the following:</p>
+
+<ul>
+	<li>At least one author must register for the conference with the ‘Conference’ option checked in the registration form; ‘Virtual Pass’ alone is not sufficient (see item 4 below).</li>
+	<li>At least one author needs to digitally sign the publication consent form (see item 5 below)</li>
+	<li>The presenting author needs to digitally sign the consent form (see item 5 below).</li>
+	<li>The corresponding author needs to sign the PMLR publication agreement form and upload it in pdf format together with the camera-ready submission (see item 6 below). <strong>(Note: Maximum file sizes 20MB)</strong></li>
+	<li>Complete the camera-ready form on OpenReview (see items 7-10 below).</li>
+</ul>
+
+<p>Please follow the guidelines below:</p>
+
+<ol>
+	<li>In the camera-ready version, you have an extra page to address reviewer comments, so the length limit of the paper body is <strong>9 pages</strong>, followed by any Acknowledgements, (optionally) the Impact Statement, and References.</li>
+	<li>You should include any appendices of the paper as part of the camera-ready pdf. There is NO camera-ready supplementary material of any kind, as these will not be listed on PMLR nor on OpenReview. If you have code or other material that you want the readers to have access to, please upload it to a repository (e.g., GitHub) and include a link in your paper. We also encourage you to <strong>include the url link to the code</strong> in the optional “code url” box on OpenReview – this will appear on the OpenReview entry of the paper as well as on PMLR.</li>
+	<li>You are allowed to change the author order on the camera-ready submission page, but no author additions are allowed. You are also allowed to change the title and abstract slightly. If you want to change the title significantly with a good reason (for instance, it was suggested by the meta reviewer), then you should get permission from the program chairs.</li>
+	<li>Register for the conference: go to icml.cc and click "Registration 2025". From there, you can log in if you have an existing profile, or create a new profile. At least one author must register with the checkbox ‘Conference’ ticked under the ‘Sessions’ list in the registration form; selecting ‘Virtual Pass’ alone is not sufficient.</li>
+	<li>At least one author needs to digitally sign the ICML 2025 Publishing Release form, and the presenting author needs to sign the ICML 2025 Recording Release and License form, both at <a href="https://icml.cc/ConsentForm" target="_blank">https://icml.cc/ConsentForm</a> (you will need to log in to icml.cc to see your paper(s)).</li>
+	<li>The PMLR Publication Agreement form (available at <a href="http://proceedings.mlr.press/pmlr-license-agreement.pdf" target="_blank">http://proceedings.mlr.press/pmlr-license-agreement.pdf</a>) should be filled and signed by the corresponding author and uploaded as part of the camera-ready form.</li>
+	<li>The camera-ready version should be prepared using the LaTeX style file from <a href="https://media.icml.cc/Conferences/ICML2025/Styles/icml2025.zip" target="_blank">https://media.icml.cc/Conferences/ICML2025/Styles/icml2025.zip</a> with the \usepackage[accepted]{icml2025} option. Please note that for camera-ready there is an optional Impact Statement in an unnumbered section just before the bibliography. Acknowledgments can also optionally be included in another unnumbered section. Both Acknowledgments and Impact Statement are excluded from the 9-page limit.</li>
+	<li>Check the pdf file of your paper with the <strong>ICML format checker</strong>. Read the instructions at <a href="https://papercheck.icml.cc/papercheck.html" target="_blank">https://papercheck.icml.cc/papercheck.html</a>, and upload your camera-ready paper for automatic checking of the guidelines (if there are errors, you can upload again until all detected violations are resolved). Upon successful completion of the paper checker, you will obtain a <strong>5-letter submission code</strong> which you will enter in the camera-ready form.</li>
+	<li><strong>Upload the required files to the OpenReview camera-ready form</strong>, which you can access via your OpenReview console. Enter your title and abstract in the camera-ready form, exactly matching the paper. You can use TeX math (we suggest sparingly), but no custom macros or other TeX commands. Please make sure that accents, special characters, etc., are entered using TeX commands and not using non-English characters.</li>
+	<li>New this year, you will have to enter a “<strong>lay summary</strong>” of your paper (also called “plain language summary”) in the OpenReview form. See <a href="https://medium.com/@icml2025pc/lay-summaries-at-icml-2025-8d15e395b7f3" target="_blank">https://medium.com/@icml2025pc/lay-summaries-at-icml-2025-8d15e395b7f3</a> for additional guidelines and examples.</li>
+</ol>
+
+<p>Please do not wait until the last day, as fixes might require some time. Pay special attention to the following:</p>
+
+<ul>
+	<li>The main paper itself must contain no more than 9 pages (note the extra page compared to the length at submission time). Acknowledgements, (optional) Impact Statement, References, and appendices should follow the main paper in the same PDF file.</li>
+	<li>Enter author details as in the TeX file (see example_paper.tex in icml2025_style.zip in step 7 above). Check that the affiliations footnote renders correctly. Make sure you have called \printAffiliationsAndNotice{\icmlEqualContribution} if multiple authors have made equal contributions, or \printAffiliationsAndNotice{} otherwise (see comments in the file example_paper.tex near line 113).</li>
+	<li>The title and section headings should have content words capitalized, not all caps. For instance, "Position: Stop Research on Psychic Properties of Machine Learning", and not "POSITION: STOP RESEARCH ON PSYCHIC PROPERTIES OF MACHINE LEARNING". For further guidance on capitalization rules, please see here: <a href="https://grammar.yourdictionary.com/capitalization/rules-for-capitalization-in-titles.html" target="_blank">https://grammar.yourdictionary.com/capitalization/rules-for-capitalization-in-titles.html</a>.</li>
+	<li>Carefully check your references and <strong>replace arXiv citations with peer-reviewed papers</strong> where possible (arXiv is generally not peer-reviewed). Please also check that capitalization in your references appears as you intended (for example, use braces like {Markov} in Bibtex entries to make sure that Markov (proper name) keeps its capitalization in the reference).</li>
+	<li>We kindly ask all authors to follow our guidelines for writing accessible papers. In particular, we expect that authors (1) review guidelines for accessibility to color-blind and visually impaired; (2) ensure their bibliography is up-to-date, including up-to-date names and venues; (3) use inclusive and respectful language throughout when talking about people.</li>
+	<li>This year, there is no Type 3 font check, so you do not have to use TrueType font to pass the check or convert eps figures to png figures to bypass the check. If possible, please use vector graphics (eps or pdf figures) for experimental results such as line plots and bar plots to maximize readability, and only use bitmap graphics for certain illustrations and visualizations that cannot be easily represented by vector graphics.</li>
+	<li>Abstracts should be a single paragraph and ideally 4-6 sentences.</li>
+	<li>The citation font size should be the same as that in the main body of the paper.</li>
+	<li>Your paper must be in US letter size (i.e., not A4 or other sizes).</li>
+	<li>Full paper (including appendices) in pdf format (<strong>max size 20 MB</strong>; please reduce the size/quality of large images if you exceed this).</li>
+	<li>Publication agreement form (max size 10 MB).</li>
+</ul>
+
+<p>Please double-check the order of authors in OpenReview to make sure it is consistent with that in the camera-ready version.</p>
+
+<p>After this year's conference, there will be another window where you may upload small corrections to the paper following the feedback received at the conference. More information on this will follow after the conference.</p>
+
+<hr>
+<h2><a id="retraction-policy" name="retraction-policy"></a>Retraction policy</h2>
+
+<p>If an author wants to retract their paper after it is accepted, they will need to enter a retraction statement in OpenReview. The retraction statement will be reviewed by the Program Chairs and all authors will be contacted. Once the retraction is confirmed, the paper will remain on OpenReview but its status will be marked as retracted, and the retraction statement will also be publicly visible.</p>
+
+<p> </p>
+
+<p><span><span><span><span><span><span><em>Revised January 28th, 2025 (clarified submission size limit and updated camera ready size to 20MB)</em></span></span></span></span></span></span></p>
+
+<p><span><span><span><span><span><span><em>Revised March 24, 2025 (added link to detailed instructions for author response/author-reviewer discussions)</em></span></span></span></span></span></span></p>
+
+<p><span><span><span><span><span><span><em>Revised May 2025 (added camera-ready instructions)</em></span></span></span></span></span></span></p>
+
+<p><span><span><span><span><span><span><em>Revised July 10, 2025 (added retraction policy)</em></span></span></span></span></span></span></p>
+</div>
+</div>
+        
+    </div>
+
+
+
+    
+        </div>
+    
+
+</main>
+<!--END BLOCK CONTENT-->
+
+
+<!--Footer for the edit button-->
+
+
+<script nonce="O6PhEffCTC4Paq2TJ2e/Qg==">
+
+    $(function () {
+        if ($(".editable").length == 0) {
+            $("#editFooter").hide();
+        }
+
+        // Event bindings for edit buttons
+        $('.startEditBtn').on('click', function() {
+            start_edit();
+        });
+        
+        $('.stopEditBtn').on('click', function() {
+            stop_edit();
+        });
+        $('#id_accepted_terms_and_conditions').on('change', function() {
+            this.form.submit();
+        });
+        $('.accepted_terms_and_conditions').on('change', function() {
+            this.form.submit();
+        });
+        $('.workshopstatus').on('change', function() {
+            changeStatus(this);
+        });
+        $('.action-select').on('change', function() {
+            actionChanged(this);
+        });
+        $('.extra').on('change', function() {
+            extraChanged(this);
+        });
+        $('.filter_workshop').on('change', function() {
+            this.form.submit();
+        });
+        $('.volunteer-status, .recommendation-letter-status').on('change', function() {
+            setStatus(this);
+        });
+        $('.status-form-show').on('change', function() {
+            this.form.submit();
+        });
+        $('.download-form-download').on('change', function() {
+            this.form.submit();
+        });
+        $('.presentation-type-form-presentation-type').on('change', function() {
+            this.form.submit();
+        });
+        $('.export-form-resource').on('change', function() {
+            showFieldsForResource(this.value);
+        });
+        $('.import-form-resource').on('change', function() {
+            showFieldsForResource(this.value);
+        });
+        $('.vol-email-form-to, .vol-email-form-template').on('change', function() {
+            this.form.submit();
+        });
+        $('.organizer-alert').on('click', function() {
+            getUserCreateForm(this.href);
+        });
+    })
+</script>
+
+<script src="/static/core/js/fastclick.min.js" ></script>
+
+<!--We don't know if there are editable tags on the page until after the django template engine has rendered the page. So,
+test in javascript for "editable" tags and if present, load the ckeditor engine dynamically. -->
+
+<script nonce="O6PhEffCTC4Paq2TJ2e/Qg==">
+    if (document.getElementsByClassName('editable').length > 0) {
+        var script = document.createElement("script");
+        script.type = "text/javascript";
+        script.src = "/static/core/ckeditor/4.18/ckeditor.js";    // use this for linked script
+      script.onload = function () {
+        console.log("ckeditor loaded");
+        // Initial setup when each editor is ready
+        CKEDITOR.on("instanceReady", function (e) {
+          updateToggleDocName(e.editor);
+        });
+
+        // React to any editor entering/leaving read-only
+        CKEDITOR.on("readOnly", function (e) {
+          updateToggleDocName(e.editor);
+        });
+      };
+        document.body.appendChild(script);
+    }
+
+    function updateToggleDocName(editor) {
+      var id = editor && editor.name;
+      if (!id || id.indexOf("id_") !== 0) return;
+
+      var doc_name_element = document.getElementById("document_name_" + id.slice(3));
+      console.log(doc_name_element);
+      if (!doc_name_element) return;
+
+      doc_name_element.style.display = editor.readOnly ? "none" : "block";
+    }
+
+</script>
+
+
+<script nonce="O6PhEffCTC4Paq2TJ2e/Qg==">
+    function fetchContent() {
+        $(".editable").each(function (index) {
+            var myself = this;
+            var docvID = this.getAttribute('id').replace("id_", "");
+            var blurbtext = this.getAttribute("blurbtext");
+            $.ajax({
+                url: "/Admin/RetrieveDocumentVersion",
+                type: "POST",
+                data: {
+                    docvID: docvID,
+                    blurbtext: blurbtext,
+                    csrfmiddlewaretoken: csrftoken,
+                },
+                success: function (data, textStatus, jqXHR) {
+                    myself.setAttribute("contenteditable", "true");
+                    myself.innerHTML = data;
+                    CKEDITOR.inline(myself.id);
+                },
+            });
+        })
+    }
+
+    $("#nopageedit").hide();
+
+    function start_edit() {
+
+        $(".editable").addClass("warning-ring");
+
+        //At the beginning of an edit, we need to replace the content of the
+        //editable div with it's databased content in order to preserve the
+        //template tags. We want the tag, not the rendered tag.
+
+        /* You must remove any countdown.js timers on the page before replacing the page with it's
+        document version otherwise, Javascript will throw an exception.  */
+
+
+        $("[class$='-countdown']").parent().remove();
+        fetchContent();
+        $(".editable").attr("onblur", "ckeditorsave(this)");
+        window.status.bold();
+        window.status = "Click outside the editable area to save. Changes are LIVE!! Refresh page to discard changes.";
+        $("#editpage").hide();
+        $("#noeditpage").show();
+    }
+
+
+    function stop_edit() {
+        ckeditorsave();
+        $("#noeditpage").hide();
+        $("#editpage").show();
+        window.location.reload();
+    }
+
+    function ckeditorsave(event) {
+        for (var name in CKEDITOR.instances) {
+            if (CKEDITOR.instances[name].checkDirty()) {
+                editor = CKEDITOR.instances[name];
+                saveEditable(editor);
+            }
+        }
+    }
+
+    function saveEditable(editor) {
+        var content = editor.getData();
+        var contentId = editor.name;
+        var pageId = window.location.pathname;
+        var originalContent = "N/A";
+        var documentversion = editor.container.getAttribute("id").replace("id_", "");
+        var blurbtext = editor.container.getAttribute("blurbtext");
+        if (contentId.match(/-aloha$/gi)) {
+            contentId = contentId.replace(/-aloha/gi, '');
+        }  /*I'm not sure what this does but it seems like it would matter*/
+        var request = jQuery.ajax({
+            url: "/Admin/SaveDocument",
+            type: "POST",
+            async: false,
+            data: {
+                content: content,
+                originalContent: originalContent,
+                contentId: contentId,
+                pageId: pageId,
+                documentversion: documentversion,
+                blurbtext: blurbtext,
+                csrfmiddlewaretoken: csrftoken
+            },
+            success: function (data) {
+                if (data['message']) {
+                    alert(data['message']);
+                }
+            },
+            error: function (xqXHR, textStatus) {
+                window.status = textStatus;
+                debugger;
+            }
+
+        });
+
+    };
+
+
+</script>
+
+<script nonce="O6PhEffCTC4Paq2TJ2e/Qg==">
+    jQuery(document).ajaxSend(function (event, xhr, settings) {
+        function getCookie(name) {
+            var cookieValue = null;
+            if (document.cookie && document.cookie != '') {
+                var cookies = document.cookie.split(';');
+                for (var i = 0; i < cookies.length; i++) {
+                    var cookie = jQuery.trim(cookies[i]);
+                    // Does this cookie string begin with the name we want?
+                    if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+
+        function sameOrigin(url) {
+            // url could be relative or scheme relative or absolute
+            var host = document.location.host; // host + port
+            var protocol = document.location.protocol;
+            var sr_origin = '//' + host;
+            var origin = protocol + sr_origin;
+            // Allow absolute or scheme relative URLs to same origin
+            return (url == origin || url.slice(0, origin.length + 1) == origin + '/') ||
+                (url == sr_origin || url.slice(0, sr_origin.length + 1) == sr_origin + '/') ||
+                // or any other URL that isn't scheme relative or absolute i.e relative.
+                !(/^(\/\/|http:|https:).*/.test(url));
+        }
+
+        function safeMethod(method) {
+            return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+        }
+
+        if (!safeMethod(settings.type) && sameOrigin(settings.url)) {
+            xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
+        }
+    });
+</script>
+
+
+
+
+
+<div id="successful-page-load" class='hidden'>Successful Page Load</div>
+
+
+
+
+
+    
+        <link href="/static/conf_gdpr/css/conf_gdpr.css" rel="stylesheet">
+        <div id="cookie-bar" style="z-index: 8">
+            <table class="gdpr-statement">
+                <col>
+                <col style="width:120px">
+                <tr>
+                    <td style="padding:5px">
+                        ICML uses cookies for essential functions only. We do not sell your personal
+                        information.
+                        <a href="/public/PrivacyPolicy">Our Privacy Policy &raquo;&nbsp;</a>
+                    </td>
+                    <td>
+                        <button float-end class="btn btn-light btn-sm btn btn-outline-dark" id="accept_cookies_button" >Accept</button>
+                           
+                    </td>
+                </tr>
+            </table>
+        </div>
+
+        <script nonce="O6PhEffCTC4Paq2TJ2e/Qg==">
+            function accept_cookies() {
+
+                $.ajax({
+                    method: "POST",
+                    url: "/conf_gdpr/accept",
+                    data: {
+                        csrfmiddlewaretoken: csrftoken,
+                    },
+                }).done(function (data) {
+                    console.log(data);
+                    $("#cookie-bar").fadeOut();
+                }).fail(function (jqXHR, textStatus) {
+                    alert(textStatus);
+                });
+            }
+            $("#accept_cookies_button").on("click", () => {
+                accept_cookies();
+            });
+        </script>
+
+    
+
+
+
+
+
+
+
+<br>
+<div class="noprint">
+    <footer id="bootstrap-footer" class="text-center text-lg-start bg-light text-muted noprint">
+
+        <div class="text-center p-1 border-top border-dark">
+        </div>
+        <!-- Section: Links  -->
+        <section class="pt-1">
+            <div class="container text-center text-md-start mt-3">
+                <!-- Grid row -->
+                <div class="row mt-3">
+                    <!-- Grid column -->
+                    <div class="col-md-3 col-lg-3 col-xl-3 mx-auto mb-3">
+                        <!-- Content -->
+                        <h6 class="text-uppercase fw-bold mb-4">
+                            <img src="/static/core/img/ICML-logo.svg" alt="ICML logo" height='30'>
+                        </h6>
+                        <p>
+                            The ICML Logo above may be used on presentations. Right-click and choose
+                            download. It is a vector graphic and may be used at any scale.
+                        </p>
+
+                    </div>
+
+
+                    <!-- Grid column -->
+                    <div class="col-md-5 col-lg-4 col-xl-3 mx-auto mb-4" style="max-width: 300px;">
+                        <!-- Links -->
+                        <h6 class="text-uppercase fw-bold mb-4 text-center">
+                            Useful links
+                        </h6>
+                        <div>
+             <div>
+<p><a href="/About">About ICML</a></p>
+
+<p><a href="https://proceedings.mlr.press">ICML Proceedings at PMLR</a></p>
+
+<p><a href="/yearly-document/CodeOfConduct">Code of Conduct</a></p>
+</div>
+
+            </div>
+                    </div>
+                    <!-- Grid column -->
+
+                    <!-- Grid column -->
+                    <div class="col-md-4 col-lg-3 col-xl-3 mx-auto mb-md-0 mb-4">
+                        <!-- Links -->
+                        <h6 class="text-uppercase fw-bold mb-4">Contact</h6>
+                        
+                            <p>
+                                <i class="fas fa-home me-3"></i> 1269 Law Street, San Diego CA 92109
+                            </p>
+                        
+                        <p>
+                            <i class="fas fa-envelope me-3"></i> <a href="/Help/Contact">Email</a>
+                        </p>
+                        
+                        
+
+
+                    </div>
+                    <!-- Grid column -->
+                </div>
+                <!-- Grid row -->
+            </div>
+        </section>
+        <!-- Section: Links  -->
+
+        <!-- Copyright -->
+        <div class="text-center p-4" style="background-color: rgba(0, 0, 0, 0.05);">
+            <div>
+             <p><a href="https://proceedings.mlr.press">ICML Proceedings at PMLR</a></p>
+
+            </div>
+        </div>
+        <!-- Copyright -->
+    </footer>
+</div>
+<!-- Footer -->
+
+
+<!-- Footer -->
+
+</body>
+</html>

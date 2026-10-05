@@ -1,0 +1,134 @@
+\documentclass[withoutpreface,bwprint]{cumcmthesis}
+
+\usepackage{booktabs}
+\usepackage{graphicx}
+\usepackage{url}
+
+% ===== 字体：中文宋体，英文/数字 Times New Roman =====
+% Windows（正式比赛环境）自动命中 SimSun + Times New Roman；Mac/TeX Live 回退到等价字体。
+\IfFontExistsTF{Times New Roman}
+  {\setmainfont{Times New Roman}}
+  {\setmainfont{TeX Gyre Termes}}
+\IfFontExistsTF{SimSun}
+  {\setCJKmainfont{SimSun}}
+  {\IfFontExistsTF{Songti SC}{\setCJKmainfont{Songti SC}}{\setCJKmainfont{FandolSong-Regular}}}
+\IfFontExistsTF{SimHei}
+  {\setCJKsansfont{SimHei}}
+  {\setCJKsansfont{FandolHei-Regular}}
+
+% ===== 图题/表题：居中，宋体小四，单行不缩进 =====
+\captionsetup{justification=centering, singlelinecheck=false, font={song,minusfour}, labelfont={bf,up}}
+
+% 支持老师要求的 5.1.1.1—5.1.1.5 四级编号。
+\setcounter{secnumdepth}{4}
+\renewcommand\theparagraph{\thesubsubsection.\arabic{paragraph}}
+\makeatletter
+\renewcommand\paragraph{\@startsection{paragraph}{4}{\z@}%
+  {-3.25ex\@plus -1ex \@minus -.2ex}%
+  {1.5ex \@plus .2ex}%
+  {\normalfont\normalsize\bfseries}}
+\makeatother
+
+\title{[填写论文题目]}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+% TODO：摘要须独占一页。先总述研究对象与总体方法，再按问题分别说明模型、求解、
+% 关键结果与验证结论。不得放置公式、图或表，不得虚构尚未计算的数值。
+
+\keywords{[关键词一]\quad [关键词二]\quad [关键词三]\quad [关键词四]}
+\end{abstract}
+
+% 竞赛论文不设置目录。
+
+\section{问题重述}
+% TODO：重组题意与任务，不逐句复制题目。
+
+\section{问题分析}
+% TODO：先说明各问题之间的关系，再分问题描述将采用的技术路线。
+
+\subsection{问题一的分析}
+
+\subsection{问题二的分析}
+
+% TODO：按实际题目继续增加问题三、问题四等。
+
+\section{基本假设}
+\begin{enumerate}
+  \item TODO：写明假设、适用范围与必要性。
+\end{enumerate}
+
+\section{符号说明}
+\begin{table}[H]
+  \centering
+  \caption{主要符号说明}
+  \label{tab:symbols}
+  \begin{tabular}{ccc}
+    \toprule
+    符号 & 含义 & 单位 \\
+    \midrule
+    $x$ & TODO & TODO \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+\section{模型建立与求解}
+
+\subsection{问题一的模型建立与求解}
+% TODO：用约 8—10 个排版行概述本问的完整技术路线。
+
+\subsubsection{第一小问的模型建立与求解}
+
+\paragraph{模型建立}
+% TODO
+
+\paragraph{模型求解}
+% TODO
+
+\paragraph{问题结论}
+% TODO
+
+\paragraph{检验分析}
+% TODO：根据题型完成误差、敏感性、稳健性或对照检验。
+
+\paragraph{小结}
+% TODO
+
+\subsection{问题二的模型建立与求解}
+% TODO：按相同逻辑展开。若存在多个小问，分别设置三级标题与五个四级部分。
+
+\section{模型的评价与推广}
+
+\subsection{模型的优点}
+% TODO：用证据说明优点。
+
+\subsection{模型的局限}
+% TODO：说明数据、假设、算法与适用范围的具体限制。
+
+\subsection{模型的推广}
+% TODO：说明可迁移的对象、必要改动与适用条件。
+
+\begin{thebibliography}{99}
+% TODO：按正文首次出现顺序列出 10—15 篇真实且已核验的文献，全部在正文引用。
+% 英文文献不少于三分之一，并遵守以竞赛年份为基准的近五年规则。
+\end{thebibliography}
+
+% 篇幅目标：从摘要到参考文献优先正好 30 页，且不得超过 30 页；附录不计入。
+% 只用模型细节、求解结果、检验分析、图表和讨论充实篇幅，不得用空白或重复内容凑页。
+
+\begin{appendices}
+\section{全部程序代码}
+% TODO：所有代码统一放在附录 A。代码较多时，在附录 A 内按问题设置二级标题，
+% 例如 \subsection{问题一代码}、\subsection{问题二代码}，不要拆成多个代码附录。
+% 附录 A 控制在 1—2 页，删除不影响复现的样板代码、重复工具函数和冗长注释，
+% 同时保留复现论文结果所需的全部程序，并保证字号清晰可读。
+
+% 仅在确有非代码补充材料时启用附录 B，例如补充数据、额外图表、推导证明或问卷。
+% \section{补充材料}
+% TODO：附录 B 及后续附录不得放程序代码；没有补充材料时不要创建。
+\end{appendices}
+
+\end{document}

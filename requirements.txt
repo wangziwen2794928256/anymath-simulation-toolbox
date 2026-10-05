@@ -1,0 +1,30 @@
+# ===== 基础数值/科学计算 =====
+numpy
+pandas
+scipy
+
+# ===== 可视化 =====
+matplotlib
+seaborn
+plotly
+manim            # 可选：数学/流程动画
+
+# ===== 图与网络 =====
+networkx
+
+# ===== 仿真建模 =====
+mesa             # Agent-Based Modeling（A 赛道）
+simpy            # 离散事件仿真（A 赛道调度/排队）
+gymnasium        # RL 环境接口
+
+# ===== 机器学习 / 强化学习 / 优化 =====
+scikit-learn
+stable-baselines3   # 深度强化学习
+optuna              # 超参/智能优化
+deap                # 遗传算法等进化计算
+
+# ===== 工程辅助 =====
+tqdm
+joblib
+ipykernel
+jupyter

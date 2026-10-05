@@ -1,0 +1,59 @@
+{
+  "meta": {
+    "lang": "python",
+    "instance": "instance_flat.json"
+  },
+  "policies": {
+    "nearest": {
+      "T_mean": 483.94,
+      "T_std": 0.0,
+      "T_seeds": [
+        483.94
+      ],
+      "on_time_mean": 0.445,
+      "gini_mean": 0.423,
+      "ratio_lb_mean": 3.388,
+      "served": [
+        60,
+        97,
+        191,
+        48,
+        4
+      ]
+    },
+    "random": {
+      "T_mean": 235.36,
+      "T_std": 0.0,
+      "T_seeds": [
+        235.36
+      ],
+      "on_time_mean": 0.6375,
+      "gini_mean": 0.04,
+      "ratio_lb_mean": 1.648,
+      "served": [
+        79,
+        81,
+        86,
+        85,
+        69
+      ]
+    },
+    "waterfill": {
+      "T_mean": 157.01,
+      "T_std": 0.0,
+      "T_seeds": [
+        157.01
+      ],
+      "on_time_mean": 0.8125,
+      "gini_mean": 0.144,
+      "ratio_lb_mean": 1.099,
+      "served": [
+        114,
+        85,
+        57,
+        57,
+        87
+      ]
+    }
+  }
+}

@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+  "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg xmlns:xlink="http://www.w3.org/1999/xlink" width="515.565354pt" height="140.541732pt" viewBox="0 0 515.565354 140.541732" xmlns="http://www.w3.org/2000/svg" version="1.1">
+ <metadata>
+  <rdf:RDF xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+   <cc:Work>
+    <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>
+    <dc:date>2026-10-05T19:45:48.954082</dc:date>
+    <dc:format>image/svg+xml</dc:format>
+    <dc:creator>
+     <cc:Agent>
+      <dc:title>Matplotlib v3.11.2, https://matplotlib.org/</dc:title>
+     </cc:Agent>
+    </dc:creator>
+   </cc:Work>
+  </rdf:RDF>
+ </metadata>
+ <defs>
+  <style type="text/css">*{stroke-linejoin: round; stroke-linecap: butt}</style>
+ </defs>
+ <g id="figure_1">
+  <g id="patch_1">
+   <path d="M 0 140.541732 
+L 515.565354 140.541732 
+L 515.565354 0 
+L 0 0 
+z
+" style="fill: #ffffff"/>
+  </g>
+  <g id="axes_1">
+   <g id="line2d_1">
+    <path d="M 18.850961 31.935118 
+L 496.714394 31.935118 
+" clip-path="url(#pe121711c67)" style="fill: none; stroke: #000000; stroke-width: 1.1; stroke-linecap: square"/>
+   </g>
+   <g id="line2d_2">
+    <path d="M 18.850961 104.71748 
+L 496.714394 104.71748 
+" clip-path="url(#pe121711c67)" style="fill: none; stroke: #000000; stroke-width: 1.1; stroke-linecap: square"/>
+   </g>
+   <g id="csf-tab_main-table-header-013">
+    <text style="font-weight: 700; font-size: 7.6px; font-family: 'Libertinus Sans', 'Arial', 'Helvetica', 'DejaVu Sans', sans-serif; text-anchor: start" x="23.934614" y="28.286022" transform="rotate(-0 23.934614 28.286022)">method</text>
+   </g>
+   <g id="csf-tab_main-table-header-014">
+    <text style="font-weight: 700; font-size: 7.6px; font-family: 'Libertinus Sans', 'Arial', 'Helvetica', 'DejaVu Sans', sans-serif; text-anchor: middle" x="115.440378" y="28.286022" transform="rotate(-0 115.440378 28.286022)">T (s)</text>
+   </g>
+   <g id="csf-tab_main-table-header-015">
+    <text style="font-weight: 700; font-size: 7.6px; font-family: 'Libertinus Sans', 'Arial', 'Helvetica', 'DejaVu Sans', sans-serif; text-anchor: middle" x="206.946142" y="28.286022" transform="rotate(-0 206.946142 28.286022)">Gini</text>
+   </g>
+   <g id="csf-tab_main-table-header-016">
+    <text style="font-weight: 700; font-size: 7.6px; font-family: 'Libertinus Sans', 'Arial', 'Helvetica', 'DejaVu Sans', sans-serif; text-anchor: middle" x="298.451906" y="28.286022" transform="rotate(-0 298.451906 28.286022)">T/T_lb</text>
+   </g>
+   <g id="csf-tab_main-table-header-017">
+    <text style="font-weight: 700; font-size: 7.6px; font-family: 'Libertinus Sans', 'Arial', 'Helvetica', 'DejaVu Sans', sans-serif; text-anchor: middle" x="389.957669" y="28.286022" transform="rotate(-0 389.957669 28.286022)">flow E1/E2/E3</text>
+   </g>
+   <g id="csf-tab_main-table-header-018">
+    <text style="font-weight: 700; font-size: 7.6px; font-family: 'Libertinus Sans', 'Arial', 'Helvetica', 'DejaVu Sans', sans-serif; text-anchor: middle" x="481.463433" y="28.286022" transform="rotate(-0 481.463433 28.286022)">re-decision</text>
+   </g>
+   <g id="csf-tab_main-table-cell-019">
+    <text style="font-size: 7.2px; font-family: 'Libertinus Sans', 'Arial', 'Helvetica', 'DejaVu Sans', sans-serif; text-anchor: start" x="23.934614" y="45.379729" transform="rotate(-0 23.934614 45.379729)">Random assignment</text>
+   </g>
+   <g id="csf-tab_main-table-cell-020">
+    <text style="font-size: 7px; font-family: 'Libertinus Sans', 'Arial', 'Helvetica', 'DejaVu Sans', sans-serif; text-anchor: middle" x="115.440378" y="45.314929" transform="rotate(-0 115.440378 45.314929)">223.20±15.60</text>
+   </g>
+   <g id="csf-tab_main-table-cell-021">
+    <text style="font-weight: 700; font-size: 7px; font-family: 'Libertinus Sans', 'Arial', 'Helvetica', 'DejaVu Sans', sans-serif; text-anchor: middle" x="206.946142" y="45.314929" transform="rotate(-0 206.946142 45.314929)">0.0333</text>
+   </g>
+   <g id="csf-tab_main-table-cell-022">
+    <text style="font-size: 7px; font-family: 'Libertinus Sans', 'Arial', 'Helvetica', 'DejaVu Sans', sans-serif; text-anchor: middle" x="298.451906" y="45.314929" transform="rotate(-0 298.451906 45.314929)">1.467</text>
+   </g>
+   <g id="csf-tab_main-table-cell-023">
+    <text style="font-size: 7px; font-family: 'Libertinus Sans', 'Arial', 'Helvetica', 'DejaVu Sans', sans-serif; text-anchor: middle" x="389.957669" y="45.314929" transform="rotate(-0 389.957669 45.314929)">133/137/130</text>
+   </g>
+   <g id="csf-tab_main-table-cell-024">
+    <text style="font-size: 7px; font-family: 'Libertinus Sans', 'Arial', 'Helvetica', 'DejaVu Sans', sans-serif; text-anchor: middle" x="481.463433" y="45.314929" transform="rotate(-0 481.463433 45.314929)">0</text>
+   </g>
+   <g id="csf-tab_main-table-cell-025">
+    <text style="font-size: 7.2px; font-family: 'Libertinus Sans', 'Arial', 'Helvetica', 'DejaVu Sans', sans-serif; text-anchor: start" x="23.934614" y="62.603036" transform="rotate(-0 23.934614 62.603036)">Static rules*</text>
+   </g>
+   <g id="csf-tab_main-table-cell-026">
+    <text style="font-size: 7px; font-family: 'Libertinus Sans', 'Arial', 'Helvetica', 'DejaVu Sans', sans-serif; text-anchor: middle" x="115.440378" y="62.538236" transform="rotate(-0 115.440378 62.538236)">426.70±6.00</text>
+   </g>
+   <g id="csf-tab_main-table-cell-027">
+    <text style="font-size: 7px; font-family: 'Libertinus Sans', 'Arial', 'Helvetica', 'DejaVu Sans', sans-serif; text-anchor: middle" x="206.946142" y="62.538236" transform="rotate(-0 206.946142 62.538236)">0.3220</text>
+   </g>
+   <g id="csf-tab_main-table-cell-028">
+    <text style="font-size: 7px; font-family: 'Libertinus Sans', 'Arial', 'Helvetica', 'DejaVu Sans', sans-serif; text-anchor: middle" x="298.451906" y="62.538236" transform="rotate(-0 298.451906 62.538236)">2.803</text>
+   </g>
+   <g id="csf-tab_main-table-cell-029">
+    <text style="font-size: 7px; font-family: 'Libertinus Sans', 'Arial', 'Helvetica', 'DejaVu Sans', sans-serif; text-anchor: middle" x="389.957669" y="62.538236" transform="rotate(-0 389.957669 62.538236)">56/95/249</text>
+   </g>
+   <g id="csf-tab_main-table-cell-030">
+    <text style="font-size: 7px; font-family: 'Libertinus Sans', 'Arial', 'Helvetica', 'DejaVu Sans', sans-serif; text-anchor: middle" x="481.463433" y="62.538236" transform="rotate(-0 481.463433 62.538236)">0-3</text>
+   </g>
+   <g id="csf-tab_main-table-cell-031">
+    <text style="font-size: 7.2px; font-family: 'Libertinus Sans', 'Arial', 'Helvetica', 'DejaVu Sans', sans-serif; text-anchor: start" x="23.934614" y="79.826343" transform="rotate(-0 23.934614 79.826343)">Dynamic (ours)*</text>
+   </g>
+   <g id="csf-tab_main-table-cell-032">
+    <text style="font-style: italic; font-size: 7px; font-family: 'Libertinus Sans', 'Arial', 'Helvetica', 'DejaVu Sans', sans-serif; text-anchor: middle" x="115.440378" y="79.761543" transform="rotate(-0 115.440378 79.761543)">184.50±15.90</text>
+   </g>
+   <g id="csf-tab_main-table-cell-033">
+    <text style="font-style: italic; font-size: 7px; font-family: 'Libertinus Sans', 'Arial', 'Helvetica', 'DejaVu Sans', sans-serif; text-anchor: middle" x="206.946142" y="79.761543" transform="rotate(-0 206.946142 79.761543)">0.0833</text>
+   </g>
+   <g id="csf-tab_main-table-cell-034">
+    <text style="font-style: italic; font-size: 7px; font-family: 'Libertinus Sans', 'Arial', 'Helvetica', 'DejaVu Sans', sans-serif; text-anchor: middle" x="298.451906" y="79.761543" transform="rotate(-0 298.451906 79.761543)">1.212</text>
+   </g>
+   <g id="csf-tab_main-table-cell-035">
+    <text style="font-size: 7px; font-family: 'Libertinus Sans', 'Arial', 'Helvetica', 'DejaVu Sans', sans-serif; text-anchor: middle" x="389.957669" y="79.761543" transform="rotate(-0 389.957669 79.761543)">158/134/108</text>
+   </g>
+   <g id="csf-tab_main-table-cell-036">
+    <text style="font-size: 7px; font-family: 'Libertinus Sans', 'Arial', 'Helvetica', 'DejaVu Sans', sans-serif; text-anchor: middle" x="481.463433" y="79.761543" transform="rotate(-0 481.463433 79.761543)">0</text>
+   </g>
+   <g id="csf-tab_main-table-cell-037">
+    <text style="font-size: 7.2px; font-family: 'Libertinus Sans', 'Arial', 'Helvetica', 'DejaVu Sans', sans-serif; text-anchor: start" x="23.934614" y="97.04965" transform="rotate(-0 23.934614 97.04965)">Capacity lower bound</text>
+   </g>
+   <g id="csf-tab_main-table-cell-038">
+    <text style="font-weight: 700; font-size: 7px; font-family: 'Libertinus Sans', 'Arial', 'Helvetica', 'DejaVu Sans', sans-serif; text-anchor: middle" x="115.440378" y="96.98485" transform="rotate(-0 115.440378 96.98485)">152.21</text>
+   </g>
+   <g id="csf-tab_main-table-cell-039">
+    <text style="font-size: 7px; font-family: 'Libertinus Sans', 'Arial', 'Helvetica', 'DejaVu Sans', sans-serif; text-anchor: middle" x="206.946142" y="96.98485" transform="rotate(-0 206.946142 96.98485)">N/A</text>
+   </g>
+   <g id="csf-tab_main-table-cell-040">
+    <text style="font-weight: 700; font-size: 7px; font-family: 'Libertinus Sans', 'Arial', 'Helvetica', 'DejaVu Sans', sans-serif; text-anchor: middle" x="298.451906" y="96.98485" transform="rotate(-0 298.451906 96.98485)">1.000</text>
+   </g>
+   <g id="csf-tab_main-table-cell-041">
+    <text style="font-size: 7px; font-family: 'Libertinus Sans', 'Arial', 'Helvetica', 'DejaVu Sans', sans-serif; text-anchor: middle" x="389.957669" y="96.98485" transform="rotate(-0 389.957669 96.98485)">N/A</text>
+   </g>
+   <g id="csf-tab_main-table-cell-042">
+    <text style="font-size: 7px; font-family: 'Libertinus Sans', 'Arial', 'Helvetica', 'DejaVu Sans', sans-serif; text-anchor: middle" x="481.463433" y="96.98485" transform="rotate(-0 481.463433 96.98485)">N/A</text>
+   </g>
+  </g>
+ </g>
+ <defs>
+  <clipPath id="pe121711c67">
+   <rect x="3.6" y="3.6" width="508.365354" height="133.341732"/>
+  </clipPath>
+ </defs>
+</svg>

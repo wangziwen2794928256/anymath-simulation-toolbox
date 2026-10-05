@@ -1,0 +1,202 @@
+{
+  "_source": {
+    "methods": "results/evac_methods_fixed.json",
+    "sweeps": "results/sweeps.json",
+    "generated_by": "make_paper_numbers.py",
+    "_note": "论文正文/表格里的每个数字都应能在本文件里找到；改实验后重跑本脚本，不要手抄。"
+  },
+  "setup": {
+    "N": 400,
+    "seeds": 5,
+    "T_lb_s": 152.21,
+    "mu_per_s": [
+      1.168,
+      0.876,
+      0.584
+    ],
+    "lambda_main": 3.0
+  },
+  "main": {
+    "random_once": {
+      "T": 223.2,
+      "T_std": 15.6,
+      "gini": 0.0333,
+      "thr": 1.7991,
+      "flow": [
+        133,
+        137,
+        130
+      ],
+      "ratio_lb": 1.467,
+      "reassign": 0
+    },
+    "static_rules_once": {
+      "T": 426.7,
+      "T_std": 6.0,
+      "gini": 0.322,
+      "thr": 0.9377,
+      "flow": [
+        56,
+        95,
+        249
+      ],
+      "ratio_lb": 2.803,
+      "reassign": 0,
+      "equivalent": [
+        "nearest_once",
+        "shortest_queue_once",
+        "static_cong_once"
+      ],
+      "equivalence_verified": {
+        "nearest_once == shortest_queue_once": true,
+        "nearest_once == static_cong_once": true,
+        "shortest_queue_once == static_cong_once": true
+      }
+    },
+    "static_rules_on_arrival": {
+      "T": 426.7,
+      "T_std": 6.0,
+      "gini": 0.322,
+      "flow": [
+        56,
+        95,
+        249
+      ],
+      "reassign": 3
+    },
+    "dynamic_cong": {
+      "T": 184.5,
+      "T_std": 15.9,
+      "gini": 0.0833,
+      "thr": 2.1812,
+      "flow": [
+        158,
+        134,
+        108
+      ],
+      "ratio_lb": 1.212,
+      "reassign": 0
+    }
+  },
+  "lambda_sweep": {
+    "table": {
+      "0.0": 426.7,
+      "0.5": 217.1,
+      "1.0": 209.2,
+      "2.0": 197.5,
+      "3.0": 184.5,
+      "5.0": 194.8,
+      "8.0": 186.7,
+      "13.0": 251.2
+    },
+    "std": {
+      "0.0": 6.0,
+      "0.5": 3.9,
+      "1.0": 11.0,
+      "2.0": 13.4,
+      "3.0": 15.9,
+      "5.0": 20.1,
+      "8.0": 19.4,
+      "13.0": 57.9
+    },
+    "best_lambda": 3.0,
+    "best_T": 184.5,
+    "is_unimodal": false,
+    "plateau_within_3pct": [
+      3.0,
+      8.0
+    ],
+    "plateau_range": [
+      3.0,
+      8.0
+    ]
+  },
+  "freq_ablation": {
+    "仅 t=0（静态）": {
+      "T": 426.7,
+      "T_std": 6.0,
+      "gini": 0.322,
+      "flow": [
+        56,
+        95,
+        249
+      ]
+    },
+    "25% 个体动态": {
+      "T": 323.6,
+      "T_std": 18.4,
+      "gini": 0.1503,
+      "flow": [
+        112,
+        99,
+        189
+      ]
+    },
+    "50% 个体动态": {
+      "T": 214.0,
+      "T_std": 11.2,
+      "gini": 0.038,
+      "flow": [
+        146,
+        129,
+        125
+      ]
+    },
+    "75% 个体动态": {
+      "T": 185.9,
+      "T_std": 19.8,
+      "gini": 0.0867,
+      "flow": [
+        161,
+        131,
+        109
+      ]
+    },
+    "100% 个体动态（本文）": {
+      "T": 184.5,
+      "T_std": 15.9,
+      "gini": 0.0833,
+      "flow": [
+        158,
+        134,
+        108
+      ]
+    }
+  },
+  "scale_sweep": {
+    "200": {
+      "ours_T": 93.4,
+      "nearest_T": 215.0
+    },
+    "300": {
+      "ours_T": 146.9,
+      "nearest_T": 320.8
+    },
+    "400": {
+      "ours_T": 184.5,
+      "nearest_T": 426.7
+    },
+    "500": {
+      "ours_T": 257.5,
+      "nearest_T": 537.9
+    }
+  },
+  "speed_sweep": {
+    "1.0": {
+      "T": 167.8,
+      "T_std": 3.2
+    },
+    "1.15": {
+      "T": 192.4,
+      "T_std": 15.9
+    },
+    "1.34": {
+      "T": 184.5,
+      "T_std": 15.9
+    },
+    "1.5": {
+      "T": 207.8,
+      "T_std": 46.9
+    }
+  }
+}

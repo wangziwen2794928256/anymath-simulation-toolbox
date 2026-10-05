@@ -1,0 +1,31 @@
+language:
+- generic
+compiler:
+- gcc
+matrix:
+  include:
+  - os: linux
+    dist: trusty
+    sudo: required
+  - os: osx
+  allow_failures:
+  - os: osx
+  fast_finish: true
+before_script:
+- if [ $TRAVIS_OS_NAME == "osx" ]; then brew update -y; else sudo apt-get update -y
+  -qq; fi
+- if [ $TRAVIS_OS_NAME != "osx" ]; then sudo apt-get install -y -qq build-essential;
+  fi
+- rm -f main.pdf
+script:
+- make
+- file main.pdf
+deploy:
+  provider: releases
+  api_key:
+    secure: Y52RsbsxtTzk2Th99AYEvRYx4fG73E0U1bs1JCmim90iovaRFuz7YJEhKNHrM1abGYVCEEOh4RJGmK81+Z2NQCO2AD5VgJBoKNOMs3XPjgozquH6aqDillKEZc0fp4n7UsiaFW55s1ev9iaUI5IlPksdf40gYS78B4SjKSdjboze+0MxVH8My6UwPZ95EKAh3WjLLEsuGEb26caihGtswaGGB7u+Zz5aJym6RDlhJouy09SNnZAje/Xuhr6Ggxj0uMfmjzUUXPxqFpUAtQJC6x1wh7B4l2bhFd8joDuRpfE3dqTPlTXVg56Sjlyi5YA2oE34Q9ga3jg66QhTAic5xugIGB1oiJWvc3x9kKAeq3NdMBpn2Oph3pB8rBVYt+OZ7QnMwKcIS+3zZZabVPXqHlYkNWH3rTK2bFA/8bAf5GIyMcrwV6sPXdsZ6sAydwoP5YmCNEt9OZPliEMIua3rzAw6CsfPr2JVUV5v2uyI9yKA5/4PEVhkr3sjRsIp5AAJWluVoz3GjRPy4C6FZ2tX/1mSWm4zf3pQVu+/rejiYP4qesUZYGU7xvKLawiFyWpYIEPzYzaGCl1/rLK0gKLN86CiYk0DbBFVAqzl/TDwBzWnLV5nDAOh0RwbPGZT29lQ/yNM1dPGIbIllDKoKhV9TWDovkff2K3Sx7DNu/76has=
+  file: main.pdf
+  skip_cleanup: true
+  on:
+    repo: furushchev/aamas-paper-template
+    tags: true

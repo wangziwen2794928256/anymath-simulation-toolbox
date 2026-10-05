@@ -1,0 +1,386 @@
+%=======================================================================
+% 第 4 章：模型与协同算法（机理推导章）
+% 引用 mechanisms.json 的 MECH-01（拥堵外部性/Pigou）与
+% MECH-03（Lagrangian 对偶与影子价格），并把两者接到同一组公式上。
+%=======================================================================
+\section{模型与协同算法}
+\label{sec:model}
+
+\subsection{为假设选模型：为什么不用社会力}
+\label{sec:modelchoice}
+
+H1--H3（\ref{sec:hypotheses} 节）考察的是\textbf{资源分配策略}，不是\textbf{局部动力学}。
+模型选择因此遵循"MECH-01 的建模选择"原则：只保留对分配有影响的状态量。
+
+\begin{itemize}
+  \item \textbf{不选社会力模型}：它把个体间斥力、墙斥力、瓶颈摆动作为状态，
+        引入 $O(N^2)$ 的成对交互与若干与分配无关的参数（$\tau_i$、斥力强度 $A,B$）。
+        在本题中这些参数既无实测来源，又不影响"个体该去哪个出口"的判断，
+        只会稀释假设检验的统计功效。
+  \item \textbf{选宏观容量 + 离散时间多智能体}：把局部动力学\textbf{聚合}为服务率 $\mu_e$
+        （式 \ref{eq:mu}），状态量收缩为位置与队列长度。
+        这样每个实验的效应量都可直接归因到分配规则，而不是局部参数。
+\end{itemize}
+
+该选择有明确的代价（见 A2/A5 假设）：忽略绕行会高估动态策略收益，
+忽略局部观测会高估均衡可达性。我们选择\textbf{明确报告偏差方向}而非引入
+无依据的参数。
+
+\subsection{基线策略与本文策略}
+\label{sec:strategies}
+
+所有策略共享同一代价形式，仅\textbf{决策频率}与\textbf{参数}不同。定义个体 $i$
+对出口 $e$ 的代价
+\begin{equation}
+  c_i(e;t) \;=\; d_i(e) \;+\; \lambda\,Q_e(t),
+  \label{eq:cost}
+\end{equation}
+其中 $d_i(e)=\|\mathbf p_i-(x_e,y_e)\|$ 为欧氏距离，$Q_e(t)$ 为 $t$ 时刻排队长度，
+$\lambda\ge0$ 为拥塞权重。据此定义五个策略：
+
+\begin{enumerate}[label=\textbf{S\arabic*.}]
+  \item \textbf{随机出口}：$a_i\sim\text{Unif}(E)$，仅 $t=0$ 决策一次。
+        作为\textbf{无信息基线}，其均衡度天然较好但个体距离代价高。
+  \item \textbf{最近出口}：$a_i=\arg\min_e d_i(e)$，仅 $t=0$ 决策一次。
+        这是\textbf{工业与直觉上的默认策略}，也是本文的主要对照。
+  \item \textbf{最短队列}：$a_i=\arg\min_e Q_e(t)$（并列时取距离最近者），
+        决策时点分两种：\emph{仅 $t=0$} 与\emph{到达出口时重决策}。
+  \item \textbf{静态拥塞感知}：$a_i=\arg\min_e c_i(e;t)$，同样分
+        \emph{仅 $t=0$} 与\emph{到达时重决策}两种时点。
+  \item \textbf{动态拥塞感知（本文）}：\textbf{每一步}对全部未到达个体重算
+        \begin{equation}
+          a_i(t)=\arg\min_{e\in E}\bigl[d_i(e)+\lambda Q_e(t)\bigr].
+          \label{eq:proposed}
+        \end{equation}
+\end{enumerate}
+
+\subsection{策略退化的形式化：为什么"最短队列"等价于"最近出口"}
+\label{sec:degenerate}
+
+旧稿曾把 S2/S3/S4 当作三次独立评测并列报告，实测三者数值逐位相同。
+这不是实现缺陷，而是下述性质的结果。
+
+\begin{csfprop}[命题 1（静态策略的首步退化）]
+\label{prop:degenerate}
+在服务先于决策的转移顺序（\ref{sec:transition} 节）下，$t=0$ 时
+$Q_e(0)=0\ \forall e$。此时
+\[
+  \arg\min_{e}Q_e(0) \;=\; E
+  \quad\text{（全集并列）},
+  \qquad
+  \arg\min_{e}\bigl[d_i(e)+\lambda\cdot 0\bigr] \;=\; \arg\min_e d_i(e).
+\]
+若并列时以"距离最近者"破并（S3 的规则），则两个策略均退化为最近出口策略，
+且\emph{与 $\lambda$ 无关}。此外，任何"到达出口时才重决策"的策略，
+在个体已沿初值路径行进时也只能对极少个体生效（见命题 \ref{prop:arrival}）。
+\end{csfprop}
+
+\begin{proof}
+由式 \eqref{eq:frac} 与转移顺序，服务子过程先于判定子过程执行，
+故第一步判定时所有队列为空。代入 $Q_e\equiv0$ 即得
+$\arg\min_e[d_i(e)+\lambda Q_e]=\arg\min_e d_i(e)$，
+与 $\lambda$ 的取值无关。\hfill$\blacksquare$
+\end{proof}
+
+\begin{csfprop}[命题 2（到达时重决策的生效范围）]
+\label{prop:arrival}
+设个体 $i$ 在 $t=0$ 被指派到出口 $e_i$，并以 $v_0$ 直线移动。
+"到达时重决策"只能改变那些在\textbf{到达某个出口之前}被判为"已到达"的个体；
+对已沿 $e_i$ 方向行进的个体，其首次到达事件发生在 $e_i$ 处，
+此时重决策只在 $e_i$ 排队显著长于其他出口、且个体尚未入队的那一个时间步生效。
+实验测得该生效比例约为 $1\%$（4/400），故该策略在数值上仍近似等于 S2。
+\end{csfprop}
+
+命题 1 与 2 共同给出一个\textbf{可报告的方法学结论}：
+\textbf{策略之间的本质差异不在于"用距离还是用队列构造代价"，而在于
+"决策一次还是持续重决策"。} 这也解释了为何 S2--S4 的六行数值会塌缩为一行。
+
+\begin{csftake}[命题 1--2 的实践含义]
+"最短队列""静态拥塞感知"这类教科书式改进在\textbf{一次性决策}的框架下
+是没有作用的——它们在首步就退化为最近出口。要获得收益，必须让代价函数
+\textbf{持续参与决策}。这为 H2（动态优于静态）提供了比"多试一个策略"更硬的依据。
+\end{csftake}
+
+\subsection{排队机制的闭合推导：为什么是这个量级}
+\label{sec:queueing}
+
+本节按 MECH-04（排队闭合估计）给出闭式量级解释，使实测数值\textbf{可被独立核算}，
+而不是只能相信仿真。
+
+\paragraph{第一步：下界。}
+系统总服务率守恒，故任意可行疏散满足（命题 \ref{prop:lb}）
+\[
+  T_{\mathrm{lb}}=\frac{N}{\sum_e\mu_e}=\frac{400}{2.628}=152.2\ \text{s}.
+\]
+
+\paragraph{第二步：最近出口的闭式估计。}
+初始分布为 60\%/25\%/15\% 分别贴近 E3/E2/E1，故最近出口策略下三个出口
+承接人数为
+\[
+  n_3=240,\qquad n_2=100,\qquad n_1=60 .
+\]
+各出口清除自身队列所需时间为
+\begin{equation}
+  \frac{n_3}{\mu_3}=410.96\ \text{s},\qquad
+  \frac{n_2}{\mu_2}=114.16\ \text{s},\qquad
+  \frac{n_1}{\mu_1}=51.37\ \text{s}.
+  \label{eq:clear}
+\end{equation}
+三个时间相差近一个量级，说明\textbf{系统总时间由 E3 单独决定}。叠加 E3 前的
+行走瞬态（初始分布质心距 E3 约 $3$~m，$v_0=1.34$~m/s，约 $2.2$~s）与离散取整，
+得
+\begin{equation}
+  \widehat T_{\text{nearest}}\approx410.96+2.2+O(\Delta t)\approx411\text{--}415\ \text{s}.
+  \label{eq:nearest-est}
+\end{equation}
+实测 $426.7$~s 与估计同量级，约 $3\%$ 的差异来自到达交错与个体进入 E3 前
+其他出口的服务重叠。
+
+\paragraph{第三步：过载量的定位。}
+理想均衡负载为 $n_e^\ast=N\mu_e/\sum\mu$（表 \ref{tab:mu}）。
+最近出口策略下 E3 的过载为
+\begin{equation}
+  \Delta n_3=n_3-n_3^\ast=240-88.9=151.1\ \text{人},
+  \label{eq:overload}
+\end{equation}
+对应的额外排队时间为 $\Delta n_3/\mu_3=258.8$~s。
+这解释了最近出口策略相对下界的 $274.5$~s 超额中的绝大部分（$94\%$）。
+
+\paragraph{第四步：本文策略的闭合核对。}
+动态策略实测各出口流量为 $158/134/108$（$\lambda=3$）。E3 的清空时间为
+\begin{equation}
+  \frac{108}{0.584}=184.9\ \text{s},
+  \label{eq:dyn-est}
+\end{equation}
+与实测总时间 $184.5$~s 吻合到 $0.2\%$——说明动态策略下\textbf{E3 仍是绑定瓶颈，
+但过载已从 151.1 人压到 $108-88.9=19.1$ 人}。E1 的利用率为
+$158/(\mu_1\cdot184.5)=158/215.5=73.3\%$，说明仍有未用尽的容量，
+剩余改进空间（$184.5$ 对下界 $152.2$，差 $21.2\%$）主要受 E3 容量份额限制。
+
+\begin{csfkey}[闭合估计的验证结论]
+排队论闭式估计给出最近出口 $\approx411$~s（实测 $426.7$~s）、
+动态策略 E3 清空 $184.9$~s（实测 $184.5$~s）。两个独立场景都在 $4\%$ 内吻合，
+说明宏观容量模型抓住了系统的主导机制，不需要引入微观动力学参数。
+\end{csfkey}
+
+\paragraph{第五步：错配量的定义。}
+上述推导反复用到"初始分布与容量份额的错配"，因此需要一个可计算的量。
+定义 E3 簇份额与 E3 容量份额之差为\textbf{错配度}
+\begin{equation}
+  \mathrm{Mis}
+  \;=\;
+  \underbrace{\frac{n_{3}^{\text{init}}}{N}}_{\text{E3 初始占比}}
+  \;-\;
+  \underbrace{\frac{\mu_3}{\sum_e\mu_e}}_{\text{E3 容量份额}} .
+  \label{eq:mis}
+\end{equation}
+本文场景 $\mathrm{Mis}=0.60-0.222=0.378$。该量在第 \ref{sec:exp4} 节被用来
+解释一个反直觉的规模效应（见命题 \ref{prop:misalign}）。
+
+\subsection{社会最优的 Lagrangian 分解与影子价格}
+\label{sec:lagrangian}
+
+本节按 MECH-03 把启发式权重 $\lambda$ 升格为有理论含义的结构量。
+
+设 $x_{ie}\in\{0,1\}$ 表示个体 $i$ 是否选择出口 $e$，社会最优问题为
+\begin{equation}
+\begin{aligned}
+  \min_{x,T}\quad & T \\
+  \text{s.t.}\quad
+  & \sum_{e\in E} x_{ie} = 1, && \forall i\in\{1,\dots,N\},\\
+  & \sum_{i} x_{ie} \le \mu_e T, && \forall e\in E,\\
+  & x_{ie}\in\{0,1\},\ T\ge0 .
+\end{aligned}
+\label{eq:social}
+\end{equation}
+约束 $\sum_i x_{ie}\le\mu_e T$ 的含义是"出口 $e$ 在时间 $T$ 内至多疏散 $\mu_e T$ 人"。
+
+\paragraph{连续松弛与 KKT 条件。}
+把 $x_{ie}$ 松弛到 $[0,1]$，问题成为线性规划。对容量约束引入乘子
+$\lambda_e\ge0$、对分配约束引入乘子 $\nu_i$，Lagrange 函数为
+\begin{equation}
+  L(x,T,\lambda,\nu)
+  = T+\sum_{e}\lambda_e\Bigl(\sum_i x_{ie}-\mu_e T\Bigr)
+  +\sum_i\nu_i\Bigl(1-\sum_e x_{ie}\Bigr).
+  \label{eq:lagrange}
+\end{equation}
+对 $T$ 求偏导并令其为零，得到\textbf{乘子的归一化条件}
+\begin{equation}
+  \frac{\partial L}{\partial T}=0
+  \;\Longrightarrow\;
+  \sum_{e\in E}\lambda_e\,\mu_e = 1 .
+  \label{eq:kkt-T}
+\end{equation}
+对 $x_{ie}$ 求偏导得 $\nu_i \le d_i(e)+\lambda_e$（$d_i(e)$ 为把个体放到出口 $e$ 的
+距离代价），于是个体子问题为
+\begin{equation}
+  \min_{e\in E}\;\bigl[d_i(e)+\lambda_e\bigr],
+  \label{eq:dual-decomp}
+\end{equation}
+即 \textbf{Lagrangian 分解}把耦合的社会最优问题解耦为 $N$ 个独立的个体问题。
+
+\paragraph{影子价格的含义与互补松弛。}
+$\lambda_e$ 是容量约束的影子价格，即"出口 $e$ 的容量每多一单位，
+最优疏散时间能减少多少"。互补松弛条件给出
+\begin{equation}
+  \lambda_e\Bigl(\textstyle\sum_i x_{ie}-\mu_e T\Bigr)=0
+  \;\Longrightarrow\;
+  \lambda_e>0 \iff \text{出口 } e \text{ 在最优解中满负荷}.
+  \label{eq:cs}
+\end{equation}
+即\textbf{未满负荷的出口影子价格必为零}——这一预测可在实验中直接检验
+（见 \ref{sec:results} 节对 $\rho_e$ 的讨论：E1 利用率仅 $73.3\%$，
+故其影子价格应趋近于零，与式 \eqref{eq:cs} 一致）。
+
+\paragraph{本文代价是影子价格的分布式实现。}
+本文代价式 \eqref{eq:cost} 取 $\lambda_e=\lambda Q_e$，即用\textbf{队列长度}
+作为容量稀缺度的可观测量代理。本文 $\lambda$ 因此不是任意超参数，
+而是"容量约束影子价格关于队列长度的线性近似系数"。这直接给出 H3 的理论形式：
+$\lambda$ 的最优值由容量稀缺程度决定，且\textbf{必然有限}——
+$\lambda$ 太小则 $\lambda Q_e$ 无法逼近影子价格（外部性未内化），
+太大则把队列长度的随机波动放大成过度绕行（式 \eqref{eq:kkt-T} 的归一化被破坏）。
+
+\subsection{Pigou 拥堵定价视角与最优 $\lambda$ 的存在性}
+\label{sec:externality}
+
+本节按 MECH-01 给出 $\lambda$ 存在最优值的机制论证，并\emph{修正旧稿的一个符号错误}。
+
+设个体加入出口 $e$ 时其前方已有 $Q_e$ 人。在 FIFO 服务率为 $\mu_e$ 的队列中，
+该个体的等待时间为 $W_e=Q_e/\mu_e$。考虑边际效应：第 $j$ 个加入者使
+\textbf{其后每一个}加入者的等待各增加 $1/\mu_e$。设其后加入人数为
+$K_e$（约等于后续到达该出口的人数），则个体 $j$ 施加的\textbf{边际外部性}为
+\begin{equation}
+  \tau_e \;=\; \frac{\partial}{\partial Q_e}\Bigl(\underbrace{\tfrac{Q_e}{\mu_e}}_{W_e}\cdot K_e\Bigr)
+  \;=\; \frac{K_e}{\mu_e}
+  \;\propto\; \frac{Q_e}{\mu_e}\quad(\text{在稳态 } K_e\propto Q_e \text{ 时}).
+  \label{eq:pigou}
+\end{equation}
+
+\begin{limitation}[旧稿的符号错误（已修正）]
+旧稿把边际外部性写成 $\tau_e=\partial W_e/\partial\lambda_e\propto Q_e/\mu_e$。
+这是\textbf{符号错误}：影子价格/边际成本是对\textbf{约束量或队列长度}的导数，
+不是对权重 $\lambda_e$ 的导数——$\lambda_e$ 本身就是要被求出的乘子，
+对其求导没有经济含义（在所有可行点上 $\partial W_e/\partial\lambda_e$ 无定义）。
+式 \eqref{eq:pigou} 给出正确形式：$\tau_e=\partial(W_e K_e)/\partial Q_e=K_e/\mu_e$。
+\end{limitation}
+
+式 \eqref{eq:pigou} 就是\textbf{Pigou 拥堵税}的离散版本：
+社会最优要求个体承担其边际外部性 $\tau_e$，而非仅承担自身距离 $d_i(e)$。
+本文代价式 \eqref{eq:cost} 中的 $\lambda Q_e$ 正是 $\tau_e$ 的一阶线性近似
+（$Q_e$ 代理 $K_e$，$\lambda$ 吸收 $1/\mu_e$ 的缩放）。
+
+\paragraph{由此得到 H3 的存在性论证。}
+\begin{itemize}
+  \item 若 $\lambda\to0$，则 $c_i\to d_i$，代价退化为纯距离，外部性完全未内化，
+        $T\to426.7$~s（命题 \ref{prop:degenerate} 的极限情形）；
+  \item 若 $\lambda\to\infty$，则 $c_i\to\lambda Q_e$，个体只追逐最短队列，
+        此时\textbf{绕行距离}（式 \eqref{eq:cost} 的第一项被忽略）无界增长，
+        且由于式 \eqref{eq:kkt-T} 的归一化被破坏，等价于对拥堵"超额收费"，
+        $T$ 重新上升。
+\end{itemize}
+两个方向都劣于中间值，故 $T(\lambda)$ 必然呈\textbf{单峰}形态——
+这就是 H3 的可证伪预测，其验证见 \ref{sec:exp3} 节。
+
+\subsection{理论性质}
+\label{sec:props}
+
+\begin{csfprop}[命题 3（容量下界）]
+\label{prop:lb}
+任意可行疏散方案满足 $T\ \ge\ T_{\mathrm{lb}}=N/\sum_{e}\mu_e\approx152.2$~s。
+\end{csfprop}
+\begin{proof}
+所有个体最终必须经某个出口离场。在 $[0,T]$ 内，出口 $e$ 至多服务 $\mu_e T$ 人，
+故 $\sum_e\mu_e T\ \ge\ N$，即 $T\ge N/\sum_e\mu_e$。\hfill$\blacksquare$
+\end{proof}
+
+\begin{csfprop}[命题 4（下界不可达）]
+\label{prop:tight}
+$T_{\mathrm{lb}}$ 仅在所有出口从 $t=0$ 到 $t=T$ 全程满负荷且最终同时清空时取到。
+在本文场景下该条件不成立，故 $T>T_{\mathrm{lb}}$ 严格成立。
+\end{csfprop}
+\begin{proof}
+个体到出口存在非零行走时间（初始分布质心距最近出口约 $2$--$3$~m，
+对应 $1.5$--$2.2$~s），在这段时间内出口即使有队列也无法服务，
+故 $\rho_e<1$ 在初始阶段必成立。\hfill$\blacksquare$
+\end{proof}
+
+\begin{csfprop}[命题 5（均衡倾向）]
+\label{prop:balance}
+在 $\lambda\to\infty$ 的极限下，式 \eqref{eq:proposed} 使各出口队列长度趋于均衡，
+即 $\max_e Q_e-\min_e Q_e\to0$。
+\end{csfprop}
+\begin{proof}
+代价由 $\lambda Q_e$ 主导，个体总是选择当前最短队列；
+每次指派都会降低 $\max_e Q_e$（除非所有队列并列），
+该过程使队列差的期望值单调不增，极限为零。\hfill$\blacksquare$
+\end{proof}
+
+\begin{csfprop}[命题 6（效率与均衡度的非单调关系）]
+\label{prop:nonmono}
+存在 $\lambda^\ast$ 使 $T(\lambda)$ 最小，但 $G(\lambda)$ 在此点\textbf{不一定}
+最小；$G$ 随 $\lambda$ 单调下降，而 $\lambda^\ast$ 由式 \eqref{eq:kkt-T} 的
+归一化与绕行代价的权衡决定。
+\end{csfprop}
+\begin{proof}[证明思路]
+$G$ 只依赖流量分配，$\lambda$ 增大使个体更贴最短队列，
+故流量分布更均匀，$G$ 单调下降。而 $T$ 还含绕行代价：
+$\lambda$ 增大使个体为缩短队列而走更远，该代价与 $\mu_e^{-1}$ 的
+缩放失配，二者权衡给出内部极小点。\hfill$\blacksquare$
+\end{proof}
+
+命题 6 预判了一个容易被误读的现象：\textbf{总时间最优不等于最均衡}。
+第 \ref{sec:results} 节实测 $T$ 最优时 $G=0.083$，而随机策略 $G=0.033$
+（更均衡）却慢 $21\%$——随机策略的均衡是"无信息的偶然均衡"，
+个体距离代价高。该对照使"均衡度不是目标本身"这一论点有数据支撑。
+
+\begin{csfprop}[命题 7（规模效应的非单调性由错配度决定）]
+\label{prop:misalign}
+固定初始分布的形状（簇份额 $0.60/0.25/0.15$）而只改变总人数 $N$ 时，
+最近出口策略下 E3 的过载量为 $\Delta n_3=N(0.60-\mu_3/\sum_e\mu_e)=N\cdot\mathrm{Mis}$，
+故其 $T$ 随 $N$ \emph{线性}增长。但本文策略的 $T/T_{\mathrm{lb}}$ \textbf{不必}随 $N$
+单调：$T_{\mathrm{lb}}=N/\sum_e\mu_e$ 亦线性增长，二者之比由
+"可被均衡消解的过载比例"决定，而过载在\emph{绝对}意义上随 $N$ 增大，
+消解它所需的\textbf{额外行走距离}也随之增大（个体数越多，
+需要跨簇迁移的人越多，绕行代价 $\propto N$ 而容量收益 $\propto N$，
+但绕行发生在有限空间内会相互挤占）。因此 $T/T_{\mathrm{lb}}$ 关于 $N$
+一般\textbf{非单调}，第 \ref{sec:exp4} 节实测其在 $N=400$ 取局部最小。
+\end{csfprop}
+\begin{proof}[证明思路]
+$\Delta n_3\propto N$ 与 $T_{\mathrm{lb}}\propto N$ 同阶，故比值的一阶项抵消；
+剩余的二阶项来自绕行代价：需要迁移的人数 $\propto N\cdot\mathrm{Mis}$，
+而场地面积固定，单位面积的迁移密度 $\propto N$，迁移时间随密度非减，
+故比值存在内部极小点。\hfill$\blacksquare$
+\end{proof}
+
+\subsection{算法与复杂度}
+\label{sec:algo}
+
+动态拥塞感知策略的单步计算量为：代价矩阵 $N\times|E|$ 次距离计算
+（可用增量更新降为 $O(N|E|)$ 的加乘），加上 $N$ 次 $\arg\min$。
+故单步复杂度 $O(N|E|)$，$|E|=3$ 时为线性。总复杂度
+$O(N|E|\,T/\Delta t)=O(400\times3\times4267)\approx5.1\times10^{6}$ 次基本运算，
+在单核 NumPy 下实测秒级完成。内存为 $O(N+|E|\cdot\bar Q)$，
+其中 $\bar Q$ 为平均队列长度的上界（本文远小于 $N$）。
+
+伪代码见算法 \ref{alg:main}。注意\textbf{服务先于决策}的顺序
+在伪代码中体现为第 2 行先于第 5 行，这是命题 1 成立的前提。
+
+\begin{algorithm}[H]
+  \caption{拥塞感知动态分配（本文策略 S5）}
+  \label{alg:main}
+  \KwIn{位置 $\{\mathbf p_i\}$，出口 $\{(x_e,y_e,w_e)\}$，比流量 $q$，权重 $\lambda$，步长 $\Delta t$}
+  \KwOut{总疏散时间 $T$，各出口流量 $\{F_e\}$}
+  初始化队列 $Q_e\gets0$，分数容量 $\phi_e\gets0$，$\text{arrived}_i\gets\text{false}$\;
+  \ForEach{时间步 $t=0,\Delta t,2\Delta t,\dots$}{
+    \ForEach{出口 $e$}{
+      $\phi_e\gets\phi_e+\mu_e\Delta t$；$m\gets\lfloor\phi_e\rfloor$；$\phi_e\gets\phi_e-m$\Comment*{服务先于决策}
+      从 $Q_e$ 中 FIFO 移出 $m$ 个个体并记录离场时刻\;
+    }
+    \If{全部离场}{\textbf{break}}
+    $d_i(e)\gets\|\mathbf p_i-(x_e,y_e)\|$\Comment*{增量更新，$O(N|E|)$}
+    $a_i\gets\arg\min_{e}\bigl[d_i(e)+\lambda Q_e\bigr]$\Comment*{仅对未到达者}
+    未到达个体沿 $a_i$ 方向移动 $\min(v_0\Delta t,\ d_i(a_i))$\;
+    距离 $a_i$ 小于 $\epsilon$ 者入队 $Q_{a_i}$ 并标记 arrived\;
+  }
+  \Return $T=\max_i t_i^{\text{dep}}$，$F_e=|Q_e^{\text{served}}|$\;
+\end{algorithm}

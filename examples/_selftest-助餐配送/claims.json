@@ -1,0 +1,120 @@
+{
+  "title": "社区助餐多智能体配送调度 · 论证链（自拟题自测）",
+  "claims": [
+    {
+      "claim_id": "C1",
+      "statement": "本题的本质不是「车辆路径问题」，而是带容量错配的分布式资源分配：400 位需求点要在 5 个吞吐能力不同的服务站之间分配，最小化最后送达时刻。",
+      "kind": "design",
+      "role_in_chain": "gap",
+      "depends_on": [],
+      "evidence": [
+        "cite:little1961",
+        "cite:law2015"
+      ],
+      "falsified_by": "若把问题当作纯 VRP 求解（含完整路径优化）能得到与容量分配同量级的结果，则「本质是容量分配」的重述不成立。",
+      "numeric": "400"
+    },
+    {
+      "claim_id": "C2",
+      "statement": "主导机制是「就近选择的容量错配」：S3 南苑只占 20% 容量份额，却因空间分布承接近 47.8% 的需求，错配度 +33.5 个百分点。",
+      "kind": "theory",
+      "role_in_chain": "mechanism",
+      "depends_on": [
+        "C1"
+      ],
+      "evidence": [
+        "eq:misalign",
+        "fig:fig1_layout"
+      ],
+      "falsified_by": "若实测各站实际负载占比与容量份额的偏差 < 5 个百分点，说明错配不显著，机制判断错误。",
+      "numeric": "0.335"
+    },
+    {
+      "claim_id": "C3",
+      "statement": "由于各站理想排队时间同为 N/Σμ=142.9 分钟而站间行驶时间仅 7–13 分钟，任何反应式（追逐当前最短队列）的贪心分配在结构上都会塌缩到单一站点。",
+      "kind": "theory",
+      "role_in_chain": "mechanism",
+      "depends_on": [
+        "C2"
+      ],
+      "evidence": [
+        "eq:queue_equilibrium"
+      ],
+      "falsified_by": "若反应式贪心能稳定收敛到容量比例分配（各站负载/μ 近似相等），则该结构性论断不成立。",
+      "numeric": "142.9"
+    },
+    {
+      "claim_id": "C4",
+      "statement": "按容量比例分配（本文方法）把总完成时间降到 157.0 分钟，相对就近分配的 483.9 分钟降低 67.6%，相对容量下界 142.9 分钟的比值为 1.099。",
+      "kind": "empirical",
+      "role_in_chain": "result",
+      "depends_on": [
+        "C3"
+      ],
+      "evidence": [
+        "fig:fig2_compare",
+        "tab:tab_main"
+      ],
+      "falsified_by": "若实测 T/T_lb > 1.5，或相对就近分配的降幅 < 20%，则本文方法的有效性不成立。",
+      "numeric": "157.01"
+    },
+    {
+      "claim_id": "C5",
+      "statement": "闭式估计与仿真同量级：就近分配下瓶颈站 S3 的清空时间 477.5 分钟与实测 483.9 分钟偏差 1.3%，说明容量模型抓住了主导机制。",
+      "kind": "theory",
+      "role_in_chain": "verification",
+      "depends_on": [
+        "C4"
+      ],
+      "evidence": [
+        "eq:closed_form",
+        "tab:tab_verify"
+      ],
+      "falsified_by": "若闭式估计与实测偏差超过 20%，说明模型漏掉了主导项（如行驶或交接时间不可忽略）。",
+      "numeric": "477.5"
+    },
+    {
+      "claim_id": "C6",
+      "statement": "存在失效边界：当名额柔化参数 λ 增大到 1 以上时，各站人数被强制拉平（Gini=0），但总完成时间反而从 156.2 分钟恶化到 208.2 分钟——均衡度与效率的目标不一致。",
+      "kind": "empirical",
+      "role_in_chain": "boundary",
+      "depends_on": [
+        "C4"
+      ],
+      "evidence": [
+        "fig:fig3_tradeoff"
+      ],
+      "falsified_by": "若 λ 增大时 T 与 Gini 同向下降，则「两目标不一致」的边界论断不成立。",
+      "numeric": "208.18"
+    },
+    {
+      "claim_id": "C7",
+      "statement": "本文方法是「容量比例水填」：先按各站吞吐 μ_k 的比例分配名额（余数给容量最大的站），再在名额内就近指派，使各站负载/μ 趋于相等。",
+      "kind": "design",
+      "role_in_chain": "method",
+      "depends_on": [
+        "C3"
+      ],
+      "evidence": [
+        "algo:alg_waterfill",
+        "eq:target_load"
+      ],
+      "falsified_by": "若该名额分配规则给出的负载/μ 离散度不小于就近分配，说明「水填」并未逼近均衡结构。",
+      "numeric": ""
+    },
+    {
+      "claim_id": "C8",
+      "statement": "鲁棒性：降速 20% 仅使总完成时间增加 0.9%，配送队缺勤 20% 对结果无影响——说明瓶颈在站点装车能力而非配送队或行驶速度。",
+      "kind": "empirical",
+      "role_in_chain": "implication",
+      "depends_on": [
+        "C4"
+      ],
+      "evidence": [
+        "fig:fig4_robust"
+      ],
+      "falsified_by": "若缺勤 20% 使 T 显著上升（如 >10%），则配送队是瓶颈，方案设计应优先增派配送队而非扩容站点。",
+      "numeric": "0.9"
+    }
+  ]
+}
