@@ -152,6 +152,14 @@ The most insidious hit from `csf_prose.py` is the **bare `%` in LaTeX**:
 `improves by 20% over the baseline` comments out " over the baseline" entirely —
 **compilation succeeds**, and half a sentence silently disappears from the PDF.
 
+### Gates in action: real run output (not a mockup)
+
+Actual output of running `csf_gate.py --lang zh` on the Chinese test paper
+`examples/礼堂疏散/paper.tex` (a skeleton draft deliberately below delivery standard) —
+every ERROR maps to a concrete defect, not a style preference:
+
+![Gate run on the test paper](docs/demo-gates-in-action.png)
+
 ---
 
 ## Repository layout
@@ -175,6 +183,7 @@ examples/
 _vendor/                         third-party read-only resources (large ones gitignored,
                                  re-fetchable via included scripts)
 docs/                            engineering notes: design decisions, pitfalls, acceptance criteria
+                                 ([中文版](docs/engineering-notes.md))
 ```
 
 ---
@@ -231,7 +240,7 @@ Top-venue-style assertions are traced to official files or original papers where
 - `skills/csf-paper-polish/references/venue-style-specs.md` (parameter tables measured from official `.sty` files, with UNVERIFIED annotations)
 - `skills/csf-paper-polish/references/english-narrative.md` (prose contract: five-paragraph funnel, five-action abstract, thirteen zh→en failure modes)
 - `AnyMath-平台能力与代码落地手册.md` (AnyMath platform capabilities and hard constraints, verified against the original)
-- `docs/engineering-notes.md` (engineering notes: design decisions and pitfalls)
+- `docs/engineering-notes.md` (engineering notes: design decisions and pitfalls; [English version](docs/engineering-notes.en.md))
 
 ## License
 

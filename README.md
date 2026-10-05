@@ -150,6 +150,13 @@ SVG 里的文字是**真文字**，可以直接改字。
 `improves by 20% over the baseline` 会把 " over the baseline" 整段注释掉，
 **编译不报错**，PDF 里少半句。
 
+### 门禁实测：真实运行输出（非示意）
+
+对中文测试靶稿 `examples/礼堂疏散/paper.tex`（骨架稿，故意未达交付标准）真实运行
+`csf_gate.py --lang zh` 的输出——每一条 ERROR 都对应一个具体缺陷，而非风格建议：
+
+![门禁实测输出](docs/demo-gates-in-action.png)
+
 ---
 
 ## 目录结构
@@ -165,7 +172,7 @@ examples/
 ├── 礼堂疏散/                     中文测试靶（门禁用于验证约束能力）
 └── _selftest-助餐配送/            自测题：带真实数值结果与 claim/evidence 论证链
 _vendor/                         第三方只读资源（体积大的已 gitignore，可用脚本重新抓取）
-docs/                            工程笔记：设计决策、踩过的坑、验收判据
+docs/                            工程笔记：设计决策、踩过的坑、验收判据（[English](docs/engineering-notes.en.md)）
 ```
 
 ---
@@ -214,7 +221,7 @@ TeX 侧需要 **LuaLaTeX**（英文，推荐）与 **XeLaTeX**（中文），以
 - `skills/csf-paper-polish/references/venue-style-specs.md`（从官方 `.sty` 实测的参数表，含 UNVERIFIED 标注）
 - `skills/csf-paper-polish/references/english-narrative.md`（行文契约：五段漏斗、摘要五动作、十三条中译英失效模式）
 - `AnyMath-平台能力与代码落地手册.md`（平台能力与红线，原文核实）
-- `docs/engineering-notes.md`（工程笔记：设计决策与踩过的坑）
+- `docs/engineering-notes.md`（工程笔记：设计决策与踩过的坑；[English version](docs/engineering-notes.en.md)）
 
 ## License
 
