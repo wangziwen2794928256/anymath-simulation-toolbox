@@ -5,6 +5,8 @@ description: 顶会顶刊级图表生成与视觉 QA。用于 A 赛道（多智�
 
 # CSF 图表工坊（顶会顶刊级图表）
 
+先明确独立重复、估计量、区间含义、失败/缺失处理与源数据。统计与图型路由见 [证据到图表](../csf-simulation-modeling/references/16-evidence-statistics.md)。方法/场景/验证/消融图可独立交付，只有 evidence_level 为 hero/main 时才要求主结论面板。导出成功不等于视觉 QA 通过。
+
 ## 何时使用
 
 - 要画**方法总览图 / hero figure（Figure 1）**：用 `method_figure()`
@@ -22,7 +24,7 @@ description: 顶会顶刊级图表生成与视觉 QA。用于 A 赛道（多智�
 2. **语义配色只有一张表**（`csf_fig.SEMANTIC`）。实测同一张复合组图里，
    红色既是"最近出口"（面板 b）又是"静态"（面板 c），自相矛盾。
    `SemanticPalette` 对**未登记的角色直接报错**。
-3. **六字以上标签必须换行**，否则必溢出框外（本机 SimHei/Noto 更宽）；
+3. **按最终尺寸和实际文本边界决定换行**，六字只是旧例的启发式；
    表题**不要用加粗 CJK**（触发 `TU/SimSun/b/n undefined`，字体回退且行距翻倍）。
 
 ## 目录

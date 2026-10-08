@@ -67,6 +67,8 @@ def check(lib: dict) -> list[str]:
     ids: set[str] = set()
     fams = set(lib.get("families", []))
     mids = mech_ids()
+    if not mids:
+        problems.append("机理卡库缺失/不可读，不能跳过关联校验后声称通过")
 
     for m in lib.get("methods", []):
         mid = m.get("id", "?")
@@ -98,6 +100,11 @@ def check(lib: dict) -> list[str]:
         for m in members:
             if m not in ids:
                 problems.append(f"基线族谱 [{cname}] 指向不存在的方法 {m}")
+    from csf_applicability import load_rules, check_rules
+    try:
+        problems.extend(check_rules(load_rules(), ids))
+    except (OSError, ValueError) as error:
+        problems.append(f"适用前提库不可读: {error}")
     return problems
 
 
@@ -133,12 +140,21 @@ def baseline_coverage(lib: dict, picked: list[str]) -> dict[str, list[str]]:
     return {cname: [m for m in members if m in picked] for cname, members in tax.items()}
 
 
-def plan(lib: dict, terms: list[str]) -> str:
+def plan(lib: dict, terms: list[str], assessment: dict | None = None) -> str:
     """输出可执行行动方案（而不是一堆方法名）。"""
     rules = rules_for(lib, terms)
     hits = match(lib, terms, top=10)
+    if assessment is not None:
+        by_id = {item["id"]: item for item in assessment["methods"]}
+        hits = [(s, m) for s, m in hits if by_id[m["id"]]["status"] == "compatible_with_declared_facts"]
     lines: list[str] = []
     lines.append("=" * 78)
+    if assessment is not None:
+        from csf_applicability import render
+        lines.append(render(assessment))
+        lines.append("冲突和待补条件的候选仅保留在上方审查表；行动方案只含声明相容的候选，仍需最小验证。")
+    lines.append("注意：关键词分数仅检索候选，不是适用性/正确性评分。先读 references/15-model-validation.md。")
+    lines.append("选定前逐项记录：动作/信息结构、单位与约束、数据/计算预算、平台探针、排除理由、最小验证。")
     lines.append("方法选型行动方案（按此顺序推进，别跳步）")
     lines.append("=" * 78)
 
@@ -151,7 +167,7 @@ def plan(lib: dict, terms: list[str]) -> str:
             lines.append(f"      ⚠ {r['warn']}")
 
     if not hits:
-        lines.append("\n没有方法命中这些指纹。请换关键词，或说明该问题类型是否超出本库范围。")
+        lines.append("\n没有已声明相容的指纹候选（未命中、前提待补或冲突）；不要强行选方法。")
         return "\n".join(lines)
 
     # 分层推进：基线 → 上界/诊断 → 主方法 → 稳健性
@@ -171,6 +187,8 @@ def plan(lib: dict, terms: list[str]) -> str:
             continue
         lines.append(f"\n【{title}】")
         for m in by_role[role]:
+            if assessment is not None:
+                lines.append(f"      前提状态：{by_id[m['id']]['status']}（不是验证结论）")
             lines.append(f"  ▸ {m['id']}  {m['name']}  [{m['family']}]")
             lines.append(f"      复杂度：{m['complexity']}")
             lines.append(f"      数据需求：{m['data_need']}")
@@ -182,7 +200,7 @@ def plan(lib: dict, terms: list[str]) -> str:
 
     picked = [m["id"] for _, m in hits]
     cov = baseline_coverage(lib, picked)
-    lines.append("\n【基线族谱自查（顶会要求 ≥3 类）】")
+    lines.append("\n【基线覆盖提示（按研究问题选择对照，不是通用顶会硬规定）】")
     for cname, members in cov.items():
         mark = "✓" if members else "✗"
         lines.append(f"  {mark} {cname}：{', '.join(members) if members else '缺（需补或说明理由）'}")
@@ -247,10 +265,51 @@ def main() -> int:
     ap.add_argument("--check", action="store_true", help="校验方法库完整性")
     ap.add_argument("--emit-md", action="store_true")
     ap.add_argument("--list", action="store_true", help="列出全部方法")
+    ap.add_argument("--context", help="题目事实 JSON：true/false/null + basis")
+    ap.add_argument("--report", help="写出可追溯的前提检查 JSON（需 --context）")
     args = ap.parse_args()
+    if args.plan and (not args.fingerprint or args.pick):
+        ap.error("--plan 需要 --fingerprint，且不与 --pick 混用")
+    if args.pick and args.fingerprint:
+        ap.error("--pick 与 --fingerprint 选择一种候选检索方式")
 
     lib = load(LIB)
     rc = 0
+    assessment = None
+    if args.report and not args.context:
+        ap.error("--report 需要 --context")
+    if args.context:
+        from pathlib import Path
+        from csf_applicability import report, render
+        if args.check or args.emit_md or args.list:
+            ap.error("--context 不与 --check/--emit-md/--list 混用")
+        try:
+            methods = lib["methods"]
+            if args.pick:
+                picked = {m.upper() for m in args.pick}
+                if picked - {m["id"] for m in methods}:
+                    raise ValueError("--pick 包含未知方法，不能静默跳过")
+                methods = [m for m in methods if m["id"] in picked]
+            if args.fingerprint:
+                candidates = {m["id"] for _, m in match(lib, args.fingerprint, top=len(methods))}
+                candidates.update(mid for rule in rules_for(lib, args.fingerprint) for mid in rule["then"])
+                methods = [m for m in methods if m["id"] in candidates]
+            assessment = report(methods, load(args.context))
+            if args.report:
+                target = Path(args.report)
+                protected = {Path(p).resolve() for p in (args.context, LIB, MECH, MD_OUT)}
+                from csf_applicability import REFERENCE
+                protected.add(REFERENCE.resolve())
+                if target.resolve() in protected:
+                    raise ValueError("报告不能覆盖输入或参考库")
+                target.parent.mkdir(parents=True, exist_ok=True)
+                target.write_text(json.dumps(assessment, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+        except (OSError, ValueError) as error:
+            ap.error(str(error))
+        if not args.plan:
+            print(render(assessment))
+        if not args.fingerprint and not args.pick:
+            return 0
 
     if args.check:
         problems = check(lib)
@@ -290,7 +349,7 @@ def main() -> int:
 
     if args.fingerprint:
         if args.plan:
-            print(plan(lib, args.fingerprint))
+            print(plan(lib, args.fingerprint, assessment))
             return 0
         hits = match(lib, args.fingerprint)
         if not hits:

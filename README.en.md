@@ -67,53 +67,17 @@ and no `!` lines).
 
 ## Flagship example: `examples/evacuation-en/`
 
-A complete **6-page English paper with 0 LaTeX errors**, which doubles as the runnable
-documentation of the figure/table DSL. **Not a single number** in the figures and tables
-is hand-copied:
+A synthetic worked example with tracked per-seed outputs, recomputed sample statistics, and generated LaTeX numeric macros. It demonstrates internal reproducibility; it does not claim real-world calibration or completion of full competition manuscript gates.
 
-```
-evac_methods_fixed.json + sweeps.json     raw experiment outputs (real simulation, 5 seeds)
-  → make_paper_numbers.py                 generate + built-in assertions
-  → data/paper_numbers.json               single source of numerical truth
-  → make_example.py                       generates figures and tables
-  → paper.tex                             the paper references them
-```
-
-### Method overview (Figure 1)
-
-![Method overview](skills/csf-figure-forge/examples/templates-en/fig1_method_evac_relocation.png)
-
-Layered ribbon layout, orthogonal polyline routing (cross-layer links never cut through
-modules), a single semantic color source, and automatic label avoidance. Every figure ships
-with a **text ledger** (`*.labels.json`: `svg_id`, role, and coordinates of every text
-element), so that manual annotation rearrangement in vector software preserves wording and
-terminology — text in the SVG is **real text** and can be edited directly.
-
-### Main results, composite figure (Figure 2)
+![Implemented model](examples/evacuation-en/figures/fig1_method.png)
 
 ![Main results](examples/evacuation-en/figures/fig2_main.png)
 
-Each panel carries one claim, and each panel subtitle states **the conclusion the reader
-should draw**, not what is drawn:
+All quantitative panels show raw seed outcomes and 95% Student-t intervals of the mean. Only sampled weights 3 and 8 fall within 3% of the smallest observed mean; this is not a continuous plateau or proof of an optimum. The dynamic mean/reference ratio is 1.21. The capacity reference ignores travel and discrete service timing.
 
-- (a) λ is optimal at 3, and λ∈[0.5,8] is a **plateau within 3%** — we **deliberately do not
-  claim "unimodal"**: across 5 seeds, adjacent-point differences already fall within noise,
-  and reading a peak out of noise is over-interpretation;
-- (b) the re-decision ratio decreases monotonically from 0% to 100%: **the cost function never
-  changed**, so the improvement cannot be attributed to it;
-- (c) the advantage grows with scale;
-- (d) the residual gap to the capacity lower bound comes from walking, not allocation.
+![Main comparison](examples/evacuation-en/tables/tab_main.png)
 
-### Main comparison table (Table 1)
-
-![Main table](examples/evacuation-en/tables/tab_main.png)
-
-The table contains one deliberate choice: **the three static rules occupy a single row**,
-because their time, Gini, and flow values are **byte-identical** — a mathematical necessity
-when all queues are zero at t=0, and verified. Writing them as three rows of different
-numbers would be *wrong*. What truly distinguishes them is the `re-decision` column:
-"re-decide on arrival" fires only 3 times in total and the time is unchanged —
-**re-deciding too late is equivalent to never re-deciding**.
+The evidence chain is: tracked raw seeds → `results/paper_numbers.json` → figures, table and `results/numbers.tex` → paper. Initialization-equivalent rules share a baseline row; the arrival-time rule is separate. See [reproduction and limitations](examples/evacuation-en/README.md).
 
 ### Venue shell: same source, swap the preset, swap the conference
 

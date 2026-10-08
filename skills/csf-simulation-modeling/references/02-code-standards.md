@@ -55,7 +55,7 @@
 1. **规则基线**：贪心/最短处理时间/最早交期/随机 → `RulePolicy`。
 2. **元启发式**：GA / NSGA-II / PSO / 模拟退火 → 用 `deap` 或自写，输出帕累托前沿。
 3. **单智能体 DRL**：DQN/PPO（SB3）→ `gym_env.py` 包装。
-4. **多智能体 MARL**：IPPO（SB3 PPO 参数共享，最稳）→ 进阶 QMIX/MAPPO 用 EPyMARL/PyMARLzoo+。
+4. **多智能体 MARL**：按动作空间、信息结构与协作方式选 IPPO/MAPPO/VDN/QMIX。`train_marl.py` 仅是单环境 PPO 骨架；使用 SB3 本身不提供多智能体数据收集或参数共享。复用外部实现前检查接口、版本、许可和平台可用性。
 5. **GNN/Transformer**：析取图 + GAT/注意力编码（竞赛时间不够则只在论文里作为改进方向）。
 
 ### 7.3 训练工程要点（评委/审稿人都认）

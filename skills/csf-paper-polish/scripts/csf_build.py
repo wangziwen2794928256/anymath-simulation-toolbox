@@ -98,13 +98,20 @@ def build(tex: Path, engine: str, jobs: int, do_bib: bool) -> dict:
                        tex.name], cwd)
         passes.append({"pass": i + 1, "exit_code": rc,
                        "miktex_update_nag": "major issue" in out})
-        # 第一遍之后如果存在 .bib 且还没 .bbl，就跑 BibTeX 让引用先落地
+        # 以本次 aux 的引用声明为准；旁边存在 bib 不代表当前文档使用它。
+        # 已存在 bbl 也须更新，防止正文/参考文献修改后继续引用旧结果。
         if i == 0 and do_bib:
             bib = find_tool("bibtex")
-            if bib and (cwd / f"{stem}.aux").exists() and not (cwd / f"{stem}.bbl").exists():
+            aux = cwd / f"{stem}.aux"
+            needs_bib = aux.exists() and r"\bibdata{" in aux.read_text(encoding="utf-8", errors="replace")
+            if needs_bib and not bib:
+                return {"ok": False, "fatal": "文档需要 BibTeX，但未找到编译器", "passes": passes}
+            if needs_bib:
                 brc, bout = run([bib, stem], cwd)
                 passes.append({"bibtex": True, "exit_code": brc,
                                "output": bout.strip().splitlines()[:6]})
+                if brc != 0 and "major issue" not in bout:
+                    return {"ok": False, "fatal": "BibTeX 编译失败", "passes": passes}
 
     if not log.exists():
         return {"ok": False, "fatal": "没有生成 .log，编译在第 1 遍就中断了",
@@ -122,7 +129,7 @@ def build(tex: Path, engine: str, jobs: int, do_bib: bool) -> dict:
         (r"LaTeX Warning: (?:Reference|Citation) .* undefined", "未定义引用"),
         (r"Overfull \\hbox", "Overfull hbox（文字或公式超出边界）"),
         (r"resolves to the SAME font", "shape doctor：字体形状静默回退"),
-        (r"Package .* Warning: (?!.*unicode-math).*", "宏包告警"),
+        (r"Package (?!unicode-math\b).* Warning: .*", "宏包告警"),
     ):
         hits = re.findall(pat, text)
         if hits:

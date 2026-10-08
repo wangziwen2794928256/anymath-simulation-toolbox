@@ -452,6 +452,8 @@ def main() -> int:
                     help="与位置参数等价，供统一惯例使用")
     ap.add_argument("--title", required=True)
     ap.add_argument("--domain", default="general", choices=DOMAINS)
+    ap.add_argument("--stage", choices=("modeling", "paper"), default="paper",
+                    help="modeling 仅生成建模/验证骨架；paper 保留原完整骨架")
     ap.add_argument("--force", action="store_true")
     args = ap.parse_args()
     args.dest = args.dest_opt or args.dest
@@ -468,7 +470,7 @@ def main() -> int:
         "README.md": README_TPL.format(title=t, domain=args.domain, stamp=stamp),
         "experiments.md": EXPERIMENTS_MD,
         "claims.json": json.dumps(
-            json.loads(json.dumps(CLAIMS_SEED).replace("__TITLE__", t)),
+            json.loads(json.dumps(CLAIMS_SEED).replace("__TITLE__", json.dumps(t, ensure_ascii=False)[1:-1])),
             ensure_ascii=False, indent=2),
         os.path.join("core", "__init__.py"): "",
         os.path.join("core", "model.py"): CORE_MODEL.replace("__TITLE__", t),
@@ -480,7 +482,33 @@ def main() -> int:
         os.path.join("figures", "contracts", "fig2_main.yaml"): FIG_CONTRACT.replace("{name}", "fig2_main"),
         os.path.join("results", ".gitkeep"): "",
     }
+    assets_dir = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "assets")
+    from csf_applicability import load_rules
+    files["method-context.json"] = json.dumps({
+        "schema_version": 1,
+        "facts": {field: None for field in load_rules()["fields"]},
+        "notes": "null=未知；已确认事实填 {value: true/false, basis: 来源/代码/探针}，声明不等于验证"},
+        ensure_ascii=False, indent=2) + "\n"
+    for target, template in (("model-spec.md", "model-spec-template.md"),
+                             ("verification.md", "verification-template.md")):
+        with open(os.path.join(assets_dir, template), encoding="utf-8") as fh:
+            files[target] = fh.read()
+    if args.stage == "modeling":
+        files = {key: value for key, value in files.items()
+                 if key != "claims.json" and not key.startswith("figures" + os.sep)}
+        files["README.md"] = (
+            f"# {t} — 建模阶段\n\n"
+            "骨架尚未实现或验证，不产生实验结论。\n\n"
+            "1. 填 model-spec.md 与 method-context.json（未知保留 null）。\n"
+            "2. 检查方法前提，先实现 core/ 与规则基线。\n"
+            "3. 填 verification.md 的实际命令、参照、容差与结果。\n"
+            "4. 用 experiments.md 规划实验，逐运行指标保存到 results/。\n\n"
+            "本阶段不生成论文壳或图表契约。进入成稿时可再运行相同目标目录的 "
+            "csf_scaffold.py --stage paper，默认保留已有文件；不要加 --force 覆盖模型。\n")
     n = sum(write(os.path.join(dest, k), v, args.force) for k, v in files.items())
+    if args.stage == "modeling":
+        print(f"\n完成建模骨架：{n} 个文件。先补模型/方法前提，再验证规则基线；不运行论文配额门禁。")
+        return 0
 
     # ---- 把英文论文壳复制进 paper/ ---------------------------------------- #
     # 干跑发现的真实缺口：README 让用户去跑 paper/paper-en.tex 的门禁，
@@ -515,8 +543,9 @@ def main() -> int:
     print(f"\n完成：写入 {n} 个文件。")
     print(textwrap.dedent("""
     下一步（按顺序，别跳）：
+      0) 填 model-spec.md 与 verification.md，先验证规则基线；模板与字段检查不证明模型正确
       1) python skills/csf-simulation-modeling/scripts/csf_mechanism.py --fingerprint <现象关键词>
-      2) python skills/csf-simulation-modeling/scripts/csf_select.py --fingerprint <现象关键词> --plan
+      2) 填 method-context.json，再运行 csf_select.py --fingerprint <现象关键词> --context method-context.json --plan --report method-selection.json
       3) 填 claims.json —— 每条 claim 必须有 falsified_by 与 evidence
       4) 填 experiments.md 的假设表与实验序列表
       5) 实现 core/（禁止平台/框架依赖）

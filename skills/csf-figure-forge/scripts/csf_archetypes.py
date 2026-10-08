@@ -1006,6 +1006,7 @@ def _export(
     labels: bool = True,
     narrative_role: str = "",
     takeaway: str = "",
+    reproducible: bool = False,
 ) -> dict[str, str]:
     """统一导出：PDF（矢量）+ SVG（可编辑）+ PNG（300 dpi）+ 文字台账。
 
@@ -1022,8 +1023,11 @@ def _export(
             ledger = export_label_ledger(
                 fig, outdir, name, fig_id=name, lang=lang,
                 narrative_role=narrative_role, takeaway=takeaway, verbose=False,
+                reproducible=reproducible,
             )
         except Exception as exc:  # noqa: BLE001
+            if reproducible:
+                raise
             # 图本身是主交付物，台账失败不该拖死它；但必须**大声**报出来
             print(f"[archetype] ⚠ 文字台账写出失败（{name}）："
                   f"{type(exc).__name__}: {exc}")
@@ -1032,7 +1036,19 @@ def _export(
         kw = dict(bbox_inches="tight", facecolor="white")
         if fmt == "png":
             kw["dpi"] = 300
-        fig.savefig(p, format=fmt, **kw)
+        if reproducible:
+            if fmt == "pdf":
+                kw["metadata"] = {"CreationDate": None, "ModDate": None}
+            elif fmt == "svg":
+                kw["metadata"] = {"Date": None}
+        with mpl.rc_context({"svg.hashsalt": name} if reproducible else {}):
+            fig.savefig(p, format=fmt, **kw)
+        if reproducible and fmt == "svg":
+            # Matplotlib path serialization appends spaces; keep repository diffs clean.
+            with open(p, encoding="utf-8") as fh:
+                svg = fh.read()
+            with open(p, "w", encoding="utf-8", newline="\n") as fh:
+                fh.write("\n".join(line.rstrip() for line in svg.splitlines()) + "\n")
         written[fmt] = p
     print(f"[archetype] {name}: " + ", ".join(
         f"{f}={os.path.getsize(p):,}B" for f, p in written.items()))
@@ -1330,7 +1346,7 @@ def collect_labels(
 def _write_csv(path: str, rows: list[dict]) -> None:
     # utf-8-sig：中文标签用 Excel 直接打开不乱码
     with open(path, "w", encoding="utf-8-sig", newline="") as fh:
-        w = csv.DictWriter(fh, fieldnames=list(LABEL_COLUMNS), extrasaction="ignore")
+        w = csv.DictWriter(fh, fieldnames=list(LABEL_COLUMNS), extrasaction="ignore", lineterminator="\n")
         w.writeheader()
         for row in rows:
             w.writerow(row)
@@ -1368,6 +1384,7 @@ def export_label_ledger(
     stamp_ids: bool = True,
     aggregate: bool = True,
     verbose: bool = True,
+    reproducible: bool = False,
 ) -> dict[str, str]:
     """写出"图内文字台账"：``<name>.labels.json`` + ``<name>.labels.csv``。
 
@@ -1406,7 +1423,7 @@ def export_label_ledger(
         "lang": lang,
         "narrative_role": narrative_role,
         "takeaway": takeaway,
-        "generated": datetime.now().astimezone().isoformat(timespec="seconds"),
+        "generated": None if reproducible else datetime.now().astimezone().isoformat(timespec="seconds"),
         "n_labels": len(rows),
         "role_counts": counts,
         "pos_system": rows[0]["pos_system"] if rows else _pos_system_text(
@@ -1434,7 +1451,7 @@ def export_label_ledger(
                     for v in figures.values() if isinstance(v, dict))
         agg = {
             "ledger": "aggregate",
-            "generated": datetime.now().astimezone().isoformat(timespec="seconds"),
+            "generated": None if reproducible else datetime.now().astimezone().isoformat(timespec="seconds"),
             "n_figures": len(figures),
             "n_labels": total,
             "role_vocabulary": LABEL_ROLE_DOC,

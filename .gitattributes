@@ -1,0 +1,5 @@
+# Generated artifacts remain byte-stable on Windows and Linux checkouts.
+examples/evacuation-en/**/*.json text eol=lf
+examples/evacuation-en/**/*.csv text eol=lf
+examples/evacuation-en/**/*.svg text eol=lf
+examples/evacuation-en/**/*.tex text eol=lf

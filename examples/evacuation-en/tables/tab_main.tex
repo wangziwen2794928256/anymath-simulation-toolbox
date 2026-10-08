@@ -1,15 +1,10 @@
-\begin{table}[H]
-  \centering
-  \caption{tab main (best in bold, second best in italics)}
-  \label{tab:main}
-  \begin{tabular}{lccccc}
-    \toprule
-    method & T (s) & Gini & T/T_lb & flow E1/E2/E3 & re-decision \\
-    \midrule
-    Random assignment & 223.20$\pm$15.60 & \textbf{0.0333} & 1.467 & 133/137/130 & 0 \\
-    Static rules* & 426.70$\pm$6.00 & 0.3220 & 2.803 & 56/95/249 & 0-3 \\
-    Dynamic (ours)* & \textit{184.50$\pm$15.90} & \textit{0.0833} & \textit{1.212} & 158/134/108 & 0 \\
-    Capacity lower bound & \textbf{152.21} & N/A & \textbf{1.000} & N/A & N/A \\
-    \bottomrule
-  \end{tabular}
-\end{table}
+\begin{tabular}{lrrrr}
+\toprule
+Policy & Mean (s) & Sample SD (s) & 95\% CI of mean (s) & Mean / ref. \\
+\midrule
+Random once & 223.22 & 15.55 & 203.91 to 242.53 & 1.47 \\
+Nearest once (3 equivalent rules) & 426.66 & 5.98 & 419.24 to 434.08 & 2.80 \\
+Shortest queue on arrival & 426.66 & 5.98 & 419.24 to 434.08 & 2.80 \\
+Dynamic distance + queue & 184.54 & 15.87 & 164.84 to 204.24 & 1.21 \\
+\bottomrule
+\end{tabular}

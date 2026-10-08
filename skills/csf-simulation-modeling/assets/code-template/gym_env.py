@@ -38,27 +38,21 @@ class SimulationEnv(gym.Env):
     def reset(self, *, seed: int | None = None, options: Dict[str, Any] | None = None):
         super().reset(seed=seed)
         # TODO: 重置底层仿真
-        self.state = np.zeros(self.observation_space.shape[0], dtype=np.float32)
-        self.done = False
-        self.info: Dict[str, Any] = {}
-        return self._obs(), self.info
+        raise NotImplementedError("先实现底层 reset、初始观测与随机数流；模板不生成虚假全零轨迹")
 
     def step(self, action) -> Tuple[np.ndarray, float, bool, bool, Dict[str, Any]]:
         # TODO: 把 action 翻译成底层模型的决策，推进一个时间步
-        reward = self._reward()
-        terminated = self._terminal()
-        truncated = False
-        return self._obs(), reward, terminated, truncated, self.info
+        raise NotImplementedError("实现状态转移、动作合法性、KPI 奖励与 terminated/truncated 后再训练")
 
     def _obs(self) -> np.ndarray:
         return self.state.astype(np.float32)
 
     def _reward(self) -> float:
         # 奖励要与 KPI 单调一致，且避免稀疏到无法学习
-        return 0.0
+        raise NotImplementedError("按赛题 KPI 实现奖励，并分别记录原始 KPI")
 
     def _terminal(self) -> bool:
-        return self.done
+        raise NotImplementedError("定义任务终止；时间预算耗尽应返回 truncated=True")
 
     def render(self):
         # matplotlib/plotly 动画；训练时关掉

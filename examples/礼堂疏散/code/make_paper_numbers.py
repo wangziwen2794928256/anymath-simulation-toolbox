@@ -1,203 +1,106 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-"""make_paper_numbers —— 从实验产物生成论文数值的唯一来源
-
-为什么需要它
-------------
-``paper.tex`` 里的数字**系统性地过期**了：它们来自 ``eval_methods_fixed.py``
-修正之前的那一版代码。逐个核对后发现，这不是"个别笔误"，而是整表偏位：
-
-| 论文写的 | 实验产物里的真值 |
-|---|---|
-| 随机均衡 ``223.2±13.9``，Gini ``0.011`` | ``223.2±15.6``，Gini ``0.0333`` |
-| 最近出口 ``426.7±5.3`` | ``426.7±6.0`` |
-| 动态拥塞感知 ``204.1±25.7`` | ``184.5±15.9``（λ=3） |
-| "λ 扫描单峰，λ=5 最优 177.9" | 真最小值在 **λ=3（184.5）**，λ=8 是 186.7，**不是单峰** |
-| 消融"每 40/10/1 步：372.5 / 224.7 / 204.1" | 真实键是 **25/50/75/100% 个体动态：323.6 / 214.0 / 185.9 / 184.5** |
-
-两张最危险的后果：
-
-1. **``204.1`` 被当成了主结果**，但它其实属于消融里"每 1 步重决策"的那一行；
-   主对比表里的动态策略是 ``184.5``。**两个不同实验的数字被混用了。**
-2. **"λ=5 最优、单峰"这个结论不成立。** 真数据是 λ∈[0.5, 8] 都在 185–217 之间
-   一个**很平**的区间，浅最小值在 λ=3。写成"单峰最优 λ=5"是把平坦读成了峰——
-   而审稿人只要扫一眼扫描表就能发现。
-
-这类错误的根因是**手抄数字**。所以本脚本把"论文里的数"变成
-**由实验产物生成的派生物**：改了实验就重跑本脚本，论文数值不会自己漂。
-``csf_gate.py`` 的数值冻结检查（正文数字必须能在 ``results/*.json`` 里找到来源）
-正是为了守住这条链。
-
-用法
-----
-    python make_paper_numbers.py            # 写出 results/paper_numbers.json
-    python make_paper_numbers.py --check    # 只校验，不写（供门禁用）
-"""
-
+"""Derive publishable statistics from saved per-seed simulations, never rounded means."""
 from __future__ import annotations
-
 import argparse
+import hashlib
 import json
-import sys
+import math
+import statistics
 from pathlib import Path
+from scipy.stats import t
 
 HERE = Path(__file__).resolve().parent
-RESULTS = HERE / "results"
-# 两个产物不在同一层：修正后的方法对比在 code/ 下，扫描结果在 code/results/ 下。
-# 写死路径容易失效，所以两个位置都查一遍。
-METHODS_CANDIDATES = (HERE / "evac_methods_fixed.json", RESULTS / "evac_methods_fixed.json")
-SWEEPS_CANDIDATES = (RESULTS / "sweeps.json", HERE / "sweeps.json")
+ROOT = HERE.parents[2]
+DEFAULT_OUT = ROOT / "examples/evacuation-en/results/paper_numbers.json"
 
 
-def _first_existing(cands: tuple[Path, ...], what: str) -> Path:
-    for p in cands:
-        if p.exists():
-            return p
-    raise SystemExit(f"找不到{what}，已查找：{[str(c) for c in cands]}")
-
-
-def load(name: str) -> dict:
-    if name == "evac_methods_fixed.json":
-        p = _first_existing(METHODS_CANDIDATES, "方法对比结果")
-    elif name == "sweeps.json":
-        p = _first_existing(SWEEPS_CANDIDATES, "扫描结果")
-    else:
-        p = RESULTS / name
-    return json.loads(p.read_text(encoding="utf-8"))
+def summarize(record: dict, seeds: list[int]) -> dict:
+    values = record.get("T_seeds")
+    if record.get("completed_all") is not True:
+        raise ValueError("Incomplete runs must be reported separately, not as clearance times")
+    if not isinstance(values, list) or len(values) != len(seeds) or len(values) < 2:
+        raise ValueError("Every seed must have a raw clearance time; at least two are required")
+    if any(isinstance(v, bool) or not isinstance(v, (int, float))
+           or not math.isfinite(v) or v <= 0 for v in values):
+        raise ValueError("Clearance times must be finite positive numbers")
+    mean, sd = statistics.mean(values), statistics.stdev(values)
+    half = float(t.ppf(.975, len(values) - 1)) * sd / math.sqrt(len(values))
+    return {"T": mean, "T_std": sd, "T_ci95": [mean - half, mean + half],
+            "T_seeds": values, "n": len(values), "unit": "s", "completed_all": True}
 
 
 def build() -> dict:
-    methods = load("evac_methods_fixed.json")
-    sweeps = load("sweeps.json")
-
-    m = methods["methods"]
+    sources = {"methods": HERE / "evac_methods_fixed.json", "sweeps": HERE / "results/sweeps.json"}
+    methods, sweeps = (json.loads(sources[k].read_text(encoding="utf-8")) for k in ("methods", "sweeps"))
     meta = methods["meta"]
-    nea, rnd, dyn = m["nearest_once"], m["random_once"], m["dynamic_cong"]
-
-    lam = {float(k): v for k, v in sweeps["lambda_sweep"].items()}
-    lam_best = min(lam.items(), key=lambda kv: kv[1]["T_mean"])
-    freq = sweeps["freq_ablation"]
-
-    # λ 扫描是否真的是"单峰"？用数据回答，不要用印象回答。
-    # 判据：存在一个内部极小值，且两侧都单调上升。
-    ks = sorted(lam)
-    ts = [lam[k]["T_mean"] for k in ks]
-    i = ts.index(min(ts))
-    left_rising = all(ts[j] > ts[j + 1] for j in range(i))
-    right_rising = all(ts[j] < ts[j + 1] for j in range(i, len(ts) - 1))
-    unimodal = left_rising and right_rising
-    # 相对最优的容差带：与最优差 3% 以内的 λ 都算"平台"
-    plateau = [k for k in ks if ts[ks.index(k)] <= ts[i] * 1.03]
-
-    out = {
-        "_source": {
-            "methods": "results/evac_methods_fixed.json",
-            "sweeps": "results/sweeps.json",
-            "generated_by": "make_paper_numbers.py",
-            "_note": "论文正文/表格里的每个数字都应能在本文件里找到；"
-                     "改实验后重跑本脚本，不要手抄。",
-        },
-        "setup": {
-            "N": meta["n"],
-            "seeds": meta["seeds"],
-            "T_lb_s": meta["T_lb"],
-            "mu_per_s": meta["mu"],
-            "lambda_main": meta["lam"],
-        },
-        # 主对比表：三个静态规则**逐位相同是数学必然**（t=0 时队列全为 0），
-        # 所以只作为**一条基线**报告，并同时给出 reassign_count 以揭示真正的差异来源。
-        "main": {
-            "random_once": {
-                "T": rnd["T_mean"], "T_std": rnd["T_std"], "gini": rnd["gini_mean"],
-                "thr": rnd["thr_mean"], "flow": rnd["flow_mean"],
-                "ratio_lb": rnd["ratio_vs_lb"], "reassign": rnd["reassign_count_mean"],
-            },
-            "static_rules_once": {
-                "T": nea["T_mean"], "T_std": nea["T_std"], "gini": nea["gini_mean"],
-                "thr": nea["thr_mean"], "flow": nea["flow_mean"],
-                "ratio_lb": nea["ratio_vs_lb"], "reassign": nea["reassign_count_mean"],
-                "equivalent": ["nearest_once", "shortest_queue_once", "static_cong_once"],
-                "equivalence_verified": methods.get("equivalence_checks", {}),
-            },
-            "static_rules_on_arrival": {
-                "T": m["shortest_queue_arrival"]["T_mean"],
-                "T_std": m["shortest_queue_arrival"]["T_std"],
-                "gini": m["shortest_queue_arrival"]["gini_mean"],
-                "flow": m["shortest_queue_arrival"]["flow_mean"],
-                "reassign": m["shortest_queue_arrival"]["reassign_count_mean"],
-            },
-            "dynamic_cong": {
-                "T": dyn["T_mean"], "T_std": dyn["T_std"], "gini": dyn["gini_mean"],
-                "thr": dyn["thr_mean"], "flow": dyn["flow_mean"],
-                "ratio_lb": dyn["ratio_vs_lb"], "reassign": dyn["reassign_count_mean"],
-            },
-        },
-        "lambda_sweep": {
-            "table": {str(k): round(lam[k]["T_mean"], 1) for k in ks},
-            "std": {str(k): round(lam[k]["T_std"], 1) for k in ks},
-            "best_lambda": lam_best[0],
-            "best_T": round(lam_best[1]["T_mean"], 1),
-            # 由数据判定，而非由论文作者印象宣称
-            "is_unimodal": unimodal,
-            "plateau_within_3pct": plateau,
-            "plateau_range": [min(plateau), max(plateau)] if plateau else None,
-        },
-        "freq_ablation": {
-            k: {"T": v["T_mean"], "T_std": v["T_std"], "gini": v["gini_mean"],
-                "flow": v["flow_mean"]}
-            for k, v in freq.items()
-        },
-        "scale_sweep": {
-            k: {"ours_T": v["ours"]["T_mean"], "nearest_T": v["nearest"]["T_mean"]}
-            for k, v in sweeps["scale_sweep"].items()
-        },
-        "speed_sweep": {
-            k: {"T": v["T_mean"], "T_std": v["T_std"]}
-            for k, v in sweeps["speed_sweep"].items()
-        },
-    }
-    return out
+    seeds = meta["seed_list"]
+    if (not isinstance(seeds, list) or len(seeds) < 2 or len(set(seeds)) != len(seeds)
+            or any(type(s) is not int for s in seeds) or meta["seeds"] != len(seeds)):
+        raise ValueError("Invalid independent seed identifiers")
+    if any(meta[k] != sweeps["meta"][k] for k in ("n", "mu")) or seeds != sweeps["meta"]["seeds"]:
+        raise ValueError("Main comparison and sweep configurations differ")
+    reference = meta["n"] / sum(meta["mu"])
+    m = methods["methods"]
+    for key in ("shortest_queue_once", "static_cong_once"):
+        if m[key]["T_seeds"] != m["nearest_once"]["T_seeds"]:
+            raise ValueError("Static baseline equivalence no longer holds")
+    main = {}
+    for target, original in (("random_once", "random_once"), ("static_rules_once", "nearest_once"),
+                             ("static_rules_on_arrival", "shortest_queue_arrival"), ("dynamic_cong", "dynamic_cong")):
+        record = m[original]
+        main[target] = {**summarize(record, seeds), "gini": record["gini_mean"], "flow": record["flow_mean"],
+                        "ratio_ref": statistics.mean(record["T_seeds"]) / reference,
+                        "reassign": None if target == "dynamic_cong" else record["reassign_count_mean"]}
+    lam = {k: summarize(v, seeds) for k, v in sweeps["lambda_sweep"].items()}
+    best = min(lam, key=lambda k: lam[k]["T"])
+    near = [float(k) for k in sorted(lam, key=float) if lam[k]["T"] <= lam[best]["T"] * 1.03]
+    return {"schema_version": 2,
+            "_source": {k: {"path": p.relative_to(ROOT).as_posix(), "hash_normalization": "CRLF to LF",
+                             "sha256": hashlib.sha256(p.read_bytes().replace(b"\r\n", b"\n")).hexdigest()}
+                        for k, p in sources.items()},
+            "statistics": {"independent_unit": "simulation seed", "std_ddof": 1,
+                           "interval": "two-sided Student-t 95% CI of the mean",
+                           "warning": "Five synthetic runs; post-hoc best is not a proven optimum. No significance test."},
+            "setup": {"N": meta["n"], "seeds": seeds, "mu_per_s": meta["mu"], "lambda_main": meta["lam"],
+                      "dt_s": sweeps["meta"]["dt"], "T_ref_s": reference,
+                      "discrete_capacity_bound_s": reference - sweeps["meta"]["dt"]},
+            "main": main,
+            "lambda_sweep": {"records": lam, "best_lambda": float(best), "best_T": lam[best]["T"], "observed_within_3pct": near},
+            "freq_ablation": {k: summarize(v, seeds) for k, v in sweeps["freq_ablation"].items()},
+            "scale_sweep": {k: {p: summarize(v[p], seeds) for p in ("ours", "nearest")}
+                            for k, v in sweeps["scale_sweep"].items()},
+            "speed_sweep": {k: summarize(v, seeds) for k, v in sweeps["speed_sweep"].items()}}
 
 
 def main() -> int:
-    ap = argparse.ArgumentParser(description="生成论文数值的唯一来源")
-    ap.add_argument("--check", action="store_true", help="只校验能否生成，不写文件")
-    ap.add_argument("--out", default=str(RESULTS / "paper_numbers.json"))
+    ap = argparse.ArgumentParser(description=__doc__)
+    ap.add_argument("--check", action="store_true", help="Fail if the published derived artifact is stale")
+    ap.add_argument("--out", type=Path, default=DEFAULT_OUT)
     args = ap.parse_args()
-
     data = build()
-
-    # 自检：把几个"曾经写错的结论"变成可执行断言，防止再次漂移
-    problems: list[str] = []
-    lam = data["lambda_sweep"]
-    if lam["best_lambda"] != 3.0:
-        problems.append(
-            f"λ 最优值变了：数据说是 {lam['best_lambda']}，"
-            f"论文里写的是 5 —— 必须同步正文，不要只改表")
-    if lam["is_unimodal"]:
-        problems.append("λ 扫描现在真的是单峰了，正文结论可以改回来")
-    ma = data["main"]
-    if abs(ma["dynamic_cong"]["T"] - 204.1) < 1e-9:
-        problems.append("主对比的动态策略又变回 204.1 —— 那是消融里每 1 步的值，"
-                        "不是主对比的值，疑似把两个实验混用了")
-
     if args.check:
-        for p in problems:
-            print(f"[WARN] {p}")
-        print("生成校验：通过" if not problems else f"生成校验：{len(problems)} 处需人工确认")
-        return 0
-
-    Path(args.out).write_text(
-        json.dumps(data, ensure_ascii=False, indent=2), encoding="utf-8")
-    print(f"已写出 {args.out}")
-    print(f"  λ 最优        : {lam['best_lambda']}（T={lam['best_T']} s），"
-          f"单峰={lam['is_unimodal']}，平台={lam['plateau_range']}")
-    print(f"  主对比 动态    : {ma['dynamic_cong']['T']}±{ma['dynamic_cong']['T_std']} s")
-    print(f"  主对比 静态规则: {ma['static_rules_once']['T']}±{ma['static_rules_once']['T_std']} s"
-          f"（三种等价表述，reassign={ma['static_rules_once']['reassign']}）")
-    for p in problems:
-        print(f"[WARN] {p}")
+        if not args.out.exists() or not equivalent(json.loads(args.out.read_text(encoding="utf-8")), data):
+            ap.exit(1, f"Stale or missing artifact: {args.out}\n")
+        print("Raw-seed statistics and source hashes match the published artifact")
+    else:
+        protected = {HERE / "evac_methods_fixed.json", HERE / "results/sweeps.json", Path(__file__)}
+        if args.out.resolve() in {p.resolve() for p in protected}:
+            ap.error("Output cannot overwrite an input or generator")
+        args.out.parent.mkdir(parents=True, exist_ok=True)
+        args.out.write_text(json.dumps(data, ensure_ascii=False, indent=2) + "\n", encoding="utf-8", newline="\n")
+        print(args.out)
     return 0
+
+
+def equivalent(saved, current):
+    """Strict structure/provenance; tolerate only numerical library round-off."""
+    if isinstance(current, dict):
+        return isinstance(saved, dict) and saved.keys() == current.keys() and all(equivalent(saved[k], v) for k, v in current.items())
+    if isinstance(current, list):
+        return isinstance(saved, list) and len(saved) == len(current) and all(equivalent(a, b) for a, b in zip(saved, current))
+    if isinstance(current, float):
+        return type(saved) in (int, float) and math.isclose(saved, current, rel_tol=1e-12, abs_tol=1e-10)
+    return type(saved) is type(current) and saved == current
 
 
 if __name__ == "__main__":

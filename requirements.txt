@@ -5,6 +5,7 @@ scipy
 
 # ===== 可视化 =====
 matplotlib
+SciencePlots        # csf-figure-forge 样式注册的实际依赖
 seaborn
 plotly
 manim            # 可选：数学/流程动画

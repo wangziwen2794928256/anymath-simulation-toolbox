@@ -851,29 +851,47 @@ def figure_contract_check(contract: dict, rendered: dict | None = None) -> list[
           panels[].units / evidence_level / integrity_risks
     """
     problems: list[str] = []
+    if not isinstance(contract, dict):
+        return ["contract 必须为对象"]
     required_top = ["conclusion", "role_in_paper", "evidence_level", "panels"]
     for key in required_top:
         if not contract.get(key):
             problems.append(f"contract 缺字段: {key}")
+        elif key != "panels" and not isinstance(contract[key], str):
+            problems.append(f"contract 字段必须为字符串: {key}")
 
     panels = contract.get("panels") or []
+    if not isinstance(panels, list) or any(not isinstance(p, dict) for p in panels):
+        return problems + ["panels 必须为对象列表"]
     if not panels:
         problems.append("contract 至少需要 1 个 panel")
+    ids = []
     for idx, p in enumerate(panels):
         tag = p.get("id") or f"panel[{idx}]"
+        if "id" in p:
+            if not isinstance(p["id"], str) or not p["id"].strip():
+                problems.append(f"panel[{idx}] id 必须为非空字符串")
+            elif p["id"] in ids:
+                problems.append(f"panel id 重复: {p['id']}")
+            else:
+                ids.append(p["id"])
         for key in ("role", "source", "units", "claim"):
             if not p.get(key):
                 problems.append(f"{tag} 缺字段: {key}")
+            elif not isinstance(p[key], str):
+                problems.append(f"{tag} 字段必须为字符串: {key}")
 
-    roles = {p.get("role") for p in panels}
-    if not roles & {"hero", "main"}:
+    roles = {p.get("role") for p in panels if isinstance(p.get("role"), str)}
+    if contract.get("evidence_level") in ("hero", "main") and not roles & {"hero", "main"}:
         problems.append("没有任何 panel 声明为 hero/main —— 一图必须有主结论面板")
 
     if not contract.get("integrity_risks"):
         problems.append("缺 integrity_risks：未声明可能被误读的点")
 
     if rendered is not None:
-        for fmt in ("pdf", "png"):
+        if not isinstance(rendered, dict):
+            return problems + ["rendered 必须为对象"]
+        for fmt in ("pdf", "svg", "png"):
             if fmt not in rendered:
                 problems.append(f"未导出 {fmt}（矢量+300dpi 双份是硬要求）")
     return problems

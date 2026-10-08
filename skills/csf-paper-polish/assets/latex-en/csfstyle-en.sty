@@ -681,9 +681,20 @@
 % csf_prose.py checks that the style is applied consistently.
 \titleformat{\paragraph}[runin]{\normalfont\normalsize\bfseries}{}{0pt}{}
 
-\titlespacing*{\section}{0pt}{\csf@secbefore}{\csf@secafter}
-\titlespacing*{\subsection}{0pt}{\csf@subbefore}{\csf@subafter}
-\titlespacing*{\subsubsection}{0pt}{\csf@subsubbefore}{\csf@subsubafter}
+% Official @startsection uses a negative before-skip to disable indentation;
+% titlesec uses the sign as actual vertical space. Transfer the magnitude.
+\newskip\csf@sectionbefore
+\newskip\csf@subsectionbefore
+\newskip\csf@subsubsectionbefore
+\csf@sectionbefore=\csf@secbefore\relax
+\csf@subsectionbefore=\csf@subbefore\relax
+\csf@subsubsectionbefore=\csf@subsubbefore\relax
+\ifdim\csf@sectionbefore<0pt \multiply\csf@sectionbefore by -1\fi
+\ifdim\csf@subsectionbefore<0pt \multiply\csf@subsectionbefore by -1\fi
+\ifdim\csf@subsubsectionbefore<0pt \multiply\csf@subsubsectionbefore by -1\fi
+\titlespacing*{\section}{0pt}{\csf@sectionbefore}{\csf@secafter}
+\titlespacing*{\subsection}{0pt}{\csf@subsectionbefore}{\csf@subafter}
+\titlespacing*{\subsubsection}{0pt}{\csf@subsubsectionbefore}{\csf@subsubafter}
 \titlespacing*{\paragraph}{0pt}{0.8ex plus .2ex minus .2ex}{0.5em}
 
 % --------------------------------------------------------------------------- %
@@ -802,17 +813,9 @@
     coltitle=csfInk,
     % `before skip` / `after skip` are LOAD-BEARING, not cosmetic.
     %
-    % The official heading spacing copied into the presets uses a NEGATIVE
-    % before-space: NeurIPS -2.0ex, ICML -0.12in, AAAI -2.0ex (about -8.6pt each).
-    % That is tuned to follow a PARAGRAPH, where the paragraph's own skip absorbs it.
-    % Follow a tcolorbox and there is nothing to absorb it: the next \section rises
-    % into the box and its rule crosses the box's bottom edge.
-    %
-    % 16pt is not arbitrary: it must exceed the largest negative pre-space in any
-    % preset (~8.6pt) and still leave a visible gap (~7.4pt). An earlier value of
-    % 8pt cancelled almost exactly and the collision survived — confirmed by
-    % cropping the compiled page at 200 dpi, which is the only way this class of
-    % defect becomes visible.
+    % Keep visible separation around callout boxes. Heading before-skips from
+    % official @startsection presets are converted to positive magnitudes for
+    % titlesec above; their negative sign originally controlled indentation.
     before skip = 8pt,
     after skip  = 16pt,
     % A `breakable` box that splits across a column or page break gets NO padding at
@@ -992,7 +995,7 @@
   \ifnum\csf@titlebars=1
     \begingroup\noindent\rule{\linewidth}{4pt}\par\vspace{0.25in}\endgroup
   \fi
-  \begin{center}{\csf@titlefmt #1}\end{center}%
+  \begin{center}{\csf@titlefmt #1\par}\end{center}%
   \ifnum\csf@titlebars=1
     \begingroup\vspace{0.29in}\noindent\rule{\linewidth}{1pt}\par
     \vspace{0.09in}\endgroup

@@ -1,0 +1,17 @@
+name: Validate modeling evidence
+on: [push, pull_request]
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: pip
+          cache-dependency-path: requirements-core.txt
+      - run: python -m pip install -r requirements-core.txt
+      - run: python -m unittest discover -s tests -v
+      - run: python skills/csf-simulation-modeling/scripts/csf_select.py --check
+      - run: python skills/csf-simulation-modeling/scripts/csf_mechanism.py --check
+      - run: python examples/礼堂疏散/code/make_paper_numbers.py --check

@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="utf-8" standalone="no"?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
   "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
-<svg xmlns:xlink="http://www.w3.org/1999/xlink" width="515.565354pt" height="140.541732pt" viewBox="0 0 515.565354 140.541732" xmlns="http://www.w3.org/2000/svg" version="1.1">
+<svg xmlns:xlink="http://www.w3.org/1999/xlink" width="598.68pt" height="159.562pt" viewBox="0 0 598.68 159.562" xmlns="http://www.w3.org/2000/svg" version="1.1">
  <metadata>
   <rdf:RDF xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
    <cc:Work>
     <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>
-    <dc:date>2026-10-05T19:45:48.954082</dc:date>
     <dc:format>image/svg+xml</dc:format>
     <dc:creator>
      <cc:Agent>
@@ -21,119 +20,294 @@
  </defs>
  <g id="figure_1">
   <g id="patch_1">
-   <path d="M 0 140.541732 
-L 515.565354 140.541732 
-L 515.565354 0 
-L 0 0 
+   <path d="M 0 159.562
+L 598.68 159.562
+L 598.68 -0
+L 0 -0
 z
 " style="fill: #ffffff"/>
   </g>
   <g id="axes_1">
-   <g id="line2d_1">
-    <path d="M 18.850961 31.935118 
-L 496.714394 31.935118 
-" clip-path="url(#pe121711c67)" style="fill: none; stroke: #000000; stroke-width: 1.1; stroke-linecap: square"/>
+   <g id="table_1">
+    <g id="patch_2">
+     <path d="M 3.6 59.392
+L 210.618 59.392
+L 210.618 36.592
+L 3.6 36.592
+z
+" style="fill: #edf3f9; stroke: #ffffff; stroke-linejoin: miter"/>
+    </g>
+    <g id="text_1">
+     <text style="font-weight: 700; font-size: 9px; font-family: 'Libertinus Sans', 'Arial', 'Helvetica', 'DejaVu Sans', sans-serif; text-anchor: start; fill: #24364b" x="24.3018" y="50.908" transform="rotate(-0 24.3018 50.908)">Policy</text>
+    </g>
+    <g id="patch_3">
+     <path d="M 210.618 59.392
+L 281.5956 59.392
+L 281.5956 36.592
+L 210.618 36.592
+z
+" style="fill: #edf3f9; stroke: #ffffff; stroke-linejoin: miter"/>
+    </g>
+    <g id="text_2">
+     <text style="font-weight: 700; font-size: 9px; font-family: 'Libertinus Sans', 'Arial', 'Helvetica', 'DejaVu Sans', sans-serif; text-anchor: middle; fill: #24364b" x="246.1068" y="50.908" transform="rotate(-0 246.1068 50.908)">Mean (s)</text>
+    </g>
+    <g id="patch_4">
+     <path d="M 281.5956 59.392
+L 370.3176 59.392
+L 370.3176 36.592
+L 281.5956 36.592
+z
+" style="fill: #edf3f9; stroke: #ffffff; stroke-linejoin: miter"/>
+    </g>
+    <g id="text_3">
+     <text style="font-weight: 700; font-size: 9px; font-family: 'Libertinus Sans', 'Arial', 'Helvetica', 'DejaVu Sans', sans-serif; text-anchor: middle; fill: #24364b" x="325.9566" y="50.908" transform="rotate(-0 325.9566 50.908)">Sample SD (s)</text>
+    </g>
+    <g id="patch_5">
+     <path d="M 370.3176 59.392
+L 512.2728 59.392
+L 512.2728 36.592
+L 370.3176 36.592
+z
+" style="fill: #edf3f9; stroke: #ffffff; stroke-linejoin: miter"/>
+    </g>
+    <g id="text_4">
+     <text style="font-weight: 700; font-size: 9px; font-family: 'Libertinus Sans', 'Arial', 'Helvetica', 'DejaVu Sans', sans-serif; text-anchor: middle; fill: #24364b" x="441.2952" y="50.908" transform="rotate(-0 441.2952 50.908)">95% CI of mean (s)</text>
+    </g>
+    <g id="patch_6">
+     <path d="M 512.2728 59.392
+L 595.08 59.392
+L 595.08 36.592
+L 512.2728 36.592
+z
+" style="fill: #edf3f9; stroke: #ffffff; stroke-linejoin: miter"/>
+    </g>
+    <g id="text_5">
+     <text style="font-weight: 700; font-size: 9px; font-family: 'Libertinus Sans', 'Arial', 'Helvetica', 'DejaVu Sans', sans-serif; text-anchor: middle; fill: #24364b" x="553.6764" y="50.908" transform="rotate(-0 553.6764 50.908)">Mean / ref.</text>
+    </g>
+    <g id="patch_7">
+     <path d="M 3.6 82.192
+L 210.618 82.192
+L 210.618 59.392
+L 3.6 59.392
+z
+" style="fill: #f7f9fc; stroke: #ffffff; stroke-linejoin: miter"/>
+    </g>
+    <g id="text_6">
+     <text style="font-size: 9px; font-family: 'Libertinus Sans', 'Arial', 'Helvetica', 'DejaVu Sans', sans-serif; text-anchor: start" x="24.3018" y="73.708" transform="rotate(-0 24.3018 73.708)">Random once</text>
+    </g>
+    <g id="patch_8">
+     <path d="M 210.618 82.192
+L 281.5956 82.192
+L 281.5956 59.392
+L 210.618 59.392
+z
+" style="fill: #f7f9fc; stroke: #ffffff; stroke-linejoin: miter"/>
+    </g>
+    <g id="text_7">
+     <text style="font-size: 9px; font-family: 'Libertinus Sans', 'Arial', 'Helvetica', 'DejaVu Sans', sans-serif; text-anchor: middle" x="246.1068" y="73.708" transform="rotate(-0 246.1068 73.708)">223.22</text>
+    </g>
+    <g id="patch_9">
+     <path d="M 281.5956 82.192
+L 370.3176 82.192
+L 370.3176 59.392
+L 281.5956 59.392
+z
+" style="fill: #f7f9fc; stroke: #ffffff; stroke-linejoin: miter"/>
+    </g>
+    <g id="text_8">
+     <text style="font-size: 9px; font-family: 'Libertinus Sans', 'Arial', 'Helvetica', 'DejaVu Sans', sans-serif; text-anchor: middle" x="325.9566" y="73.708" transform="rotate(-0 325.9566 73.708)">15.55</text>
+    </g>
+    <g id="patch_10">
+     <path d="M 370.3176 82.192
+L 512.2728 82.192
+L 512.2728 59.392
+L 370.3176 59.392
+z
+" style="fill: #f7f9fc; stroke: #ffffff; stroke-linejoin: miter"/>
+    </g>
+    <g id="text_9">
+     <text style="font-size: 9px; font-family: 'Libertinus Sans', 'Arial', 'Helvetica', 'DejaVu Sans', sans-serif; text-anchor: middle" x="441.2952" y="73.708" transform="rotate(-0 441.2952 73.708)">203.91 to 242.53</text>
+    </g>
+    <g id="patch_11">
+     <path d="M 512.2728 82.192
+L 595.08 82.192
+L 595.08 59.392
+L 512.2728 59.392
+z
+" style="fill: #f7f9fc; stroke: #ffffff; stroke-linejoin: miter"/>
+    </g>
+    <g id="text_10">
+     <text style="font-size: 9px; font-family: 'Libertinus Sans', 'Arial', 'Helvetica', 'DejaVu Sans', sans-serif; text-anchor: middle" x="553.6764" y="73.708" transform="rotate(-0 553.6764 73.708)">1.47</text>
+    </g>
+    <g id="patch_12">
+     <path d="M 3.6 104.992
+L 210.618 104.992
+L 210.618 82.192
+L 3.6 82.192
+z
+" style="fill: #f7f9fc; stroke: #ffffff; stroke-linejoin: miter"/>
+    </g>
+    <g id="text_11">
+     <text style="font-size: 9px; font-family: 'Libertinus Sans', 'Arial', 'Helvetica', 'DejaVu Sans', sans-serif; text-anchor: start" x="24.3018" y="96.508" transform="rotate(-0 24.3018 96.508)">Nearest once (3 equivalent rules)</text>
+    </g>
+    <g id="patch_13">
+     <path d="M 210.618 104.992
+L 281.5956 104.992
+L 281.5956 82.192
+L 210.618 82.192
+z
+" style="fill: #f7f9fc; stroke: #ffffff; stroke-linejoin: miter"/>
+    </g>
+    <g id="text_12">
+     <text style="font-size: 9px; font-family: 'Libertinus Sans', 'Arial', 'Helvetica', 'DejaVu Sans', sans-serif; text-anchor: middle" x="246.1068" y="96.508" transform="rotate(-0 246.1068 96.508)">426.66</text>
+    </g>
+    <g id="patch_14">
+     <path d="M 281.5956 104.992
+L 370.3176 104.992
+L 370.3176 82.192
+L 281.5956 82.192
+z
+" style="fill: #f7f9fc; stroke: #ffffff; stroke-linejoin: miter"/>
+    </g>
+    <g id="text_13">
+     <text style="font-size: 9px; font-family: 'Libertinus Sans', 'Arial', 'Helvetica', 'DejaVu Sans', sans-serif; text-anchor: middle" x="325.9566" y="96.508" transform="rotate(-0 325.9566 96.508)">5.98</text>
+    </g>
+    <g id="patch_15">
+     <path d="M 370.3176 104.992
+L 512.2728 104.992
+L 512.2728 82.192
+L 370.3176 82.192
+z
+" style="fill: #f7f9fc; stroke: #ffffff; stroke-linejoin: miter"/>
+    </g>
+    <g id="text_14">
+     <text style="font-size: 9px; font-family: 'Libertinus Sans', 'Arial', 'Helvetica', 'DejaVu Sans', sans-serif; text-anchor: middle" x="441.2952" y="96.508" transform="rotate(-0 441.2952 96.508)">419.24 to 434.08</text>
+    </g>
+    <g id="patch_16">
+     <path d="M 512.2728 104.992
+L 595.08 104.992
+L 595.08 82.192
+L 512.2728 82.192
+z
+" style="fill: #f7f9fc; stroke: #ffffff; stroke-linejoin: miter"/>
+    </g>
+    <g id="text_15">
+     <text style="font-size: 9px; font-family: 'Libertinus Sans', 'Arial', 'Helvetica', 'DejaVu Sans', sans-serif; text-anchor: middle" x="553.6764" y="96.508" transform="rotate(-0 553.6764 96.508)">2.80</text>
+    </g>
+    <g id="patch_17">
+     <path d="M 3.6 127.792
+L 210.618 127.792
+L 210.618 104.992
+L 3.6 104.992
+z
+" style="fill: #f7f9fc; stroke: #ffffff; stroke-linejoin: miter"/>
+    </g>
+    <g id="text_16">
+     <text style="font-size: 9px; font-family: 'Libertinus Sans', 'Arial', 'Helvetica', 'DejaVu Sans', sans-serif; text-anchor: start" x="24.3018" y="119.308" transform="rotate(-0 24.3018 119.308)">Shortest queue on arrival</text>
+    </g>
+    <g id="patch_18">
+     <path d="M 210.618 127.792
+L 281.5956 127.792
+L 281.5956 104.992
+L 210.618 104.992
+z
+" style="fill: #f7f9fc; stroke: #ffffff; stroke-linejoin: miter"/>
+    </g>
+    <g id="text_17">
+     <text style="font-size: 9px; font-family: 'Libertinus Sans', 'Arial', 'Helvetica', 'DejaVu Sans', sans-serif; text-anchor: middle" x="246.1068" y="119.308" transform="rotate(-0 246.1068 119.308)">426.66</text>
+    </g>
+    <g id="patch_19">
+     <path d="M 281.5956 127.792
+L 370.3176 127.792
+L 370.3176 104.992
+L 281.5956 104.992
+z
+" style="fill: #f7f9fc; stroke: #ffffff; stroke-linejoin: miter"/>
+    </g>
+    <g id="text_18">
+     <text style="font-size: 9px; font-family: 'Libertinus Sans', 'Arial', 'Helvetica', 'DejaVu Sans', sans-serif; text-anchor: middle" x="325.9566" y="119.308" transform="rotate(-0 325.9566 119.308)">5.98</text>
+    </g>
+    <g id="patch_20">
+     <path d="M 370.3176 127.792
+L 512.2728 127.792
+L 512.2728 104.992
+L 370.3176 104.992
+z
+" style="fill: #f7f9fc; stroke: #ffffff; stroke-linejoin: miter"/>
+    </g>
+    <g id="text_19">
+     <text style="font-size: 9px; font-family: 'Libertinus Sans', 'Arial', 'Helvetica', 'DejaVu Sans', sans-serif; text-anchor: middle" x="441.2952" y="119.308" transform="rotate(-0 441.2952 119.308)">419.24 to 434.08</text>
+    </g>
+    <g id="patch_21">
+     <path d="M 512.2728 127.792
+L 595.08 127.792
+L 595.08 104.992
+L 512.2728 104.992
+z
+" style="fill: #f7f9fc; stroke: #ffffff; stroke-linejoin: miter"/>
+    </g>
+    <g id="text_20">
+     <text style="font-size: 9px; font-family: 'Libertinus Sans', 'Arial', 'Helvetica', 'DejaVu Sans', sans-serif; text-anchor: middle" x="553.6764" y="119.308" transform="rotate(-0 553.6764 119.308)">2.80</text>
+    </g>
+    <g id="patch_22">
+     <path d="M 3.6 150.592
+L 210.618 150.592
+L 210.618 127.792
+L 3.6 127.792
+z
+" style="fill: #edf3f9; stroke: #ffffff; stroke-linejoin: miter"/>
+    </g>
+    <g id="text_21">
+     <text style="font-size: 9px; font-family: 'Libertinus Sans', 'Arial', 'Helvetica', 'DejaVu Sans', sans-serif; text-anchor: start" x="24.3018" y="142.108" transform="rotate(-0 24.3018 142.108)">Dynamic distance + queue</text>
+    </g>
+    <g id="patch_23">
+     <path d="M 210.618 150.592
+L 281.5956 150.592
+L 281.5956 127.792
+L 210.618 127.792
+z
+" style="fill: #edf3f9; stroke: #ffffff; stroke-linejoin: miter"/>
+    </g>
+    <g id="text_22">
+     <text style="font-size: 9px; font-family: 'Libertinus Sans', 'Arial', 'Helvetica', 'DejaVu Sans', sans-serif; text-anchor: middle" x="246.1068" y="142.108" transform="rotate(-0 246.1068 142.108)">184.54</text>
+    </g>
+    <g id="patch_24">
+     <path d="M 281.5956 150.592
+L 370.3176 150.592
+L 370.3176 127.792
+L 281.5956 127.792
+z
+" style="fill: #edf3f9; stroke: #ffffff; stroke-linejoin: miter"/>
+    </g>
+    <g id="text_23">
+     <text style="font-size: 9px; font-family: 'Libertinus Sans', 'Arial', 'Helvetica', 'DejaVu Sans', sans-serif; text-anchor: middle" x="325.9566" y="142.108" transform="rotate(-0 325.9566 142.108)">15.87</text>
+    </g>
+    <g id="patch_25">
+     <path d="M 370.3176 150.592
+L 512.2728 150.592
+L 512.2728 127.792
+L 370.3176 127.792
+z
+" style="fill: #edf3f9; stroke: #ffffff; stroke-linejoin: miter"/>
+    </g>
+    <g id="text_24">
+     <text style="font-size: 9px; font-family: 'Libertinus Sans', 'Arial', 'Helvetica', 'DejaVu Sans', sans-serif; text-anchor: middle" x="441.2952" y="142.108" transform="rotate(-0 441.2952 142.108)">164.84 to 204.24</text>
+    </g>
+    <g id="patch_26">
+     <path d="M 512.2728 150.592
+L 595.08 150.592
+L 595.08 127.792
+L 512.2728 127.792
+z
+" style="fill: #edf3f9; stroke: #ffffff; stroke-linejoin: miter"/>
+    </g>
+    <g id="text_25">
+     <text style="font-size: 9px; font-family: 'Libertinus Sans', 'Arial', 'Helvetica', 'DejaVu Sans', sans-serif; text-anchor: middle" x="553.6764" y="142.108" transform="rotate(-0 553.6764 142.108)">1.21</text>
+    </g>
    </g>
-   <g id="line2d_2">
-    <path d="M 18.850961 104.71748 
-L 496.714394 104.71748 
-" clip-path="url(#pe121711c67)" style="fill: none; stroke: #000000; stroke-width: 1.1; stroke-linecap: square"/>
-   </g>
-   <g id="csf-tab_main-table-header-013">
-    <text style="font-weight: 700; font-size: 7.6px; font-family: 'Libertinus Sans', 'Arial', 'Helvetica', 'DejaVu Sans', sans-serif; text-anchor: start" x="23.934614" y="28.286022" transform="rotate(-0 23.934614 28.286022)">method</text>
-   </g>
-   <g id="csf-tab_main-table-header-014">
-    <text style="font-weight: 700; font-size: 7.6px; font-family: 'Libertinus Sans', 'Arial', 'Helvetica', 'DejaVu Sans', sans-serif; text-anchor: middle" x="115.440378" y="28.286022" transform="rotate(-0 115.440378 28.286022)">T (s)</text>
-   </g>
-   <g id="csf-tab_main-table-header-015">
-    <text style="font-weight: 700; font-size: 7.6px; font-family: 'Libertinus Sans', 'Arial', 'Helvetica', 'DejaVu Sans', sans-serif; text-anchor: middle" x="206.946142" y="28.286022" transform="rotate(-0 206.946142 28.286022)">Gini</text>
-   </g>
-   <g id="csf-tab_main-table-header-016">
-    <text style="font-weight: 700; font-size: 7.6px; font-family: 'Libertinus Sans', 'Arial', 'Helvetica', 'DejaVu Sans', sans-serif; text-anchor: middle" x="298.451906" y="28.286022" transform="rotate(-0 298.451906 28.286022)">T/T_lb</text>
-   </g>
-   <g id="csf-tab_main-table-header-017">
-    <text style="font-weight: 700; font-size: 7.6px; font-family: 'Libertinus Sans', 'Arial', 'Helvetica', 'DejaVu Sans', sans-serif; text-anchor: middle" x="389.957669" y="28.286022" transform="rotate(-0 389.957669 28.286022)">flow E1/E2/E3</text>
-   </g>
-   <g id="csf-tab_main-table-header-018">
-    <text style="font-weight: 700; font-size: 7.6px; font-family: 'Libertinus Sans', 'Arial', 'Helvetica', 'DejaVu Sans', sans-serif; text-anchor: middle" x="481.463433" y="28.286022" transform="rotate(-0 481.463433 28.286022)">re-decision</text>
-   </g>
-   <g id="csf-tab_main-table-cell-019">
-    <text style="font-size: 7.2px; font-family: 'Libertinus Sans', 'Arial', 'Helvetica', 'DejaVu Sans', sans-serif; text-anchor: start" x="23.934614" y="45.379729" transform="rotate(-0 23.934614 45.379729)">Random assignment</text>
-   </g>
-   <g id="csf-tab_main-table-cell-020">
-    <text style="font-size: 7px; font-family: 'Libertinus Sans', 'Arial', 'Helvetica', 'DejaVu Sans', sans-serif; text-anchor: middle" x="115.440378" y="45.314929" transform="rotate(-0 115.440378 45.314929)">223.20±15.60</text>
-   </g>
-   <g id="csf-tab_main-table-cell-021">
-    <text style="font-weight: 700; font-size: 7px; font-family: 'Libertinus Sans', 'Arial', 'Helvetica', 'DejaVu Sans', sans-serif; text-anchor: middle" x="206.946142" y="45.314929" transform="rotate(-0 206.946142 45.314929)">0.0333</text>
-   </g>
-   <g id="csf-tab_main-table-cell-022">
-    <text style="font-size: 7px; font-family: 'Libertinus Sans', 'Arial', 'Helvetica', 'DejaVu Sans', sans-serif; text-anchor: middle" x="298.451906" y="45.314929" transform="rotate(-0 298.451906 45.314929)">1.467</text>
-   </g>
-   <g id="csf-tab_main-table-cell-023">
-    <text style="font-size: 7px; font-family: 'Libertinus Sans', 'Arial', 'Helvetica', 'DejaVu Sans', sans-serif; text-anchor: middle" x="389.957669" y="45.314929" transform="rotate(-0 389.957669 45.314929)">133/137/130</text>
-   </g>
-   <g id="csf-tab_main-table-cell-024">
-    <text style="font-size: 7px; font-family: 'Libertinus Sans', 'Arial', 'Helvetica', 'DejaVu Sans', sans-serif; text-anchor: middle" x="481.463433" y="45.314929" transform="rotate(-0 481.463433 45.314929)">0</text>
-   </g>
-   <g id="csf-tab_main-table-cell-025">
-    <text style="font-size: 7.2px; font-family: 'Libertinus Sans', 'Arial', 'Helvetica', 'DejaVu Sans', sans-serif; text-anchor: start" x="23.934614" y="62.603036" transform="rotate(-0 23.934614 62.603036)">Static rules*</text>
-   </g>
-   <g id="csf-tab_main-table-cell-026">
-    <text style="font-size: 7px; font-family: 'Libertinus Sans', 'Arial', 'Helvetica', 'DejaVu Sans', sans-serif; text-anchor: middle" x="115.440378" y="62.538236" transform="rotate(-0 115.440378 62.538236)">426.70±6.00</text>
-   </g>
-   <g id="csf-tab_main-table-cell-027">
-    <text style="font-size: 7px; font-family: 'Libertinus Sans', 'Arial', 'Helvetica', 'DejaVu Sans', sans-serif; text-anchor: middle" x="206.946142" y="62.538236" transform="rotate(-0 206.946142 62.538236)">0.3220</text>
-   </g>
-   <g id="csf-tab_main-table-cell-028">
-    <text style="font-size: 7px; font-family: 'Libertinus Sans', 'Arial', 'Helvetica', 'DejaVu Sans', sans-serif; text-anchor: middle" x="298.451906" y="62.538236" transform="rotate(-0 298.451906 62.538236)">2.803</text>
-   </g>
-   <g id="csf-tab_main-table-cell-029">
-    <text style="font-size: 7px; font-family: 'Libertinus Sans', 'Arial', 'Helvetica', 'DejaVu Sans', sans-serif; text-anchor: middle" x="389.957669" y="62.538236" transform="rotate(-0 389.957669 62.538236)">56/95/249</text>
-   </g>
-   <g id="csf-tab_main-table-cell-030">
-    <text style="font-size: 7px; font-family: 'Libertinus Sans', 'Arial', 'Helvetica', 'DejaVu Sans', sans-serif; text-anchor: middle" x="481.463433" y="62.538236" transform="rotate(-0 481.463433 62.538236)">0-3</text>
-   </g>
-   <g id="csf-tab_main-table-cell-031">
-    <text style="font-size: 7.2px; font-family: 'Libertinus Sans', 'Arial', 'Helvetica', 'DejaVu Sans', sans-serif; text-anchor: start" x="23.934614" y="79.826343" transform="rotate(-0 23.934614 79.826343)">Dynamic (ours)*</text>
-   </g>
-   <g id="csf-tab_main-table-cell-032">
-    <text style="font-style: italic; font-size: 7px; font-family: 'Libertinus Sans', 'Arial', 'Helvetica', 'DejaVu Sans', sans-serif; text-anchor: middle" x="115.440378" y="79.761543" transform="rotate(-0 115.440378 79.761543)">184.50±15.90</text>
-   </g>
-   <g id="csf-tab_main-table-cell-033">
-    <text style="font-style: italic; font-size: 7px; font-family: 'Libertinus Sans', 'Arial', 'Helvetica', 'DejaVu Sans', sans-serif; text-anchor: middle" x="206.946142" y="79.761543" transform="rotate(-0 206.946142 79.761543)">0.0833</text>
-   </g>
-   <g id="csf-tab_main-table-cell-034">
-    <text style="font-style: italic; font-size: 7px; font-family: 'Libertinus Sans', 'Arial', 'Helvetica', 'DejaVu Sans', sans-serif; text-anchor: middle" x="298.451906" y="79.761543" transform="rotate(-0 298.451906 79.761543)">1.212</text>
-   </g>
-   <g id="csf-tab_main-table-cell-035">
-    <text style="font-size: 7px; font-family: 'Libertinus Sans', 'Arial', 'Helvetica', 'DejaVu Sans', sans-serif; text-anchor: middle" x="389.957669" y="79.761543" transform="rotate(-0 389.957669 79.761543)">158/134/108</text>
-   </g>
-   <g id="csf-tab_main-table-cell-036">
-    <text style="font-size: 7px; font-family: 'Libertinus Sans', 'Arial', 'Helvetica', 'DejaVu Sans', sans-serif; text-anchor: middle" x="481.463433" y="79.761543" transform="rotate(-0 481.463433 79.761543)">0</text>
-   </g>
-   <g id="csf-tab_main-table-cell-037">
-    <text style="font-size: 7.2px; font-family: 'Libertinus Sans', 'Arial', 'Helvetica', 'DejaVu Sans', sans-serif; text-anchor: start" x="23.934614" y="97.04965" transform="rotate(-0 23.934614 97.04965)">Capacity lower bound</text>
-   </g>
-   <g id="csf-tab_main-table-cell-038">
-    <text style="font-weight: 700; font-size: 7px; font-family: 'Libertinus Sans', 'Arial', 'Helvetica', 'DejaVu Sans', sans-serif; text-anchor: middle" x="115.440378" y="96.98485" transform="rotate(-0 115.440378 96.98485)">152.21</text>
-   </g>
-   <g id="csf-tab_main-table-cell-039">
-    <text style="font-size: 7px; font-family: 'Libertinus Sans', 'Arial', 'Helvetica', 'DejaVu Sans', sans-serif; text-anchor: middle" x="206.946142" y="96.98485" transform="rotate(-0 206.946142 96.98485)">N/A</text>
-   </g>
-   <g id="csf-tab_main-table-cell-040">
-    <text style="font-weight: 700; font-size: 7px; font-family: 'Libertinus Sans', 'Arial', 'Helvetica', 'DejaVu Sans', sans-serif; text-anchor: middle" x="298.451906" y="96.98485" transform="rotate(-0 298.451906 96.98485)">1.000</text>
-   </g>
-   <g id="csf-tab_main-table-cell-041">
-    <text style="font-size: 7px; font-family: 'Libertinus Sans', 'Arial', 'Helvetica', 'DejaVu Sans', sans-serif; text-anchor: middle" x="389.957669" y="96.98485" transform="rotate(-0 389.957669 96.98485)">N/A</text>
-   </g>
-   <g id="csf-tab_main-table-cell-042">
-    <text style="font-size: 7px; font-family: 'Libertinus Sans', 'Arial', 'Helvetica', 'DejaVu Sans', sans-serif; text-anchor: middle" x="481.463433" y="96.98485" transform="rotate(-0 481.463433 96.98485)">N/A</text>
+   <g id="csf-tab_main-title-001">
+    <text style="font-weight: 700; font-size: 13px; font-family: 'Libertinus Sans', 'Arial', 'Helvetica', 'DejaVu Sans', sans-serif; text-anchor: start; fill: #24364b" x="3.6" y="15.222" transform="rotate(-0 3.6 15.222)">Main comparison: five complete synthetic runs per policy</text>
    </g>
   </g>
  </g>
- <defs>
-  <clipPath id="pe121711c67">
-   <rect x="3.6" y="3.6" width="508.365354" height="133.341732"/>
-  </clipPath>
- </defs>
 </svg>

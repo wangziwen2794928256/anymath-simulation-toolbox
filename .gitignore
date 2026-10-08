@@ -9,6 +9,7 @@ __pycache__/
 .venv/
 venv/
 .ipynb_checkpoints/
+examples/validated-dispatch/outputs/
 
 # ---- LaTeX 编译中间产物（保留 .tex/.pdf/.sty/.cls/.bib）----
 *.aux

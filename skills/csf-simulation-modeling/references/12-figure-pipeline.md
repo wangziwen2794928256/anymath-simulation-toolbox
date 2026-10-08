@@ -47,22 +47,24 @@ csf_fig.use_style("nature", cjk=True, font_size=9.0, strict_glyphs=True)
 
 `csf_fig.figure_contract_check()` 会校验字段，缺一项就报问题。
 
+这是基础结构检查，不自动证明数据或统计前提正确。只有 `evidence_level` 为 hero/main 时才要求 hero/main 面板；验证/消融/场景图可独立成图。统计口径与不确定性见 [16-evidence-statistics.md](16-evidence-statistics.md)。以下契约仅示范结构，正式数值从真实运行产物生成。
+
 ```yaml
-conclusion: "动态拥塞感知把总疏散时间从 426.7 s 降到 204.1 s，接近理论下界 152.2 s"
+conclusion: "比较动态拥塞策略与规则基线的完成时间；结论待真实实验确认"
 role_in_paper: "第 6 章主结果"
 evidence_level: "hero"          # hero / validation / ablation / sensitivity
 integrity_risks:                # 可能被误读的点，必须在正文或 caption 里澄清
-  - "204.1 s 仍是启发式结果，不是最优解"
-  - "下界 152.2 s 假设出口全程满负荷，实际不可达"
+  - "启发式结果不代表最优解"
+  - "容量下界的假设与可达性必须单独核查"
 panels:
   - id: a
-    role: hero                  # 必须至少有一个 hero/main
-    claim: "本文策略提前 ~200 s 完成疏散"
+    role: hero                  # 仅 hero/main 类型要求主结论面板
+    claim: "待实验确认：完成时间差与其区间"
     source: "results/evac_methods.json#/T/summary"   # 数据源 key，供数值冻结
     units: "s"
   - id: b
     role: validation
-    claim: "出口流量 Gini 从 0.322 降到 0.056"
+    claim: "待实验确认：出口流量不均衡度变化"
     source: "results/evac_methods.json#/gini"
     units: "—"
 ```
@@ -129,7 +131,7 @@ panels:
 
 1. **图内禁止出现标题**。标题交给 LaTeX `\caption{}`。实测交付稿每张图被标注两次。
 2. **语义配色只有一张表**，跨面板、跨图全局一致。
-3. **六字以上标签必须换行**（10–12 字必溢出；本机 SimHei/Noto 更宽）。
+3. **按最终尺寸与真实文本边界决定换行**；六字是旧示例的启发式，不是通用长度限制。
 4. **表题不要用加粗 CJK**（`\bfseries` 触发 `TU/SimSun/b/n undefined` → 字体回退、
    行距翻倍）。图题同理。
 5. **`\caption` 后紧跟 `\label`**，且每张图只承担一个叙事角色；同一图文件被多次引用

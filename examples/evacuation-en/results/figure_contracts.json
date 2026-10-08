@@ -1,0 +1,61 @@
+[
+  {
+    "figure_id": "fig1_method",
+    "conclusion": "The diagram documents implemented rules and timing.",
+    "role_in_paper": "model",
+    "evidence_level": "method",
+    "panels": [
+      {
+        "id": "pipeline",
+        "role": "method",
+        "source": "examples/礼堂疏散/code/eval_methods_fixed.py",
+        "units": "m, s, persons",
+        "claim": "Rule-based simulation followed by raw-seed evidence."
+      }
+    ],
+    "integrity_risks": [
+      "No learned policy or empirical calibration; diagram is not an execution trace."
+    ]
+  },
+  {
+    "figure_id": "fig2_main",
+    "conclusion": "The saved synthetic runs support descriptive policy comparisons.",
+    "role_in_paper": "main comparison and sensitivity",
+    "evidence_level": "main",
+    "panels": [
+      {
+        "id": "a",
+        "role": "sensitivity",
+        "source": "paper_numbers.json:lambda_sweep",
+        "units": "clearance time (s)",
+        "claim": "Sampled near-minimum weights form a discrete set."
+      },
+      {
+        "id": "b",
+        "role": "ablation",
+        "source": "paper_numbers.json:freq_ablation",
+        "units": "clearance time (s)",
+        "claim": "Dynamic-share comparison with mean intervals."
+      },
+      {
+        "id": "c",
+        "role": "scaling",
+        "source": "paper_numbers.json:scale_sweep",
+        "units": "clearance time (s)",
+        "claim": "Policy comparisons at four sizes."
+      },
+      {
+        "id": "d",
+        "role": "main",
+        "source": "paper_numbers.json:main",
+        "units": "clearance time (s)",
+        "claim": "Mean divided by continuous capacity reference."
+      }
+    ],
+    "integrity_risks": [
+      "95% mean intervals are not SD or significance tests.",
+      "Weight settings are equally spaced as discrete categories.",
+      "Five synthetic seeds; capacity reference is not an attainable optimum."
+    ]
+  }
+]
