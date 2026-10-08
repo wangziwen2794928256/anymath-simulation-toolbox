@@ -2,6 +2,14 @@
 
 本例是合成队列与移动模型的可复现展示，不宣称已校准真实疏散行为、训练 MARL 或通过完整赛事论文门禁。
 
+## 旗舰视觉展示（Canva 重绘）
+
+![方法图视觉稿](figures/fig1_method_canva.jpg)
+
+![结果组图视觉稿](figures/fig2_main_canva.jpg)
+
+以上两张图替换仓库首页的旗舰展示图；为 Canva 生成的 1456 × 1088 JPEG 页面资源。局部文字、机制和定量图形存在生成偏差，尚不作为实验结果或投稿定稿。论文继续引用下述代码生成的 PDF；重跑 `make_example.py` 不会覆盖 Canva 图片。[来源与已知偏差](figures/canva-visuals.md)。
+
 在仓库根目录：
 
 ```bash

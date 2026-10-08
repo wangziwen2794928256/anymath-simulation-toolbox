@@ -85,15 +85,15 @@ python skills/csf-paper-polish/scripts/csf_prose.py            --tex myproj/pape
 
 ### 方法总览图（Figure 1）
 
-![方法总览图](examples/evacuation-en/figures/fig1_method.png)
+![方法总览图 — Canva 高密度视觉稿](examples/evacuation-en/figures/fig1_method_canva.jpg)
 
-按实际代码展示合成场景、距离与队列规则、服务/移动顺序和统计证据链。每张图附带 PDF/SVG/300 dpi PNG 与文字台账。
+Canva 高密度视觉展示稿：合成场景、智能体状态、决策规则、FIFO 服务与统计证据链。图中局部生成文字、示意数字与机制描述尚未通过逐项核验；论文与复现仍使用[代码生成的方法图](examples/evacuation-en/figures/fig1_method.pdf)。来源和已知偏差见[图像说明](examples/evacuation-en/figures/canva-visuals.md)。
 
 ### 主结果组图（Figure 2）
 
-![主结果组图](examples/evacuation-en/figures/fig2_main.png)
+![主结果组图 — Canva 高密度视觉稿](examples/evacuation-en/figures/fig2_main_canva.jpg)
 
-全部数值面板显示原始种子点和均值 95% CI；包含 λ=0 和各消融的不确定性。只有采样点 3、8 在最小观察均值的 3% 内，不能解释成连续平台。动态均值/连续容量参照为 1.21，不将残余差距直接归因于旅行。
+Canva 八子图视觉展示稿：策略比较、决策参数、人口规模与速度敏感性。图形坐标、区间及局部标签存在生成偏差，定量引用以[可复现结果图](examples/evacuation-en/figures/fig2_main.pdf)和[逐种子统计](examples/evacuation-en/results/paper_numbers.json)为准。只有采样点 3、8 在最小观察均值的 3% 内；动态均值/连续容量参照为 1.21。
 
 ### 主对比表（Table 1）
 
